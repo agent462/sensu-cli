@@ -56,12 +56,12 @@ module SensuCli
           p = Trollop::options do
             opt :client, "returns the list of current events for a client", :short => "c", :type => :string
           end
-          p = {:command => cmd}
+          p.merge!({:command => cmd})
         when "stashes"
           p = Trollop::options do
             opt :path, "The stash path to look up", :short => "p", :type => :string
           end
-          p = {:command => cmd}
+          p.merge!({:command => cmd})
         else
           explode = Trollop::with_standard_exception_handling global_opts do
             raise Trollop::HelpNeeded # show help screen
