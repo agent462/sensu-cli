@@ -19,10 +19,13 @@ module SensuCli
           Available subcommands: (for details, sensu SUB-COMMAND --help)
 
           ** Sensu Commands **
-          sensu client (options)\r
-          sensu check (options)\r
+          sensu clients (options)\r
+          sensu checks (options)\r
           sensu stash (options)\r
           sensu status (options)\r
+          sensu info (options)\r
+          sensu events (options)\r
+          sensu stashes (options)\r
 
         EOS
         banner <<-EOS.gsub(/^ {10}/, '').color(:cyan)

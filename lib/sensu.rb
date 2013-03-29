@@ -11,9 +11,8 @@ module SensuCli
 
     def initialize
       cli = Cli.opts
-      settings = Settings.load_file
+      @settings = Settings.load_file
       request(cli)
-      api(settings)
     end
 
     def request(cli)
@@ -45,6 +44,12 @@ module SensuCli
           @api = {:path => "/events"}
         end
       end
+      res = api(@settings)
+      if cli[:command] === "stashes"
+        pretty_stashes(res)
+      else
+        pretty(res)
+      end
     end
 
     def api_request(opts={})
@@ -66,7 +71,22 @@ module SensuCli
         :port => settings[:port],
         :path => @api[:path]
       }
-      puts JSON.parse(api_request(opts).body)
+      JSON.parse(api_request(opts).body)
+    end
+
+    def pretty(res)
+      res.each do |item|
+        puts "----"
+        item.each do |key,value|
+          puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
+        end
+      end
+    end
+
+    def pretty_stashes(res)
+      res.each do |item|
+        puts item.color(:cyan)
+      end
     end
 
   end
