@@ -44,12 +44,7 @@ module SensuCli
           @api = {:path => "/events"}
         end
       end
-      res = api(@settings)
-      if cli[:command] === "stashes"
-        pretty_stashes(res)
-      else
-        pretty(res)
-      end
+      pretty(api(@settings))
     end
 
     def api_request(opts={})
@@ -75,17 +70,23 @@ module SensuCli
     end
 
     def pretty(res)
-      res.each do |item|
-        puts "----"
-        item.each do |key,value|
-          puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
+      if !res.empty?
+        res.each do |item|
+          puts "----"
+          if item.is_a?(Hash)
+            item.each do |key,value|
+              puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
+            end
+          elsif item.is_a?(Array)
+              item.each do |key|
+                puts "#{key}:  ".color(:cyan)
+              end
+          else
+            puts item.color(:cyan)
+          end
         end
-      end
-    end
-
-    def pretty_stashes(res)
-      res.each do |item|
-        puts item.color(:cyan)
+      else
+        puts "no values for this request".color(:cyan)
       end
     end
 
