@@ -66,7 +66,12 @@ module SensuCli
         :port => settings[:port],
         :path => @api[:path]
       }
-      JSON.parse(api_request(opts).body)
+      res = api_request(opts)
+      if res.code === '200'
+        JSON.parse(res.body)
+      else
+        res = ""
+      end
     end
 
     def pretty(res)
