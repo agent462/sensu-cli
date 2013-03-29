@@ -11,7 +11,7 @@ Features
 
 Usage and Configuration
 -----------------------
-There is one settings file for host, port and ssl
+* There is one settings file for host, port and ssl
    
 ````
 {
@@ -22,16 +22,17 @@ There is one settings file for host, port and ssl
 
 ````
 
-Add the bin folder to your path.  
+* chmod +x bin/sensu
+* Add the bin folder to your path for simple command execution
 
 Examples
 -----------
-sensu --help 
-sensu clients
-sensu clients --help
-sensu clients --name servername
-sensu info
-
+sensu --help   
+sensu clients   
+sensu clients --help   
+sensu clients --name servername   
+sensu info   
+   
 Contributions
 -------------
 Please provide a pull request.  
