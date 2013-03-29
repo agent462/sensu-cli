@@ -37,6 +37,11 @@ Contributions
 -------------
 Please provide a pull request.  
 
+TODO
+----
+* nice output format
+* support post
+* support delete
 
 License and Author
 ==================
