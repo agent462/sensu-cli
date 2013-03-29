@@ -53,6 +53,9 @@ module SensuCli
         when "info"
           p = {:command => cmd}
         when "events"
+          p = Trollop::options do
+            opt :client, "returns the list of current events for a client", :short => "c", :type => :string
+          end
           p = {:command => cmd}
         when "stashes"
           p = Trollop::options do

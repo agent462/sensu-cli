@@ -39,7 +39,11 @@ module SensuCli
           @api = {:path => '/checks'}
         end
       when 'events'
-        @api = {:path => '/events'}
+        if cli[:client]
+          @api = {:path => "/events/#{cli[:client]}"}
+        else
+          @api = {:path => "/events"}
+        end
       end
     end
 
