@@ -8,6 +8,17 @@ require 'rainbow'
 
 module SensuCli
   class Core
+    #
+    # CLI can be anything assuming you can pass these paramaters
+    #
+    # cli = {
+    #   :command => 'client',
+    #   :method => 'Get',
+    #   :flags => {:name => 'ntp-check',
+    #              :path => '/keepalive/i-asesew',
+    #              :client => 'i-23412412',
+    #              :check => 'ntp-check'}
+    # }
 
     def initialize
       cli = Cli.opts
@@ -44,21 +55,28 @@ module SensuCli
           @api = {:path => "/events"}
         end
       end
+      @api.merge!({:method => cli[:method]})
       pretty(api(@settings))
     end
 
     def api_request(opts={})
-      o = {}.merge(opts)
-
-      http = Net::HTTP.new(o[:host], o[:port])
+      http = Net::HTTP.new(opts[:host], opts[:port])
       http.read_timeout = 15
       http.open_timeout = 5
-      if o[:ssl]
+      if opts[:ssl]
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
+      case opts[:method]
+      when 'Get'
+        req =  Net::HTTP::Get.new(opts[:path])
+      when 'Delete'
+        req =  Net::HTTP::Delete.new(opts[:path])
+      when 'Post'
+        req =  Net::HTTP::Post.new(opts[:path])
+        req.set_form_data({"key" => "value"})
+      end
       begin
-        req =  Net::HTTP::Get.new(o[:path])
         http.request(req)
       rescue Timeout::Error
         puts "HTTP connection timed out".color(:red)

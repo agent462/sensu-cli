@@ -46,6 +46,7 @@ module SensuCli
         when "clients"
           p = Trollop::options do
             opt :name, "Client name to return", :short => "n", :type => :string
+            opt :delete, "Client name to return", :short => "d", :type => :boolean
           end
           p.merge!({:command => cmd})
         when "checks"
