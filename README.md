@@ -2,6 +2,8 @@ sensu-api
 =========
 A sensu-cli that currently supports get and delete requests
 
+What is Sensu? http://sensuapp.org/
+
 Features
 --------
 * Get Requests
