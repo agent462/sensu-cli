@@ -51,12 +51,19 @@ module SensuCli
       o = {}.merge(opts)
 
       http = Net::HTTP.new(o[:host], o[:port])
+      http.read_timeout = 15
+      http.open_timeout = 5
       if o[:ssl]
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
-      req =  Net::HTTP::Get.new(o[:path])
-      http.request(req)
+      begin
+        req =  Net::HTTP::Get.new(o[:path])
+        http.request(req)
+      rescue Timeout::Error
+        puts "HTTP connection timed out".color(:red)
+        exit
+      end
     end
 
     def api(settings)

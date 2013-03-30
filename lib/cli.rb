@@ -45,19 +45,20 @@ module SensuCli
       cmd_opts = case cmd
         when "clients"
           p = Trollop::options do
-            opt :name, "returns a client", :short => "n", :type => :string
+            opt :name, "Client name to return", :short => "n", :type => :string
           end
           p.merge!({:command => cmd})
         when "checks"
           p = Trollop::options do
-            opt :name, "The check name to look up.", :short => "n", :type => :string
+            opt :name, "Check name to return", :short => "n", :type => :string
           end
           p.merge!({:command => cmd})
         when "info"
-          p = {:command => cmd}
+          p = Trollop::options
+          p.merge!({:command => cmd})
         when "events"
           p = Trollop::options do
-            opt :client, "returns the list of current events for a client", :short => "c", :type => :string
+            opt :client, "Returns the list of current events for a client", :short => "c", :type => :string
           end
           p.merge!({:command => cmd})
         when "stashes"
