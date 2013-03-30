@@ -10,9 +10,17 @@ module SensuCli
 
       global_opts = Trollop::Parser.new do
         version "Sensu CLI 0.0.1"
-        banner <<-EOS.gsub(/^ {10}/, '')
+        banner <<-'EOS'.gsub(/^ {10}/, '')
           #
           # Welcome to the sensu-cli.
+          #          ______
+          #       .-'      '-.
+          #     .'     __     '.
+          #    /      /  \      \
+          #    ------------------
+          #            /\
+          #           '--'
+          #          SENSU
           #
 
 
