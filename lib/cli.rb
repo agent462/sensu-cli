@@ -22,7 +22,6 @@ module SensuCli
           sensu clients (options)\r
           sensu checks (options)\r
           sensu stash (options)\r
-          sensu status (options)\r
           sensu info (options)\r
           sensu events (options)\r
           sensu stashes (options)\r
@@ -42,37 +41,72 @@ module SensuCli
       end
 
       cmd = ARGV.shift # get the subcommand
+      cli ={}
       cmd_opts = case cmd
         when "clients"
           p = Trollop::options do
             opt :name, "Client name to return", :short => "n", :type => :string
-            opt :delete, "Client name to return", :short => "d", :type => :boolean
+            opt :delete, "Delete the client given by --name", :short => "d", :type => :boolean
           end
-          p.merge!({:command => cmd})
+          Trollop::die :delete, "Delete depends on the name option --name ( -n )".color(:red) if p[:delete] && !p[:name]
+          p[:delete] ? cli.merge!({:method => 'Delete'}) : cli.merge!({:method => 'Get'})
+          cli.merge!({:command => cmd})
         when "checks"
           p = Trollop::options do
             opt :name, "Check name to return", :short => "n", :type => :string
           end
-          p.merge!({:command => cmd})
+          cli.merge!({:command => cmd, :method => 'Get'})
         when "info"
           p = Trollop::options
-          p.merge!({:command => cmd})
+          cli.merge!({:command => cmd, :method => 'Get'})
         when "events"
           p = Trollop::options do
             opt :client, "Returns the list of current events for a client", :short => "c", :type => :string
+            opt :check, "Returns the check associated with the client", :short => "k", :type => :string
+            opt :delete, "Deletes the check associated with the client", :short => "d", :type => :boolean
           end
-          p.merge!({:command => cmd})
+          Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
+          Trollop::die :delete, "Delete depends on the client option --client ( -c ) and the check option --check ( -k )".color(:red) if p[:delete] && !p[:client] && !p[:check]
+          if p[:delete]
+            cli.merge!({:method => 'Delete'})
+          else
+            cli.merge!({:method => 'Get'})
+          end
+          cli.merge!({:command => cmd})
         when "stashes"
           p = Trollop::options do
             opt :path, "The stash path to look up", :short => "p", :type => :string
+            #opt :create, "The stash to create", :short => "C", :type => :string
+            opt :delete, "The stash to delete", :short => "d", :type => :boolean
           end
-          p.merge!({:command => cmd})
+          if p[:create]
+            cli.merge!({:method => 'Post'})
+          elsif p[:delete]
+            cli.merge!({:method => 'Delete'})
+          else
+            cli.merge!({:method => 'Get'})
+          end
+          cli.merge!({:command => cmd})
+        # when "silence"
+        #   p = Trollop::options do
+        #     opt :client, "The client to silence", :short => "c", :type => :string
+        #     opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
+        #   end
+        #   cli.merge!({:command => cmd, :method => 'Post'})
+        # when "resolve"
+        #   p = Trollop::options do
+        #     opt :client, "The client to silence", :short => "c", :type => :string
+        #     opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
+        #   end
+        #   Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
+        #   cli.merge!({:command => cmd, :method => 'Post'})
         else
           explode = Trollop::with_standard_exception_handling global_opts do
             raise Trollop::HelpNeeded # show help screen
           end
         end
-      p ? p : opts
+        cli.merge!({:fields => p})
+        cli
     end
 
   end

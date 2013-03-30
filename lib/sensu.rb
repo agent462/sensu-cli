@@ -29,28 +29,32 @@ module SensuCli
     def request(cli)
       case cli[:command]
       when 'clients'
-        if cli[:name]
-          @api = {:path => "/client/#{cli[:name]}"}
+        if cli[:fields][:name]
+          @api = {:path => "/client/#{cli[:fields][:name]}"}
         else
           @api = {:path => '/clients'}
         end
       when 'info'
         @api = {:path => '/info'}
       when 'stashes'
-        if cli[:path]
-          @api = {:path => "/stashes/#{cli[:path]}"}
+        if cli[:fields][:path]
+          @api = {:path => "/stashes/#{cli[:fields][:path]}"}
         else
           @api = {:path => '/stashes'}
         end
       when 'checks'
-        if cli[:name]
-          @api = {:path => "/check/#{cli[:name]}"}
+        if cli[:fields][:name] && cli[:fields][:check]
+          @api = {:path => "/check/#{cli[:fields][:name]}/#{cli[:fields][:check]}"}
+        elsif cli[:fields][:name]
+          @api = {:path => "/check/#{cli[:fields][:name]}"}
         else
           @api = {:path => '/checks'}
         end
       when 'events'
-        if cli[:client]
-          @api = {:path => "/events/#{cli[:client]}"}
+        if cli[:fields][:client] && cli[:fields][:check]
+          @api = {:path => "/events/#{cli[:fields][:client]}/#{cli[:fields][:check]}"}
+        elsif cli[:fields][:client]
+          @api = {:path => "/events/#{cli[:fields][:client]}"}
         else
           @api = {:path => "/events"}
         end
@@ -89,7 +93,8 @@ module SensuCli
         :ssl => settings[:ssl],
         :host => settings[:host],
         :port => settings[:port],
-        :path => @api[:path]
+        :path => @api[:path],
+        :method => @api[:method]
       }
       res = api_request(opts)
       if res.code === '200'
