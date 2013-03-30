@@ -12,7 +12,7 @@ Features
 Usage and Configuration
 -----------------------
 * There is one settings file for host, port and ssl
-   
+
 ````
 {
   "host": "127.0.0.1",
@@ -27,21 +27,32 @@ Usage and Configuration
 
 Examples
 -----------
-sensu --help   
-sensu clients   
-sensu clients --help   
-sensu clients --name servername   
-sensu info   
-   
+sensu --help
+sensu clients --name some_host --delete true
+sensu clients --help
+sensu clients --name servername
+sensu info
+
 Contributions
 -------------
-Please provide a pull request.  
+Please provide a pull request.
 
 TODO
 ----
 * nice output format
 * support post
 * support delete
+
+Eventually I'd like to get to a cleaner input that mimicks the Chef Knife CLI
+current:
+sensu clients
+sensu clients --name NODE
+sensu clients --name NODE --delete true
+
+aspiration:
+sensu client list
+sensu client show NODE
+sensu client delete some_host
 
 License and Author
 ==================
