@@ -4,7 +4,7 @@ require 'rainbow'
 module SensuCli
   class Cli
 
-    SUB_COMMANDS = %w(info clients checks check events event stashes)
+    SUB_COMMANDS = %w(info clients checks events stashes)
 
     def self.opts
 
@@ -37,7 +37,7 @@ module SensuCli
         EOS
         banner <<-EOS.gsub(/^ {10}/, '').color(:cyan)
 
-          Example Usage: sensu client (stuff goes here)
+          Example Usage: sensu clients --name NODE
           For help use: sensu SUB-COMMAND --help
         EOS
         stop_on SUB_COMMANDS
@@ -71,7 +71,7 @@ module SensuCli
           p = Trollop::options do
             opt :client, "Returns the list of current events for a client", :short => "c", :type => :string
             opt :check, "Returns the check associated with the client", :short => "k", :type => :string
-            opt :delete, "Deletes the check associated with the client", :short => "d", :type => :boolean
+            opt :delete, "Delete an event given by --client and --check", :short => "d", :type => :boolean
           end
           Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
           Trollop::die :delete, "Delete depends on the client option --client ( -c ) and the check option --check ( -k )".color(:red) if p[:delete] && !p[:client] && !p[:check]
@@ -85,7 +85,7 @@ module SensuCli
           p = Trollop::options do
             opt :path, "The stash path to look up", :short => "p", :type => :string
             #opt :create, "The stash to create", :short => "C", :type => :string
-            opt :delete, "The stash to delete", :short => "d", :type => :boolean
+            opt :delete, "Delete a stash given by --path", :short => "d", :type => :boolean
           end
           if p[:create]
             cli.merge!({:method => 'Post'})
