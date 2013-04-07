@@ -33,7 +33,10 @@ module SensuCli
           sensu info (options)\r
           sensu events (options)\r
           sensu stashes (options)\r
-          sensu resolve (options)
+
+          sensu resolve (options)\r
+          sensu silence (options)\r
+
 
         EOS
         banner <<-EOS.gsub(/^ {10}/, '').color(:cyan)
