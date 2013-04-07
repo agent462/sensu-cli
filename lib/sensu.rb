@@ -29,19 +29,16 @@ module SensuCli
       case cli[:command]
       when 'clients'
         path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "")
-        @api = {:path => path}
       when 'info'
-        @api = {:path => '/info'}
+        path = "/info"
       when 'stashes'
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
-        @api = {:path => path}
       when 'checks'
         if cli[:fields][:name]
           path = "/check/#{cli[:fields][:name]}" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
         else
           path = "/checks"
         end
-        @api = {:path => path}
       when 'events'
         path = "/events"
         if cli[:fields][:client]
@@ -49,10 +46,9 @@ module SensuCli
         elsif cli[:fields][:check]
           path << "/#{cli[:fields][:check]}"
         end
-        @api = {:path => path}
       when 'resolve'
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
-        @api = {:path => "/event/resolve", :payload => payload}
+        path = "/event/resolve"
       when 'silence'
         payload = {:timestamp => Time.now.to_i}.to_json
         path = "/stashes/silence"
@@ -61,13 +57,13 @@ module SensuCli
         elsif cli[:fields][:check]
           path << "/#{cli[:fields][:check]}"
         end
-        @api = {:path => path, :payload => payload}
       end
-      @api.merge!({:method => cli[:method], :command => cli[:command]})
+      @api = {:path => path, :method => cli[:method], :command => cli[:command]}
+      @api.merge!({:payload => payload}) if payload
       pretty(api)
     end
 
-    def api_request
+    def http_request
       http = Net::HTTP.new(@settings[:host], @settings[:port])
       http.read_timeout = 15
       http.open_timeout = 5
@@ -87,13 +83,13 @@ module SensuCli
       begin
         http.request(req)
       rescue Timeout::Error
-        puts "HTTP connection timed out".color(:red)
+        puts "HTTP connection has timed out".color(:red)
         exit
       end
     end
 
     def api
-      res = api_request
+      res = http_request
       msg = response_codes(res)
       if res.code != '200'
         exit
