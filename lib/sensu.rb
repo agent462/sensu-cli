@@ -30,45 +30,40 @@ module SensuCli
     def request(cli)
       case cli[:command]
       when 'clients'
-        if cli[:fields][:name]
-          @api = {:path => "/client/#{cli[:fields][:name]}"}
-        else
-          @api = {:path => '/clients'}
-        end
+        path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "")
+        @api = {:path => path}
       when 'info'
         @api = {:path => '/info'}
       when 'stashes'
-        if cli[:fields][:path]
-          @api = {:path => "/stashes/#{cli[:fields][:path]}"}
-        else
-          @api = {:path => '/stashes'}
-        end
+        path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
+        @api = {:path => path}
       when 'checks'
-        if cli[:fields][:name] && cli[:fields][:check]
-          @api = {:path => "/check/#{cli[:fields][:name]}/#{cli[:fields][:check]}"}
-        elsif cli[:fields][:name]
-          @api = {:path => "/check/#{cli[:fields][:name]}"}
+        if cli[:fields][:name]
+          path = "/check/#{cli[:fields][:name]}" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
         else
-          @api = {:path => '/checks'}
+          path = "/checks"
         end
+        @api = {:path => path}
       when 'events'
-        if cli[:fields][:client] && cli[:fields][:check]
-          @api = {:path => "/events/#{cli[:fields][:client]}/#{cli[:fields][:check]}"}
-        elsif cli[:fields][:client]
-          @api = {:path => "/events/#{cli[:fields][:client]}"}
-        else
-          @api = {:path => "/events"}
+        path = "/events"
+        if cli[:fields][:client]
+          path << "/#{cli[:fields][:client]}"
+        elsif cli[:fields][:check]
+          path << "/#{cli[:fields][:check]}"
         end
+        @api = {:path => path}
       when 'resolve'
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
         @api = {:path => "/event/resolve", :payload => payload}
       when 'silence'
         payload = {:timestamp => Time.now.to_i}.to_json
-        if cli[:fields][:client] && cli[:fields][:check]
-          @api = {:path => "/stashes/silence/#{cli[:fields][:client]}/#{cli[:fields][:check]}", :payload => payload}
-        else
-          @api = {:path => "/stashes/silence/#{cli[:fields][:client]}", :payload => payload}
+        path = "/stashes/silence"
+        if cli[:fields][:client]
+          path << "/#{cli[:fields][:client]}"
+        elsif cli[:fields][:check]
+          path << "/#{cli[:fields][:check]}"
         end
+        @api = {:path => path, :payload => payload}
       end
       @api.merge!({:method => cli[:method], :command => cli[:command]})
       pretty(api)
