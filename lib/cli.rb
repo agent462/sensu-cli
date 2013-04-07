@@ -4,7 +4,7 @@ require 'rainbow'
 module SensuCli
   class Cli
 
-    SUB_COMMANDS = %w(info clients checks events stashes)
+    SUB_COMMANDS = %w(info clients checks events stashes resolve silence)
 
     def self.opts
 
@@ -33,6 +33,7 @@ module SensuCli
           sensu info (options)\r
           sensu events (options)\r
           sensu stashes (options)\r
+          sensu resolve (options)
 
         EOS
         banner <<-EOS.gsub(/^ {10}/, '').color(:cyan)
@@ -95,19 +96,20 @@ module SensuCli
             cli.merge!({:method => 'Get'})
           end
           cli.merge!({:command => cmd})
-        # when "silence"
-        #   p = Trollop::options do
-        #     opt :client, "The client to silence", :short => "c", :type => :string
-        #     opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
-        #   end
-        #   cli.merge!({:command => cmd, :method => 'Post'})
-        # when "resolve"
-        #   p = Trollop::options do
-        #     opt :client, "The client to silence", :short => "c", :type => :string
-        #     opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
-        #   end
-        #   Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
-        #   cli.merge!({:command => cmd, :method => 'Post'})
+        when "silence"
+          p = Trollop::options do
+            opt :client, "The client to silence", :short => "c", :type => :string
+            opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
+          end
+          Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
+          cli.merge!({:command => cmd, :method => 'Post'})
+        when "resolve"
+          p = Trollop::options do
+            opt :client, "The client to silence", :short => "c", :type => :string, :required => true
+            opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string, :required => true
+          end
+          Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
+          cli.merge!({:command => cmd, :method => 'Post'})
         else
           explode = Trollop::with_standard_exception_handling global_opts do
             raise Trollop::HelpNeeded # show help screen

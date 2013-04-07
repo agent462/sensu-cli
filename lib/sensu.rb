@@ -5,6 +5,7 @@ require 'json'
 require 'settings'
 require 'cli'
 require 'rainbow'
+require 'uri'
 
 module SensuCli
   class Core
@@ -58,27 +59,37 @@ module SensuCli
         else
           @api = {:path => "/events"}
         end
+      when 'resolve'
+        payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
+        @api = {:path => "/event/resolve", :payload => payload}
+      when 'silence'
+        payload = {:timestamp => Time.now.to_i}.to_json
+        if cli[:fields][:client] && cli[:fields][:check]
+          @api = {:path => "/stashes/silence/#{cli[:fields][:client]}/#{cli[:fields][:check]}", :payload => payload}
+        else
+          @api = {:path => "/stashes/silence/#{cli[:fields][:client]}", :payload => payload}
+        end
       end
       @api.merge!({:method => cli[:method], :command => cli[:command]})
-      pretty(api(@settings))
+      pretty(api)
     end
 
-    def api_request(opts={})
-      http = Net::HTTP.new(opts[:host], opts[:port])
+    def api_request
+      http = Net::HTTP.new(@settings[:host], @settings[:port])
       http.read_timeout = 15
       http.open_timeout = 5
-      if opts[:ssl]
+      if @settings[:ssl]
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
-      case opts[:method]
+      case @api[:method]
       when 'Get'
-        req =  Net::HTTP::Get.new(opts[:path])
+        req =  Net::HTTP::Get.new(@api[:path])
       when 'Delete'
-        req =  Net::HTTP::Delete.new(opts[:path])
+        req =  Net::HTTP::Delete.new(@api[:path])
       when 'Post'
-        req =  Net::HTTP::Post.new(opts[:path])
-        req.set_form_data({"key" => "value"})
+        req =  Net::HTTP::Post.new(@api[:path],initheader = {'Content-Type' =>'application/json'})
+        req.body = @api[:payload]
       end
       begin
         http.request(req)
@@ -88,15 +99,8 @@ module SensuCli
       end
     end
 
-    def api(settings)
-      opts = {
-        :ssl => settings[:ssl],
-        :host => settings[:host],
-        :port => settings[:port],
-        :path => @api[:path],
-        :method => @api[:method]
-      }
-      res = api_request(opts)
+    def api
+      res = api_request
       msg = response_codes(res)
       if res.code != '200'
         exit
@@ -109,8 +113,10 @@ module SensuCli
       case res.code
       when '200'
         JSON.parse(res.body)
+      when '201'
+        puts "The stash has been created."
       when '202'
-        puts "The item was successfully deleted."
+        puts "The item was submitted for processing."
       when '204'
         puts "The item was successfully deleted."
       when '400'
