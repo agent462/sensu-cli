@@ -7,7 +7,7 @@ module SensuCli
     def self.load_file
       directory = "#{Dir.home}/.sensu"
       file = "#{directory}/settings.json"
-      settings = {}
+      settings = Hash.new
       if File.readable?(file)
         begin
           settings = JSON.parse(File.open(file, 'r').read, :symbolize_names => true)

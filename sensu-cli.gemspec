@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.date        = '2013-03-30'
   s.summary     = "A command line utility for Sensu."
-  s.description = "A command line utility for Sensu."
+  s.description = "A command line utility for interacting with the Sensu api."
   s.authors     = ["Bryan Brandau"]
   s.email       = 'agent462@gmail.com'
   s.has_rdoc    = false

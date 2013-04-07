@@ -1,4 +1,4 @@
-sensu-api
+sensu-cli
 =========
 A sensu-cli for interacting with the sensu api.
 
@@ -15,7 +15,10 @@ Features
 
 Usage and Configuration
 -----------------------
-* There is one settings file for host, port and ssl
+* gem build sensu-cli.gemspec
+* gem install ./{gem file created}
+
+* There is one settings file for host, port and ssl that lives in your user directory ~/.sensu/settings.json
 
 ````
 {
@@ -25,9 +28,6 @@ Usage and Configuration
 }
 
 ````
-
-* chmod +x bin/sensu
-* Add the bin folder to your path for simple command execution
 
 Examples
 -----------
@@ -45,9 +45,8 @@ Please provide a pull request.
 
 TODO
 ----
-* nice output format
-* support post
-* support delete
+* nicer output format
+* support post for all applicable endpoints
 
 Eventually I'd like to get to a cleaner input that mimicks the Chef Knife CLI
 current:

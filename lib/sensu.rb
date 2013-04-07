@@ -1,11 +1,9 @@
-#!/usr/bin/env ruby
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 require "net/https"
 require 'json'
 require 'settings'
 require 'cli'
 require 'rainbow'
-require 'uri'
 
 module SensuCli
   class Core
