@@ -28,7 +28,6 @@ module SensuCli
           ** Sensu Commands **
           sensu clients (options)\r
           sensu checks (options)\r
-          sensu stash (options)\r
           sensu info (options)\r
           sensu events (options)\r
           sensu stashes (options)\r

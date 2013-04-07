@@ -58,9 +58,8 @@ module SensuCli
           path << "/#{cli[:fields][:check]}"
         end
       end
-      @api = {:path => path, :method => cli[:method], :command => cli[:command]}
-      @api.merge!({:payload => payload}) if payload
-      pretty(api)
+      @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || nil)}
+      api
     end
 
     def http_request
@@ -94,7 +93,7 @@ module SensuCli
       if res.code != '200'
         exit
       else
-        msg
+        pretty(msg)
       end
     end
 
@@ -119,18 +118,20 @@ module SensuCli
 
     def pretty(res)
       if !res.empty?
-        res.each do |item|
-          puts "----"
-          if item.is_a?(Hash)
-            item.each do |key,value|
-              puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
-            end
-          elsif item.is_a?(Array)
-              item.each do |key|
-                puts "#{key}:  ".color(:cyan)
+        if res.is_a?(Hash)
+          res.each do |key,value|
+            puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
+          end
+        elsif res.is_a?(Array)
+          res.each do |item|
+            puts "-------".color(:yellow)
+            if item.is_a?(Hash)
+              item.each do |key,value|
+                puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
               end
-          else
-            puts item.color(:cyan)
+            else
+              puts item.color(:cyan)
+            end
           end
         end
       else
