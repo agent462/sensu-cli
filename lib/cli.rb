@@ -22,8 +22,8 @@ module SensuCli
           #           '--'
           #          SENSU
           #
-
-
+        EOS
+        banner <<-EOS.gsub(/^ {10}/, '')
           Available subcommands: (for details, sensu SUB-COMMAND --help)
 
           ** Sensu Commands **

@@ -10,7 +10,7 @@ module SensuCli
   class Core
     #
     # CLI can be anything assuming you can pass these paramaters
-    #
+    # Field names were derived from the sensu source/documentation.
     # cli = {
     #   :command => 'client',
     #   :method => 'Get',
@@ -59,7 +59,7 @@ module SensuCli
           @api = {:path => "/events"}
         end
       end
-      @api.merge!({:method => cli[:method]})
+      @api.merge!({:method => cli[:method], :command => cli[:command]})
       pretty(api(@settings))
     end
 
@@ -97,10 +97,28 @@ module SensuCli
         :method => @api[:method]
       }
       res = api_request(opts)
-      if res.code === '200'
-        JSON.parse(res.body)
+      msg = response_codes(res)
+      if res.code != '200'
+        exit
       else
-        res = ""
+        msg
+      end
+    end
+
+    def response_codes(res)
+      case res.code
+      when '200'
+        JSON.parse(res.body)
+      when '202'
+        puts "The item was successfully deleted."
+      when '204'
+        puts "The item was successfully deleted."
+      when '400'
+        puts "The payload is malformed".color(:red)
+      when '404'
+        puts "The #{@api[:command]} did not exist".color(:cyan)
+      else
+        puts "There was an error while trying to complete your request. Response code: #{res.code}".color(:red)
       end
     end
 
