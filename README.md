@@ -45,19 +45,18 @@ Please provide a pull request.
 
 TODO
 ----
-* nicer output format
 * support post for all applicable endpoints
 
-Eventually I'd like to get to a cleaner input that mimicks the Chef Knife CLI
-current:
-sensu clients
-sensu clients --name NODE
-sensu clients --name NODE --delete true
-
-aspiration:
-sensu client list
-sensu client show NODE
-sensu client delete some_host
+Eventually I'd like to get to a cleaner input that mimicks the Chef Knife CLI   
+current:   
+sensu clients   
+sensu clients --name NODE   
+sensu clients --name NODE --delete true   
+   
+aspiration:   
+sensu client list   
+sensu client show NODE   
+sensu client delete some_host   
 
 License and Author
 ==================
