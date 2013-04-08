@@ -1,5 +1,18 @@
 sensu-cli
 =========
+```
+#
+# Welcome to the sensu-cli.
+#          ______
+#       .-'      '-.
+#     .'     __     '.
+#    /      /  \      \
+#    ------------------
+#            /\
+#           '--'
+#          SENSU
+#
+```
 A sensu-cli for interacting with the sensu api.
 
 What is Sensu? http://sensuapp.org/
