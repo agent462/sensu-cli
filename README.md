@@ -31,16 +31,42 @@ Usage and Configuration
 * gem build sensu-cli.gemspec
 * gem install ./{gem file created}
 
-* There is one settings file for host, port and ssl that lives in your user directory ~/.sensu/settings.json
+* There is one settings file for host, port and ssl that lives in your user directory ~/.sensu/settings.rb
 
 ````
-{
-  "host": "127.0.0.1",
-  "port": "4567",
-  "ssl": false
-}
+host  "127.0.0.1"
+port  4567"
+ssl   false
 
 ````
+This format was chosen so you can do some ENV magic via your profile and setting up an alias.
+`~/.sensu/settings.rb`
+````
+environment = ENV['MY_ENV']
+if environment == "dev"
+  host "127.0.0.1"
+  port "4567"
+  ssl  false
+elsif environment == "prod"
+  host "127.0.0.1"
+  port "4567"
+  ssl  false
+end
+
+````
+in your `~/.profile or ~/.bash_rc`
+````
+if [ "$1" ]; then
+    export MY_ENV=$1
+else
+  export MY_ENV=dev
+fi
+alias prod='. ~/.profile prod'
+alias dev='. ~/.profile dev'
+
+````
+Then all you have to do to switch environments is type "prod" or "dev"
+
 
 Examples
 -----------
