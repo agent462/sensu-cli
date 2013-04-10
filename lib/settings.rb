@@ -1,32 +1,26 @@
-require 'json'
 require 'fileutils'
+require 'mixlib/config'
 
 module SensuCli
-  class Settings
 
-    def self.load_file
-      directory = "#{Dir.home}/.sensu"
-      file = "#{directory}/settings.json"
-      settings = Hash.new
-      if File.readable?(file)
-        begin
-          settings = JSON.parse(File.open(file, 'r').read, :symbolize_names => true)
-        rescue JSON::ParserError => e
-          puts "The config file must be valid json. #{e}".color(:red)
-          exit
-        end
-      else
+  class Settings
+    def self.check_settings(directory,file)
+      if !File.readable?(file)
         if File.directory?(directory)
-          FileUtils.cp(File.join(File.dirname(__FILE__),"../settings.example.json"), file)
+          FileUtils.cp(File.join(File.dirname(__FILE__),"../settings.example.rb"), file)
           puts "We created the configuration file for you at #{file}.  Edit the settings as needed.".color(:red)
         else
           FileUtils.mkdir(directory)
-          FileUtils.cp(File.join(File.dirname(__FILE__),"../settings.example.json"), file)
+          FileUtils.cp(File.join(File.dirname(__FILE__),"../settings.example.rb"), file)
           puts "The settings file and directory did not exist. We created it for you #{file}. Edit the settings as needed.".color(:red)
         end
         exit
       end
     end
-
   end
+
+  class Config
+    extend(Mixlib::Config)
+  end
+
 end

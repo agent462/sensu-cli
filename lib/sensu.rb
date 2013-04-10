@@ -21,7 +21,10 @@ module SensuCli
 
     def initialize
       cli = Cli.opts
-      @settings = Settings.load_file
+      directory = "#{Dir.home}/.sensu"
+      file = "#{directory}/settings.rb"
+      Settings.check_settings(directory,file)
+      SensuCli::Config.from_file(file)
       request(cli)
     end
 
@@ -63,10 +66,10 @@ module SensuCli
     end
 
     def http_request
-      http = Net::HTTP.new(@settings[:host], @settings[:port])
+      http = Net::HTTP.new(Config.host, Config.port)
       http.read_timeout = 15
       http.open_timeout = 5
-      if @settings[:ssl]
+      if Config.ssl
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
@@ -81,8 +84,8 @@ module SensuCli
       end
       begin
         http.request(req)
-      rescue Timeout::Error
-        puts "HTTP connection has timed out".color(:red)
+      rescue Timeout::Error, StandardError
+        puts "An HTTP error has happened.  Check your settings.".color(:red)
         exit
       end
     end
