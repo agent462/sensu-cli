@@ -31,7 +31,7 @@ module SensuCli
     def request(cli)
       case cli[:command]
       when 'clients'
-        path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "")
+        path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "") << (cli[:fields][:history] ? "/history" : "")
       when 'info'
         path = "/info"
       when 'stashes'
@@ -60,6 +60,8 @@ module SensuCli
         elsif cli[:fields][:check]
           path << "/#{cli[:fields][:check]}"
         end
+      when 'aggregates'
+        path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       end
       @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || nil)}
       api

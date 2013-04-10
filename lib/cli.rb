@@ -3,7 +3,7 @@ require 'trollop'
 module SensuCli
   class Cli
 
-    SUB_COMMANDS = %w(info clients checks events stashes resolve silence)
+    SUB_COMMANDS = %w(info clients checks events stashes resolve silence aggregates)
 
     def self.opts
 
@@ -31,6 +31,7 @@ module SensuCli
           sensu info (options)\r
           sensu events (options)\r
           sensu stashes (options)\r
+          sensu aggregates (options)\r
 
           sensu resolve (options)\r
           sensu silence (options)\r
@@ -56,8 +57,10 @@ module SensuCli
         when "clients"
           p = Trollop::options do
             opt :name, "Client name to return", :short => "n", :type => :string
+            opt :history, "Return Client History", :short => "h", :type => :boolean
             opt :delete, "Delete the client given by --name", :short => "d", :type => :boolean
           end
+          Trollop::die :history, "Check depends on the name option --name ( -n )".color(:red) if p[:history] && !p[:name]
           Trollop::die :delete, "Delete depends on the name option --name ( -n )".color(:red) if p[:delete] && !p[:name]
           p[:delete] ? cli.merge!({:method => 'Delete'}) : cli.merge!({:method => 'Get'})
           cli.merge!({:command => cmd})
@@ -86,12 +89,9 @@ module SensuCli
         when "stashes"
           p = Trollop::options do
             opt :path, "The stash path to look up", :short => "p", :type => :string
-            #opt :create, "The stash to create", :short => "C", :type => :string
             opt :delete, "Delete a stash given by --path", :short => "d", :type => :boolean
           end
-          if p[:create]
-            cli.merge!({:method => 'Post'})
-          elsif p[:delete]
+          if p[:delete]
             cli.merge!({:method => 'Delete'})
           else
             cli.merge!({:method => 'Get'})
@@ -111,6 +111,12 @@ module SensuCli
           end
           Trollop::die :check, "Check depends on the client option --client ( -c )".color(:red) if p[:check] && !p[:client]
           cli.merge!({:command => cmd, :method => 'Post'})
+        when "aggregates"
+          p = Trollop::options do
+            opt :check, "The check to get", :short => 'k', :type => :string
+            opt :delete, "Delete an aggregate given by --check", :short => "d", :type => :boolean
+          end
+          cli.merge!({:command => cmd, :method => 'Get'})
         else
           explode = Trollop::with_standard_exception_handling global_opts do
             raise Trollop::HelpNeeded # show help screen
