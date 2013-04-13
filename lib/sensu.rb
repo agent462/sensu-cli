@@ -21,11 +21,22 @@ module SensuCli
 
     def initialize
       cli = Cli.opts
+      settings
+      request(cli)
+    end
+
+    def settings
       directory = "#{Dir.home}/.sensu"
       file = "#{directory}/settings.rb"
-      Settings.check_settings(directory,file)
-      SensuCli::Config.from_file(file)
-      request(cli)
+      alt = "/etc/sensu/sensu-cli/settings.rb"
+      settings = Settings.new
+      if settings.is_file?(file)
+        SensuCli::Config.from_file(file)
+      elsif settings.is_file?(alt)
+        SensuCli::Config.from_file(alt)
+      else
+        settings.create(directory,file)
+      end
     end
 
     def request(cli)
