@@ -55,22 +55,16 @@ module SensuCli
         end
       when 'events'
         path = "/events"
-        if cli[:fields][:client]
-          path << "/#{cli[:fields][:client]}"
-        elsif cli[:fields][:check]
-          path << "/#{cli[:fields][:check]}"
-        end
+        cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
+        cli[:fields][:check] ? path << "/#{cli[:fields][:check]}" : ""
       when 'resolve'
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
         path = "/event/resolve"
       when 'silence'
         payload = {:timestamp => Time.now.to_i}.to_json
         path = "/stashes/silence"
-        if cli[:fields][:client]
-          path << "/#{cli[:fields][:client]}"
-        elsif cli[:fields][:check]
-          path << "/#{cli[:fields][:check]}"
-        end
+        cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
+        cli[:fields][:check] ? path << "/#{cli[:fields][:check]}" : ""
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       end
