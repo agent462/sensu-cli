@@ -46,31 +46,19 @@ Examples
 -----------
 ````
 sensu --help
-sensu clients --name some_host --delete true
-sensu clients --help
-sensu clients --name servername
-sensu silence --client some_host
+sensu client list
+sensu client show NODE
+sensu silence NODE
 sensu info
 ````
 Contributions
 -------------
 Please provide a pull request.
-
+   
 TODO
 ----
-* support post for all applicable endpoints
-
-Eventually I'd like to get to a cleaner input that mimicks the Chef Knife CLI   
-current:   
-sensu clients   
-sensu clients --name NODE   
-sensu clients --name NODE --delete true   
+* support post for all applicable endpoints      
    
-aspiration:   
-sensu client list   
-sensu client show NODE   
-sensu client delete some_host   
-
 License and Author
 ==================
 

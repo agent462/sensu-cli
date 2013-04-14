@@ -20,7 +20,8 @@ module SensuCli
     # }
 
     def initialize
-      cli = Cli.opts
+      clis = Cli.new
+      cli = clis.global
       settings
       request(cli)
     end
@@ -48,11 +49,7 @@ module SensuCli
       when 'stashes'
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
       when 'checks'
-        if cli[:fields][:name]
-          path = "/check/#{cli[:fields][:name]}" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
-        else
-          path = "/checks"
-        end
+        cli[:fields][:name] ? (path = "/check/#{cli[:fields][:name]}" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")) : (path = "/checks")
       when 'events'
         path = "/events"
         cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
