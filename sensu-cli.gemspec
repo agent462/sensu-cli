@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'sensu-cli'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.platform    = Gem::Platform::RUBY
   s.date        = '2013-03-30'
   s.summary     = "A command line utility for Sensu."
