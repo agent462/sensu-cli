@@ -22,7 +22,6 @@ module SensuCli
     def initialize
       clis = Cli.new
       cli = clis.global
-      puts cli.inspect
       directory = "#{Dir.home}/.sensu"
       file = "#{directory}/settings.rb"
       Settings.check_settings(directory,file)
