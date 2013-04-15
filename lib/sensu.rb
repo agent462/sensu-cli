@@ -19,11 +19,12 @@ module SensuCli
     #              :check => 'ntp-check'}
     # }
 
-    def initialize
+    def setup
       clis = Cli.new
       cli = clis.global
       settings
-      request(cli)
+      api_path(cli)
+      make_call
     end
 
     def settings
@@ -40,7 +41,7 @@ module SensuCli
       end
     end
 
-    def request(cli)
+    def api_path(cli)
       case cli[:command]
       when 'clients'
         path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "") << (cli[:fields][:history] ? "/history" : "")
@@ -49,7 +50,7 @@ module SensuCli
       when 'stashes'
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
       when 'checks'
-        cli[:fields][:name] ? (path = "/check/#{cli[:fields][:name]}" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")) : (path = "/checks")
+        cli[:fields][:name] ? path = "/check/#{cli[:fields][:name]}" : (path = "/checks")
       when 'events'
         path = "/events"
         cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
@@ -65,8 +66,7 @@ module SensuCli
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       end
-      @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || nil)}
-      api
+      @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || false)}
     end
 
     def http_request
@@ -97,7 +97,7 @@ module SensuCli
       end
     end
 
-    def api
+    def make_call
       res = http_request
       msg = response_codes(res)
       if res.code != '200'

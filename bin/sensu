@@ -5,3 +5,4 @@ end
 
 require 'sensu'
 sensu = SensuCli::Core.new
+sensu.setup
