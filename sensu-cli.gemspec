@@ -1,6 +1,8 @@
+require File.join(File.dirname(__FILE__), 'lib', 'sensu-cli', 'version')
+
 Gem::Specification.new do |s|
   s.name        = 'sensu-cli'
-  s.version     = '0.0.4'
+  s.version     = SensuCli::VERSION
   s.platform    = Gem::Platform::RUBY
   s.date        = '2013-03-30'
   s.summary     = "A command line utility for Sensu."

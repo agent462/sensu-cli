@@ -218,7 +218,7 @@ module SensuCli
 
     def silence
       opts = parser("SIL")
-      explode(opts) if @command == nil
+      explode(opts) if @command == nil || @command == "--help"
       p = Trollop::options do
         opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
       end
