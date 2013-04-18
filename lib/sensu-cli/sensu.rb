@@ -1,5 +1,5 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
-require "net/https"
+require 'net/https'
 require 'json'
 require 'sensu-cli/settings'
 require 'sensu-cli/cli'
@@ -99,18 +99,14 @@ module SensuCli
 
     def make_call
       res = http_request
-      msg = response_codes(res)
-      if res.code != '200'
-        exit
-      else
-        pretty(msg)
-      end
+      msg = response_codes(res.code,res.body)
+      res.code != '200' ? exit : pretty(msg)
     end
 
-    def response_codes(res)
-      case res.code
+    def response_codes(code,body)
+      case code
       when '200'
-        JSON.parse(res.body)
+        JSON.parse(body)
       when '201'
         puts "The stash has been created."
       when '202'
@@ -120,7 +116,7 @@ module SensuCli
       when '400'
         puts "The payload is malformed".color(:red)
       when '404'
-        puts "The #{@api[:command]} did not exist".color(:cyan)
+        puts "The item did not exist".color(:cyan)
       else
         puts "There was an error while trying to complete your request. Response code: #{res.code}".color(:red)
       end

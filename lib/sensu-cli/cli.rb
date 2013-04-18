@@ -1,16 +1,17 @@
 require 'trollop'
+require 'sensu-cli/version'
 
 module SensuCli
   class Cli
-    SUB_COMMANDS = %w(info client check event stash aggregate silence resolve)
+    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve)
     CLIENT_COMMANDS = %w(list show delete history)
-    CHECK_COMMANDS = %w(list show request)
-    EVENT_COMMANDS = %w(list show delete)
-    STASH_COMMANDS = %w(list show delete)
-    AGG_COMMANDS = %w(list show)
-    SIL_COMMANDS = ""
-    RES_COMMANDS = ""
-    INFO_COMMANDS = ""
+    CHECK_COMMANDS  = %w(list show request)
+    EVENT_COMMANDS  = %w(list show delete)
+    STASH_COMMANDS  = %w(list show delete)
+    AGG_COMMANDS    = %w(list show)
+    SIL_COMMANDS    = ""
+    RES_COMMANDS    = ""
+    INFO_COMMANDS   = ""
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -61,7 +62,7 @@ module SensuCli
 
     def global
       global_opts = Trollop::Parser.new do
-        version "Sensu CLI 0.0.3"
+        version "sensu-cli version: #{SensuCli::VERSION}"
         banner <<-'EOS'.gsub(/^ {10}/, '')
           #
           # Welcome to the sensu-cli.

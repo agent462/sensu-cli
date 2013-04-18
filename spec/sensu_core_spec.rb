@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../lib/sensu-cli/sensu.rb'
 require File.dirname(__FILE__) + '/helpers.rb'
-
 require 'json'
 
 describe 'SensuCli::Core' do

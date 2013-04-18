@@ -9,7 +9,7 @@ module SensuCli
     end
 
     def create(directory,file)
-      FileUtils.mkdir(directory) if !File.directory?(directory)
+      FileUtils.mkdir_p(directory) if !File.directory?(directory)
       FileUtils.cp(File.join(File.dirname(__FILE__),"../../settings.example.rb"), file)
       puts "We created the configuration file for you at #{file}.  You can also place this in /etc/sensu/sensu-cli. Edit the settings as needed.".color(:red)
       exit
