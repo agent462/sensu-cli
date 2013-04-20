@@ -47,6 +47,8 @@ module SensuCli
         path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "") << (cli[:fields][:history] ? "/history" : "")
       when 'info'
         path = "/info"
+      when 'health'
+        path = "/health"
       when 'stashes'
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
       when 'checks'

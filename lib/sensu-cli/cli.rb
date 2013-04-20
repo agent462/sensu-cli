@@ -12,6 +12,7 @@ module SensuCli
     SIL_COMMANDS    = ""
     RES_COMMANDS    = ""
     INFO_COMMANDS   = ""
+    HEALTH_COMMANDS = ""
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -23,6 +24,10 @@ module SensuCli
     INFO_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Info Commands **
           sensu info\n\r
+        EOS
+    HEALTH_BANNER = <<-EOS.gsub(/^ {10}/, '')
+          ** Health Commands **
+          sensu health\n\r
         EOS
     CHECK_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Check Commands **
@@ -81,6 +86,7 @@ module SensuCli
         banner CHECK_BANNER
         banner CLIENT_BANNER
         banner EVENT_BANNER
+        banner HEALTH_BANNER
         banner INFO_BANNER
         banner SIL_BANNER
         banner STASH_BANNER
@@ -141,6 +147,11 @@ module SensuCli
     def info
       parser("INFO")
       cli = {:command => 'info', :method => 'Get'}
+    end
+
+    def health
+      parser("HEALTH")
+      cli = {:command => 'health', :method => 'Get'}
     end
 
     def check

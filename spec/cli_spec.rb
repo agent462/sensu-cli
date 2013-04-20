@@ -62,6 +62,14 @@ describe 'SensuCli::Cli' do
     end
   end
 
+  describe "health commands" do
+    it 'should return proper health hash' do
+      ARGV.push("health")
+      response = @cli.global
+      response.should eq({:command=>"health", :method=>"Get"})
+    end
+  end
+
   describe "aggregate commands" do
     it 'should return aggregate help' do
       ARGV.push("aggregate","--help")

@@ -45,6 +45,15 @@ describe 'SensuCli::Core' do
     @core.api_path(cli).should == {:path=>"/info", :method=>"Get", :command=>"info", :payload=>false}
   end
 
+  it 'can return proper health path' do
+    cli = {
+      :command => 'health',
+      :method => 'Get',
+      :fields => {}
+    }
+    @core.api_path(cli).should == {:path=>"/health", :method=>"Get", :command=>"health", :payload=>false}
+  end
+
   it 'can return proper all stashes path' do
     cli = {
       :command => 'stashes',
