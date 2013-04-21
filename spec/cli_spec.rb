@@ -32,7 +32,7 @@ describe 'SensuCli::Cli' do
     it 'should return proper client list hash' do
       ARGV.push("client","list")
       response = @cli.global
-      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:help=>false}})
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :help=>false}})
     end
 
     it 'should return proper client show hash' do
@@ -51,6 +51,23 @@ describe 'SensuCli::Cli' do
       ARGV.push("client","history","test_client")
       response = @cli.global
       response.should eq({:command=>"clients", :method=>"Get", :fields=>{:name=>"test_client", :history=>true, :help=>false}})
+    end
+
+    it 'should paginate with limit and offset' do
+      ARGV.push("client","list","-l","2","-o","3")
+      response = @cli.global
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>"3", :help=>false, :limit_given=>true, :offset_given=>true}})
+    end
+
+    it 'should paginate with limit' do
+      ARGV.push("client","list","-l","2")
+      response = @cli.global
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
+    end
+
+    it 'should bail if offset exists without limit' do
+      ARGV.push("client","list","-o","2")
+      lambda { @cli.global }.should raise_error SystemExit
     end
   end
 
@@ -79,13 +96,30 @@ describe 'SensuCli::Cli' do
     it 'should return proper aggregate list hash' do
       ARGV.push("aggregate","list")
       response = @cli.global
-      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:help=>false}})
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :help=>false}})
     end
 
     it 'should return proper aggregate show hash' do
       ARGV.push("aggregate","show","test_check")
       response = @cli.global
       response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:check=>"test_check", :help=>false}})
+    end
+
+    it 'should paginate with limit and offset' do
+      ARGV.push("aggregate","list","-l","2","-o","3")
+      response = @cli.global
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>"2",:offset=>"3",:help=>false, :limit_given=>true, :offset_given=>true}})
+    end
+
+    it 'should paginate with limit' do
+      ARGV.push("aggregate","list","-l","2")
+      response = @cli.global
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
+    end
+
+    it 'should bail with offset and no limit' do
+      ARGV.push("aggregate","list","-o","2")
+      lambda { @cli.global }.should raise_error SystemExit
     end
   end
 
@@ -180,7 +214,7 @@ describe 'SensuCli::Cli' do
     it 'should return stash list hash' do
       ARGV.push("stash","list")
       response = @cli.global
-      response.should eq({:command=>"stashes", :method=>"Get", :fields=>{:help=>false}})
+      response.should eq({:command=>"stashes", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :help=>false}})
     end
 
     it 'should return stash show hash' do
@@ -193,6 +227,23 @@ describe 'SensuCli::Cli' do
       ARGV.push("stash","delete","path")
       response = @cli.global
       response.should eq({:command=>"stashes", :method=>"Delete", :fields=>{:path=>"path", :help=>false}})
+    end
+
+    it 'should paginate with limit and offset' do
+      ARGV.push("stash","list","-l","2","-o","3")
+      response = @cli.global
+      response.should eq({:command=>"stashes", :method=>"Get", :fields=>{:limit=>"2",:offset=>"3",:help=>false, :limit_given=>true, :offset_given=>true}})
+    end
+
+    it 'should paginate with limit' do
+      ARGV.push("stash","list","-l","2")
+      response = @cli.global
+      response.should eq({:command=>"stashes", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
+    end
+
+    it 'should bail with offset and no limit' do
+      ARGV.push("stash","list","-o","2")
+      lambda { @cli.global }.should raise_error SystemExit
     end
   end
 

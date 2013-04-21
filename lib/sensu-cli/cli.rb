@@ -16,7 +16,7 @@ module SensuCli
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
-          sensu client list
+          sensu client list (OPTIONS)
           sensu client show NODE
           sensu client delete NODE
           sensu client history NODE\n\r
@@ -43,7 +43,7 @@ module SensuCli
         EOS
     STASH_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Stash Commands **
-          sensu stash list
+          sensu stash list (OPTIONS)
           sensu stash show STASHPATH
           sensu stash delete STASHPATH\n\r
         EOS
@@ -51,7 +51,7 @@ module SensuCli
         #apost '/stashes'
     AGG_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Aggregate Commands **
-          sensu aggregate list
+          sensu aggregate list (OPTIONS)
           sensu aggregate show CHECK\n\r
         EOS
         #sensu aggregate delete CHECK\n\r
@@ -128,16 +128,25 @@ module SensuCli
     def client
       opts = parser("CLIENT")
       is_list(opts)
-      p = Trollop::options
-      item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
       case @command
       when 'list'
+        p = Trollop::options do
+          opt :limit, "The number if clients to return", :short => "l", :type => :string
+          opt :offset, "The number of clients to offset before returning", :short => "o", :type => :string
+        end
+        Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
         cli = {:command => 'clients', :method => 'Get', :fields => p}
       when 'delete'
+        p = Trollop::options
+        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
         deep_merge({:command => 'clients', :method => 'Delete', :fields => {:name => item}},{:fields => p})
       when 'show'
+        p = Trollop::options
+        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item}},{:fields => p})
       when 'history'
+        p = Trollop::options
+        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item, :history => true}},{:fields => p})
       else
         explode(opts)
@@ -197,14 +206,21 @@ module SensuCli
     def stash
       opts = parser("STASH")
       is_list(opts)
-      p = Trollop::options
-      item = ARGV.shift
       case @command
       when 'list'
+        p = Trollop::options do
+          opt :limit, "The number of stashes to return", :short => "l", :type => :string
+          opt :offset, "The number of stashes to offset before returning", :short => "o", :type => :string
+        end
+        Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
         cli = {:command => 'stashes', :method => 'Get', :fields => p}
       when 'show'
+        p = Trollop::options
+        item = ARGV.shift
         deep_merge({:command => 'stashes', :method => 'Get', :fields => {:path => item}},{:fields => p})
       when 'delete'
+        p = Trollop::options
+        item = ARGV.shift
         deep_merge({:command => 'stashes', :method => 'Delete', :fields => {:path => item}},{:fields => p})
       else
         explode(opts)
@@ -214,14 +230,21 @@ module SensuCli
     def aggregate
       opts = parser("AGG")
       is_list(opts)
-      p = Trollop::options
-      item = ARGV.shift
       case @command
       when 'list'
+        p = Trollop::options do
+          opt :limit, "The number of aggregates to return", :short => "l", :type => :string
+          opt :offset, "The number of aggregates to offset before returning", :short => "o", :type => :string
+        end
+        Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
         cli = {:command => 'aggregates', :method => 'Get', :fields => p}
       when 'show'
+        p = Trollop::options
+        item = ARGV.shift
         deep_merge({:command => 'aggregates', :method => 'Get', :fields => {:check => item}},{:fields => p})
       when 'delete'
+        p = Trollop::options
+        item = ARGV.shift
         deep_merge({:command => 'aggregates', :method => 'Delete', :fields => {:check => item}},{:fields => p})
       else
         explode(opts)

@@ -68,7 +68,18 @@ module SensuCli
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       end
+      path << pagination(cli)
       @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || false)}
+    end
+
+    def pagination(cli)
+      if cli[:fields][:limit] && cli[:fields][:offset]
+        page = "?limit=#{cli[:fields][:limit]}&offset=#{cli[:fields][:offset]}"
+      elsif cli[:fields][:limit]
+        page = "?limit=#{cli[:fields][:limit]}"
+      else
+        page = ""
+      end
     end
 
     def http_request
