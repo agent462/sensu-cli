@@ -114,6 +114,7 @@ module SensuCli
       res = http_request
       msg = response_codes(res.code,res.body)
       res.code != '200' ? exit : pretty(msg)
+      count(msg)
     end
 
     def response_codes(code,body)
@@ -156,6 +157,11 @@ module SensuCli
       else
         puts "no values for this request".color(:cyan)
       end
+    end
+
+    def count(res)
+      res.is_a?(Hash) ? count = res.length : count = res.count
+      puts "#{count} total items".color(:yellow) if count
     end
 
   end

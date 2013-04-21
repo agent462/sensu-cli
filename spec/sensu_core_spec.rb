@@ -206,6 +206,18 @@ describe 'SensuCli::Core' do
     output.should == "\e[33m-------\e[0m\n\e[36mtest:  \e[0m\e[32mvalue\e[0m\n\e[36mtest1:  \e[0m\e[32mvalue1\e[0m\n"
   end
 
+  it 'can count a hash' do
+    res = {:test => "value",:test1 => "value1"}
+    output = capture_stdout { @core.count(res) }
+    output.should == "\e[33m2 total items\e[0m\n"
+  end
+
+  it 'can count an array' do
+    res = ["test","test2"]
+    output = capture_stdout { @core.count(res) }
+    output.should == "\e[33m2 total items\e[0m\n"
+  end
+
   it 'can paginate with limit and offset' do
     cli = {:fields => {:limit => '2', :offset => '3'}}
     output = @core.pagination(cli)
