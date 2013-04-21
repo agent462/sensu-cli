@@ -19,11 +19,11 @@ What is Sensu? http://sensuapp.org/
 
 Features
 --------
-* Get Requests
-* Delete Requests (delete clients, stashes and events)
-* API interaction with info, stashes, events, clients and checks
+* API interaction with info, health, stashes, events, clients, aggregates and checks
 * Resolve Events
 * Silence clients and checks
+* Get Requests (get clients, stashes, events, etc.)
+* Delete Requests (delete clients, stashes and events)
 
 
 Usage and Configuration
@@ -45,19 +45,58 @@ This format was chosen so you can do some ENV magic via your profile and setting
 Examples
 -----------
 ````
-sensu --help
-sensu client list
+Available subcommands: (for details, sensu SUB-COMMAND --help)
+
+** Aggregate Commands **
+sensu aggregate list (OPTIONS)
+sensu aggregate show CHECK
+
+** Check Commands **
+sensu check list
+sensu check show CHECK
+
+** Client Commands **
+sensu client list (OPTIONS)
 sensu client show NODE
-sensu silence NODE
+sensu client delete NODE
+sensu client history NODE
+
+** Event Commands **
+sensu event list
+sensu event show NODE (OPTIONS)
+sensu event delete NODE CHECK
+
+** Health Commands **
+sensu health
+
+** Info Commands **
 sensu info
+
+** Silence Commands **
+sensu silence NODE (OPTIONS)
+
+** Stash Commands **
+sensu stash list (OPTIONS)
+sensu stash show STASHPATH
+sensu stash delete STASHPATH
+
+** Resolve Commands **
+sensu resolve NODE CHECK
+
+  --version, -v:   Print version and exit
+     --help, -h:   Show this message
 ````
+
 Contributions
 -------------
-Please provide a pull request.
+Please provide a pull request.  I'm an ops guy, not a developer, so if you're submitting code cleanup, all I ask is that you explain the improvement so I can learn.
    
 TODO
 ----
-* support post for all applicable endpoints      
+* support submitting checks
+* support deletion of aggregate check
+* cleanup the cli
+* Once complete api support is implemented I'll add other features like filtering or issuing a event.
    
 License and Author
 ==================
