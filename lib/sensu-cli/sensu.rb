@@ -73,12 +73,12 @@ module SensuCli
     end
 
     def pagination(cli)
-      if cli[:fields][:limit] && cli[:fields][:offset]
+      if cli[:fields].has_key?(:limit) && cli[:fields].has_key?(:offset)
         page = "?limit=#{cli[:fields][:limit]}&offset=#{cli[:fields][:offset]}"
-      elsif cli[:fields][:limit]
+      elsif cli[:fields].has_key?(:limit)
         page = "?limit=#{cli[:fields][:limit]}"
       else
-        page = ""
+         page = ""
       end
     end
 

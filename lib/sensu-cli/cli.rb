@@ -155,12 +155,12 @@ module SensuCli
 
     def info
       parser("INFO")
-      cli = {:command => 'info', :method => 'Get'}
+      cli = {:command => 'info', :method => 'Get', :fields => {}}
     end
 
     def health
       parser("HEALTH")
-      cli = {:command => 'health', :method => 'Get'}
+      cli = {:command => 'health', :method => 'Get', :fields => {}}
     end
 
     def check
