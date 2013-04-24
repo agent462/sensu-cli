@@ -3,7 +3,7 @@ require 'sensu-cli/version'
 
 module SensuCli
   class Cli
-    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve)
+    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve health)
     CLIENT_COMMANDS = %w(list show delete history)
     CHECK_COMMANDS  = %w(list show request)
     EVENT_COMMANDS  = %w(list show delete)
@@ -12,7 +12,7 @@ module SensuCli
     SIL_COMMANDS    = ""
     RES_COMMANDS    = ""
     INFO_COMMANDS   = ""
-    HEALTH_COMMANDS = ""
+    HEALTH_COMMANDS = "check"
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -27,7 +27,7 @@ module SensuCli
         EOS
     HEALTH_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Health Commands **
-          sensu health\n\r
+          sensu health check (OPTIONS)\n\r
         EOS
     CHECK_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Check Commands **
@@ -159,8 +159,15 @@ module SensuCli
     end
 
     def health
-      parser("HEALTH")
-      cli = {:command => 'health', :method => 'Get', :fields => {}}
+      opts = parser("HEALTH")
+      case @command
+      when 'check'
+        p = Trollop::options do
+          opt :consumers, "The minimum number of consumers", :short => "c", :type => :string, :required => true
+          opt :messages, "The maximum number of messages", :short => "m", :type => :string, :required => true
+        end
+      end
+      cli = {:command => 'health', :method => 'Get', :fields => p}
     end
 
     def check

@@ -75,15 +75,15 @@ describe 'SensuCli::Cli' do
     it 'should return proper info hash' do
       ARGV.push("info")
       response = @cli.global
-      response.should eq({:command=>"info", :method=>"Get"})
+      response.should eq({:command=>"info", :method=>"Get", :fields=>{}})
     end
   end
 
   describe "health commands" do
     it 'should return proper health hash' do
-      ARGV.push("health")
+      ARGV.push("health","check","--messages","3","--consumers","2")
       response = @cli.global
-      response.should eq({:command=>"health", :method=>"Get"})
+      response.should eq({:command=>"health", :method=>"Get", :fields=>{:consumers=>"2", :messages=>"3", :help=>false, :messages_given=>true, :consumers_given=>true}})
     end
   end
 
