@@ -55,21 +55,17 @@ module SensuCli
       when 'checks'
         cli[:fields][:name] ? path = "/check/#{cli[:fields][:name]}" : (path = "/checks")
       when 'events'
-        path = "/events"
-        cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
-        cli[:fields][:check] ? path << "/#{cli[:fields][:check]}" : ""
+        path = "/events" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       when 'resolve'
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
         path = "/event/resolve"
       when 'silence'
-        payload = {:timestamp => Time.now.to_i}.to_json
-        path = "/stashes/silence"
-        cli[:fields][:client] ? path << "/#{cli[:fields][:client]}" : ""
-        cli[:fields][:check] ? path << "/#{cli[:fields][:check]}" : ""
+         cli[:fields][:reason] ? payload = ({:reason => cli[:fields][:reason],:timestamp => Time.now.to_i}).to_json : payload = {:timestamp => Time.now.to_i}.to_json
+        path = "/stashes/silence" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       end
-      path << pagination(cli)
+      path << pagination(cli) if ["stashes","clients","aggregates"].include?(@command)
       @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || false)}
     end
 

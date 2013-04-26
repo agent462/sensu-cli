@@ -81,7 +81,7 @@ describe 'SensuCli::Cli' do
 
   describe "health commands" do
     it 'should return proper health hash' do
-      ARGV.push("health","check","--messages","3","--consumers","2")
+      ARGV.push("health","--messages","3","--consumers","2")
       response = @cli.global
       response.should eq({:command=>"health", :method=>"Get", :fields=>{:consumers=>"2", :messages=>"3", :help=>false, :messages_given=>true, :consumers_given=>true}})
     end
@@ -182,13 +182,13 @@ describe 'SensuCli::Cli' do
     it 'should return silence node hash' do
       ARGV.push("silence","test_node")
       response = @cli.global
-      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>nil, :help=>false}})
+      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>nil, :reason=>nil, :help=>false}})
     end
 
     it 'should return silence node check hash' do
       ARGV.push("silence","test_node","-k","test_check")
       response = @cli.global
-      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>"test_check", :help=>false, :check_given=>true}})
+      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>"test_check", :reason=>nil, :help=>false, :check_given=>true}})
     end
   end
 

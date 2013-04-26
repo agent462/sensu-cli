@@ -12,7 +12,7 @@ module SensuCli
     SIL_COMMANDS    = ""
     RES_COMMANDS    = ""
     INFO_COMMANDS   = ""
-    HEALTH_COMMANDS = "check"
+    HEALTH_COMMANDS = ""
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -27,7 +27,7 @@ module SensuCli
         EOS
     HEALTH_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Health Commands **
-          sensu health check (OPTIONS)\n\r
+          sensu health (OPTIONS)\n\r
         EOS
     CHECK_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Check Commands **
@@ -100,7 +100,6 @@ module SensuCli
       end
 
       cmd = ARGV.shift
-      @command = ARGV.shift
       self.respond_to?(cmd) ? send(cmd) : explode(global_opts)
     end
 
@@ -121,14 +120,15 @@ module SensuCli
       end
     end
 
-    def is_list(opts)
-      explode(opts) if ARGV.empty? && @command != 'list'
+    def is_list(opts,command)
+      explode(opts) if ARGV.empty? && command != 'list'
     end
 
     def client
       opts = parser("CLIENT")
-      is_list(opts)
-      case @command
+      command = ARGV.shift
+      is_list(opts,command)
+      case command
       when 'list'
         p = Trollop::options do
           opt :limit, "The number if clients to return", :short => "l", :type => :string
@@ -155,27 +155,26 @@ module SensuCli
 
     def info
       parser("INFO")
+      p = Trollop::options
       cli = {:command => 'info', :method => 'Get', :fields => {}}
     end
 
     def health
       opts = parser("HEALTH")
-      case @command
-      when 'check'
-        p = Trollop::options do
-          opt :consumers, "The minimum number of consumers", :short => "c", :type => :string, :required => true
-          opt :messages, "The maximum number of messages", :short => "m", :type => :string, :required => true
-        end
+      p = Trollop::options do
+        opt :consumers, "The minimum number of consumers", :short => "c", :type => :string, :required => true
+        opt :messages, "The maximum number of messages", :short => "m", :type => :string, :required => true
       end
       cli = {:command => 'health', :method => 'Get', :fields => p}
     end
 
     def check
       opts = parser("CHECK")
-      is_list(opts)
+      command = ARGV.shift
+      is_list(opts,command)
       p = Trollop::options
       item = ARGV.shift
-      case @command
+      case command
       when 'list'
         cli = {:command => 'checks', :method => 'Get', :fields => p}
       when 'show'
@@ -188,8 +187,9 @@ module SensuCli
 
     def event
       opts = parser("EVENT")
-      is_list(opts)
-      case @command
+      command = ARGV.shift
+      is_list(opts,command)
+      case command
       when 'list'
         p = Trollop::options
         cli = {:command => 'events', :method => 'Get', :fields => p}
@@ -212,8 +212,9 @@ module SensuCli
 
     def stash
       opts = parser("STASH")
-      is_list(opts)
-      case @command
+      command = ARGV.shift
+      is_list(opts,command)
+      case command
       when 'list'
         p = Trollop::options do
           opt :limit, "The number of stashes to return", :short => "l", :type => :string
@@ -236,8 +237,9 @@ module SensuCli
 
     def aggregate
       opts = parser("AGG")
-      is_list(opts)
-      case @command
+      command = ARGV.shift
+      is_list(opts,command)
+      case command
       when 'list'
         p = Trollop::options do
           opt :limit, "The number of aggregates to return", :short => "l", :type => :string
@@ -260,18 +262,21 @@ module SensuCli
 
     def silence
       opts = parser("SIL")
-      explode(opts) if @command == nil || @command == "--help"
       p = Trollop::options do
         opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
+        opt :reason, "The reason this check/node is being silenced", :short => 'r', :type => :string
       end
-      deep_merge({:command => 'silence', :method => 'Post', :fields => {:client => @command}},{:fields => p})
+      command = ARGV.shift
+      explode(opts) if command == nil
+      deep_merge({:command => 'silence', :method => 'Post', :fields => {:client => command}},{:fields => p})
     end
 
     def resolve
       opts = parser("RES")
+      command = ARGV.shift
       p = Trollop::options
       ARGV.empty? ? explode(opts) : (check = ARGV.shift)
-      deep_merge({:command => 'resolve', :method => 'Post', :fields => {:client => @command, :check => check}},{:fields => p})
+      deep_merge({:command => 'resolve', :method => 'Post', :fields => {:client => command, :check => check}},{:fields => p})
     end
 
   end
