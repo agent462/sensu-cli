@@ -142,11 +142,11 @@ module SensuCli
         deep_merge({:command => 'clients', :method => 'Delete', :fields => {:name => item}},{:fields => p})
       when 'show'
         p = Trollop::options
-        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
+        item = ARGV.shift
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item}},{:fields => p})
       when 'history'
         p = Trollop::options
-        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
+        item = ARGV.shift
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item, :history => true}},{:fields => p})
       else
         explode(opts)
