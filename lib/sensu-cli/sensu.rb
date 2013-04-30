@@ -96,6 +96,7 @@ module SensuCli
         req =  Net::HTTP::Post.new(@api[:path],initheader = {'Content-Type' =>'application/json'})
         req.body = @api[:payload]
       end
+      req.basic_auth(Config.user, Config.password) if Config.user and Config.password
       begin
         http.request(req)
       rescue Timeout::Error
@@ -127,10 +128,12 @@ module SensuCli
         puts "The item was successfully deleted." if @command == 'aggregates' || @command == 'stashes'
       when '400'
         puts "The payload is malformed".color(:red)
+      when '401'
+        puts "The request requires user authentication".color(:red)
       when '404'
         puts "The item did not exist".color(:cyan)
       else
-        (@command == 'health') ? (puts "Sensu is not healthy".color(:red)) : (puts "There was an error while trying to complete your request. Response code: #{res.code}".color(:red))
+        (@command == 'health') ? (puts "Sensu is not healthy".color(:red)) : (puts "There was an error while trying to complete your request. Response code: #{code}".color(:red))
       end
     end
 
