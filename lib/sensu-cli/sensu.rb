@@ -151,7 +151,7 @@ module SensuCli
                 puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
               end
             else
-              puts item.color(:cyan)
+              puts item.to_s.color(:cyan)
             end
           end
         end
