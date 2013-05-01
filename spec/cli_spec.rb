@@ -96,29 +96,29 @@ describe 'SensuCli::Cli' do
     it 'should return proper aggregate list hash' do
       ARGV.push("aggregate","list")
       response = @cli.global
-      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :help=>false}})
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:help=>false}})
     end
 
     it 'should return proper aggregate show hash' do
       ARGV.push("aggregate","show","test_check")
       response = @cli.global
-      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:check=>"test_check", :help=>false}})
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:check=>"test_check", :limit=>nil, :offset=>nil, :help=>false}})
     end
 
     it 'should paginate with limit and offset' do
-      ARGV.push("aggregate","list","-l","2","-o","3")
+      ARGV.push("aggregate","show","test_check", "-l","2","-o","3")
       response = @cli.global
-      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>"2",:offset=>"3",:help=>false, :limit_given=>true, :offset_given=>true}})
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:check=>"test_check", :limit=>"2",:offset=>"3",:help=>false, :limit_given=>true, :offset_given=>true}})
     end
 
     it 'should paginate with limit' do
-      ARGV.push("aggregate","list","-l","2")
+      ARGV.push("aggregate","show","test_check","-l","2")
       response = @cli.global
-      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
+      response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:check=>"test_check", :limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
     end
 
     it 'should bail with offset and no limit' do
-      ARGV.push("aggregate","list","-o","2")
+      ARGV.push("aggregate","show","test_check","-o","2")
       lambda { @cli.global }.should raise_error SystemExit
     end
   end

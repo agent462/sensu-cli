@@ -241,14 +241,14 @@ module SensuCli
       is_list(opts,command)
       case command
       when 'list'
+        p = Trollop::options
+        cli = {:command => 'aggregates', :method => 'Get', :fields => p}
+      when 'show'
         p = Trollop::options do
           opt :limit, "The number of aggregates to return", :short => "l", :type => :string
           opt :offset, "The number of aggregates to offset before returning", :short => "o", :type => :string
         end
         Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
-        cli = {:command => 'aggregates', :method => 'Get', :fields => p}
-      when 'show'
-        p = Trollop::options
         item = ARGV.shift
         deep_merge({:command => 'aggregates', :method => 'Get', :fields => {:check => item}},{:fields => p})
       when 'delete'
