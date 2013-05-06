@@ -127,13 +127,13 @@ module SensuCli
         puts "Sensu is healthy" if @command == 'health'
         puts "The item was successfully deleted." if @command == 'aggregates' || @command == 'stashes'
       when '400'
-        puts "The payload is malformed".color(:red)
+        puts "The payload is malformed.".color(:red)
       when '401'
-        puts "The request requires user authentication".color(:red)
+        puts "The request requires user authentication.".color(:red)
       when '404'
-        puts "The item did not exist".color(:cyan)
+        puts "The item did not exist.".color(:cyan)
       else
-        (@command == 'health') ? (puts "Sensu is not healthy".color(:red)) : (puts "There was an error while trying to complete your request. Response code: #{code}".color(:red))
+        (@command == 'health') ? (puts "Sensu is not healthy.".color(:red)) : (puts "There was an error while trying to complete your request. Response code: #{code}".color(:red))
       end
     end
 
