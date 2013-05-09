@@ -83,6 +83,15 @@ describe 'SensuCli::Core' do
       @core.api_path(cli).should == {:path=>"/checks", :method=>"Get", :command=>"checks", :payload=>false}
     end
 
+    it 'can return proper check request path' do
+      cli = {
+        :command => 'checks',
+        :method => 'Post',
+        :fields => {:check=>"some_check", :subscribers=> ["all"]}
+      }
+      @core.api_path(cli).should == {:path=>"/check/request", :method=>"Post", :command=>"checks", :payload=>"{\"check\":\"some_check\",\"subscribers\":[\"all\"]}"}
+    end
+
     it 'can return proper single checks path' do
       cli = {
         :command => 'checks',
@@ -250,9 +259,13 @@ describe 'SensuCli::Core' do
 
   describe 'response codes' do
     it 'can handle a 200 response code' do
+      response = '{"sensu":{"version":"0.9.12"},"rabbitmq":{"keepalives":{"messages":0,"consumers":1},"results":{"messages":0,"consumers":1},"connected":true},"redis":{"connected":true}}'
+      output = @core.response_codes('200',response)
+      output.should == {"sensu"=>{"version"=>"0.9.12"}, "rabbitmq"=>{"keepalives"=>{"messages"=>0, "consumers"=>1}, "results"=>{"messages"=>0, "consumers"=>1}, "connected"=>true}, "redis"=>{"connected"=>true}}
     end
 
-    it 'can handle a 201 response code' do
+    it 'can handle a 201 response code for stashes endpoint' do
+      @core.instance_variable_set(:@command, "stashes")
       output = capture_stdout { @core.response_codes('201',"") }
       output.should == "The stash has been created.\n"
     end

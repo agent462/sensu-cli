@@ -40,7 +40,7 @@ ssl   false
 ````
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
-* If your Sensu API has basic auth add the parameters to the config
+* If your Sensu API has basic auth, add the parameters to the config.
 ````
 host  "127.0.0.1"
 port  "4567"
@@ -62,6 +62,7 @@ sensu aggregate show CHECK
 ** Check Commands **
 sensu check list
 sensu check show CHECK
+sensu check request CHECK SUB1,SUB2
 
 ** Client Commands **
 sensu client list (OPTIONS)
@@ -75,7 +76,7 @@ sensu event show NODE (OPTIONS)
 sensu event delete NODE CHECK
 
 ** Health Commands **
-sensu health
+sensu health (OPTIONS)
 
 ** Info Commands **
 sensu info

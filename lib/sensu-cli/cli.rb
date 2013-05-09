@@ -32,9 +32,9 @@ module SensuCli
     CHECK_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Check Commands **
           sensu check list
-          sensu check show CHECK\n\r
+          sensu check show CHECK
+          sensu check request CHECK SUB1,SUB2\n\r
         EOS
-        #sensu check request CHECK SUBSCRIBERS\n\r
     EVENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Event Commands **
           sensu event list
@@ -99,7 +99,7 @@ module SensuCli
         raise Trollop::HelpNeeded if ARGV.empty? # show help screen
       end
 
-      cmd = ARGV.shift
+      cmd = next_argv
       self.respond_to?(cmd) ? send(cmd) : explode(global_opts)
     end
 
@@ -120,14 +120,18 @@ module SensuCli
       end
     end
 
-    def is_list(opts,command)
+    def explode_if_empty(opts,command)
       explode(opts) if ARGV.empty? && command != 'list'
+    end
+
+    def next_argv
+      ARGV.shift
     end
 
     def client
       opts = parser("CLIENT")
-      command = ARGV.shift
-      is_list(opts,command)
+      command = next_argv
+      explode_if_empty(opts,command)
       case command
       when 'list'
         p = Trollop::options do
@@ -138,15 +142,15 @@ module SensuCli
         cli = {:command => 'clients', :method => 'Get', :fields => p}
       when 'delete'
         p = Trollop::options
-        item = ARGV.shift #the ARGV.shift needs to happen after Trollop::options to catch --help
+        item = next_argv #the ARGV.shift needs to happen after Trollop::options to catch --help
         deep_merge({:command => 'clients', :method => 'Delete', :fields => {:name => item}},{:fields => p})
       when 'show'
         p = Trollop::options
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item}},{:fields => p})
       when 'history'
         p = Trollop::options
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'clients', :method => 'Get', :fields => {:name => item, :history => true}},{:fields => p})
       else
         explode(opts)
@@ -156,7 +160,7 @@ module SensuCli
     def info
       parser("INFO")
       p = Trollop::options
-      cli = {:command => 'info', :method => 'Get', :fields => {}}
+      cli = {:command => 'info', :method => 'Get', :fields => p}
     end
 
     def health
@@ -170,16 +174,18 @@ module SensuCli
 
     def check
       opts = parser("CHECK")
-      command = ARGV.shift
-      is_list(opts,command)
+      command = next_argv
+      explode_if_empty(opts,command)
       p = Trollop::options
-      item = ARGV.shift
+      item = next_argv
       case command
       when 'list'
         cli = {:command => 'checks', :method => 'Get', :fields => p}
       when 'show'
         deep_merge({:command => 'checks', :method => 'Get', :fields => {:name => item}},{:fields => p})
       when 'request'
+        ARGV.empty? ? explode(opts) : subscribers = next_argv.split(",")
+        deep_merge({:command => 'checks', :method => 'Post', :fields => {:check => item, :subscribers => subscribers}},{:fields => p})
       else
         explode(opts)
       end
@@ -187,8 +193,8 @@ module SensuCli
 
     def event
       opts = parser("EVENT")
-      command = ARGV.shift
-      is_list(opts,command)
+      command = next_argv
+      explode_if_empty(opts,command)
       case command
       when 'list'
         p = Trollop::options
@@ -197,12 +203,12 @@ module SensuCli
         p = Trollop::options do
           opt :check, "Returns the check associated with the client", :short => "k", :type => :string
         end
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'events', :method => 'Get', :fields => {:client => item}},{:fields => p})
       when 'delete'
         p = Trollop::options
-        item = ARGV.shift
-        check = ARGV.shift
+        item = next_argv
+        check = next_argv
         explode(opts) if check == nil
         deep_merge({:command => 'events', :method => 'Delete', :fields => {:client => item, :check => check}},{:fields => p})
       else
@@ -212,8 +218,8 @@ module SensuCli
 
     def stash
       opts = parser("STASH")
-      command = ARGV.shift
-      is_list(opts,command)
+      command = next_argv
+      explode_if_empty(opts,command)
       case command
       when 'list'
         p = Trollop::options do
@@ -224,11 +230,11 @@ module SensuCli
         cli = {:command => 'stashes', :method => 'Get', :fields => p}
       when 'show'
         p = Trollop::options
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'stashes', :method => 'Get', :fields => {:path => item}},{:fields => p})
       when 'delete'
         p = Trollop::options
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'stashes', :method => 'Delete', :fields => {:path => item}},{:fields => p})
       else
         explode(opts)
@@ -237,8 +243,8 @@ module SensuCli
 
     def aggregate
       opts = parser("AGG")
-      command = ARGV.shift
-      is_list(opts,command)
+      command = next_argv
+      explode_if_empty(opts,command)
       case command
       when 'list'
         p = Trollop::options
@@ -249,11 +255,11 @@ module SensuCli
           opt :offset, "The number of aggregates to offset before returning", :short => "o", :type => :string
         end
         Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'aggregates', :method => 'Get', :fields => {:check => item}},{:fields => p})
       when 'delete'
         p = Trollop::options
-        item = ARGV.shift
+        item = next_argv
         deep_merge({:command => 'aggregates', :method => 'Delete', :fields => {:check => item}},{:fields => p})
       else
         explode(opts)
@@ -266,16 +272,16 @@ module SensuCli
         opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
         opt :reason, "The reason this check/node is being silenced", :short => 'r', :type => :string
       end
-      command = ARGV.shift
+      command = next_argv
       explode(opts) if command == nil
       deep_merge({:command => 'silence', :method => 'Post', :fields => {:client => command}},{:fields => p})
     end
 
     def resolve
       opts = parser("RES")
-      command = ARGV.shift
+      command = next_argv
       p = Trollop::options
-      ARGV.empty? ? explode(opts) : (check = ARGV.shift)
+      ARGV.empty? ? explode(opts) : check = next_argv
       deep_merge({:command => 'resolve', :method => 'Post', :fields => {:client => command, :check => check}},{:fields => p})
     end
 

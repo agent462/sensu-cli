@@ -7,17 +7,6 @@ require 'rainbow'
 
 module SensuCli
   class Core
-    #
-    # CLI can be anything assuming you can pass these paramaters
-    # Field names were derived from the sensu source/documentation.
-    # cli = {
-    #   :command => 'client',
-    #   :method => 'Get',
-    #   :flags => {:name => 'ntp-check',
-    #              :path => '/keepalive/i-asesew',
-    #              :client => 'i-23412412',
-    #              :check => 'ntp-check'}
-    # }
 
     def setup
       clis = Cli.new
@@ -53,7 +42,14 @@ module SensuCli
       when 'stashes'
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
       when 'checks'
-        cli[:fields][:name] ? path = "/check/#{cli[:fields][:name]}" : (path = "/checks")
+        if cli[:fields][:name]
+          path = "/check/#{cli[:fields][:name]}"
+        elsif cli[:fields][:subscribers]
+          path = "/check/request"
+          payload = {:check => cli[:fields][:check],:subscribers => cli[:fields][:subscribers]}.to_json
+        else
+          path = "/checks"
+        end
       when 'events'
         path = "/events" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       when 'resolve'
@@ -120,7 +116,7 @@ module SensuCli
       when '200'
         JSON.parse(body)
       when '201'
-        puts "The stash has been created."
+        puts "The stash has been created." if @command == "stashes"
       when '202'
         puts "The item was submitted for processing."
       when '204'
