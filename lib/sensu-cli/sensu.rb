@@ -75,7 +75,7 @@ module SensuCli
       elsif cli[:fields].has_key?(:limit)
         page = "?limit=#{cli[:fields][:limit]}"
       else
-         page = ""
+        page = ""
       end
     end
 
@@ -96,7 +96,7 @@ module SensuCli
         req =  Net::HTTP::Post.new(@api[:path],initheader = {'Content-Type' =>'application/json'})
         req.body = @api[:payload]
       end
-      req.basic_auth(Config.user, Config.password) if Config.user and Config.password
+      req.basic_auth(Config.user, Config.password) if Config.user && Config.password
       begin
         http.request(req)
       rescue Timeout::Error

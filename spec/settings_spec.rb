@@ -27,6 +27,8 @@ describe 'SensuCli::Settings' do
     SensuCli::Config.host.should eq('127.0.0.1')
     SensuCli::Config.port.should eq('4567')
     SensuCli::Config.ssl.should eq(false)
+    SensuCli::Config.user.should eq('some_user')
+    SensuCli::Config.password.should eq('some_secret_password')
   end
 
 end

@@ -40,6 +40,14 @@ ssl   false
 ````
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
+* If your Sensu API has basic auth add the parameters to the config
+````
+host  "127.0.0.1"
+port  "4567"
+ssl   false
+user some_user
+password some_secret_password
+````
 
 
 Examples
