@@ -41,6 +41,7 @@ ssl   false
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
 * If your Sensu API has basic auth, add the parameters to the config.
+
 ````
 host  "127.0.0.1"
 port  "4567"
@@ -102,7 +103,6 @@ Please provide a pull request.  I'm an ops guy, not a developer, so if you're su
    
 TODO
 ----
-* support submitting checks
 * support deletion of aggregate check
 * cleanup the cli
 * Once complete api support is implemented I'll add other features like filtering or issuing a event.
