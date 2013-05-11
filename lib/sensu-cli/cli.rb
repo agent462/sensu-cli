@@ -52,7 +52,7 @@ module SensuCli
     AGG_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Aggregate Commands **
           sensu aggregate list (OPTIONS)
-          sensu aggregate show CHECK\n\r
+          sensu aggregate show CHECK (OPTIONS)\n\r
         EOS
         #sensu aggregate delete CHECK\n\r
         #aget %r{/aggregates?/([\w\.-]+)/([\w\.-]+)$} do |check_name, check_issued|
@@ -251,6 +251,7 @@ module SensuCli
         cli = {:command => 'aggregates', :method => 'Get', :fields => p}
       when 'show'
         p = Trollop::options do
+          opt :id, "The id of the check issued.", :short=>"i", :type => :integer
           opt :limit, "The number of aggregates to return", :short => "l", :type => :string
           opt :offset, "The number of aggregates to offset before returning", :short => "o", :type => :string
         end

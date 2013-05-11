@@ -166,6 +166,15 @@ describe 'SensuCli::Core' do
       @core.api_path(cli).should == {:path=>"/aggregates/check", :method=>"Get", :command=>"aggregates", :payload=>false}
     end
 
+    it 'can return aggregates check path with id' do
+      cli = {
+        :command => 'aggregates',
+        :method => 'Get',
+        :fields => {:check => 'check', :id => 234234234}
+      }
+      @core.api_path(cli).should == {:path=>"/aggregates/check/234234234", :method=>"Get", :command=>"aggregates", :payload=>false}
+    end
+
     it 'can return silence client path' do
       cli = {
         :command => 'silence',

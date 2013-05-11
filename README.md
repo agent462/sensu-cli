@@ -28,8 +28,7 @@ Features
 
 Usage and Configuration
 -----------------------
-* gem build sensu-cli.gemspec
-* gem install ./{gem file created}
+* gem install sensu-cli
 
 * There is one settings file for host, port and ssl that lives in your user directory ~/.sensu/settings.rb.  You can alternatively place this in /etc/sensu/sensu-cli/settings.rb.
 
@@ -46,8 +45,8 @@ This format was chosen so you can do some ENV magic via your profile and setting
 host  "127.0.0.1"
 port  "4567"
 ssl   false
-user some_user
-password some_secret_password
+user "some_user"
+password "some_secret_password"
 ````
 
 
