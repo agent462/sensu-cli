@@ -8,7 +8,7 @@ module SensuCli
     CHECK_COMMANDS  = %w(list show request)
     EVENT_COMMANDS  = %w(list show delete)
     STASH_COMMANDS  = %w(list show delete)
-    AGG_COMMANDS    = %w(list show)
+    AGG_COMMANDS    = %w(list show delete)
     SIL_COMMANDS    = ""
     RES_COMMANDS    = ""
     INFO_COMMANDS   = ""
@@ -52,10 +52,9 @@ module SensuCli
     AGG_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Aggregate Commands **
           sensu aggregate list (OPTIONS)
-          sensu aggregate show CHECK (OPTIONS)\n\r
+          sensu aggregate show CHECK (OPTIONS)
+          sensu aggregate delete CHECK\n\r
         EOS
-        #sensu aggregate delete CHECK\n\r
-        #aget %r{/aggregates?/([\w\.-]+)/([\w\.-]+)$} do |check_name, check_issued|
     SIL_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Silence Commands **
           sensu silence NODE (OPTIONS)\n\r

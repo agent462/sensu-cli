@@ -99,6 +99,12 @@ describe 'SensuCli::Cli' do
       response.should eq({:command=>"aggregates", :method=>"Get", :fields=>{:help=>false}})
     end
 
+    it 'should return proper aggregate delete hash' do
+      ARGV.push("aggregate","delete","test_check")
+      response = @cli.global
+      response.should eq({:command=>"aggregates", :method=>"Delete", :fields=>{:check=> "test_check", :help=>false}})
+    end
+
     it 'should return proper aggregate show hash' do
       ARGV.push("aggregate","show","test_check")
       response = @cli.global
