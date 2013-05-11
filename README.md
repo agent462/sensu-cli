@@ -23,7 +23,7 @@ Features
 * Resolve Events
 * Silence clients and checks
 * Get Requests (get clients, stashes, events, etc.)
-* Delete Requests (delete clients, stashes and events)
+* Delete Requests (delete clients, stashes, aggregates and events)
 
 
 Usage and Configuration
@@ -57,7 +57,8 @@ Available subcommands: (for details, sensu SUB-COMMAND --help)
 
 ** Aggregate Commands **
 sensu aggregate list (OPTIONS)
-sensu aggregate show CHECK
+sensu aggregate show CHECK (OPTIONS)
+sensu aggregate delete CHECK
 
 ** Check Commands **
 sensu check list
@@ -102,7 +103,6 @@ Please provide a pull request.  I'm an ops guy, not a developer, so if you're su
    
 TODO
 ----
-* support deletion of aggregate check
 * cleanup the cli
 * Once complete api support is implemented I'll add other features like filtering or issuing a event.
    

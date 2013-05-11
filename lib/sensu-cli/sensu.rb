@@ -56,7 +56,7 @@ module SensuCli
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
         path = "/event/resolve"
       when 'silence'
-         cli[:fields][:reason] ? payload = ({:reason => cli[:fields][:reason],:timestamp => Time.now.to_i}).to_json : payload = {:timestamp => Time.now.to_i}.to_json
+        cli[:fields][:reason] ? payload = ({:reason => cli[:fields][:reason],:timestamp => Time.now.to_i}).to_json : payload = {:timestamp => Time.now.to_i}.to_json
         path = "/stashes/silence" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "") << (cli[:fields][:id] ? "/#{cli[:fields][:id]}" : "")
