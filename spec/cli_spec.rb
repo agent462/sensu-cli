@@ -200,14 +200,21 @@ describe 'SensuCli::Cli' do
     it 'should return silence node hash' do
       ARGV.push("silence","test_node")
       response = @cli.global
-      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>nil, :reason=>nil, :help=>false}})
+      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>nil, :reason=>nil, :expires=> nil, :help=>false}})
     end
 
     it 'should return silence node check hash' do
       ARGV.push("silence","test_node","-k","test_check")
       response = @cli.global
-      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>"test_check", :reason=>nil, :help=>false, :check_given=>true}})
+      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>"test_check", :reason=>nil, :expires=> nil, :help=>false, :check_given=>true}})
     end
+
+    it 'should return silence node check hash with options' do
+      ARGV.push("silence","test_node","-k","test_check", "-r", "it's noisy", "-e", "30")
+      response = @cli.global
+      response.should eq({:command=>"silence", :method=>"Post", :fields=>{:client=>"test_node", :check=>"test_check", :reason=>"it's noisy", :expires=> 30, :help=>false, :check_given=>true, :reason_given=>true, :expires_given=>true}})
+    end
+
   end
 
   describe 'resolve commands' do

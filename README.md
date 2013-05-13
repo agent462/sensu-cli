@@ -49,6 +49,11 @@ user "some_user"
 password "some_secret_password"
 ````
 
+Expire Silenced Hosts/Checks
+----------------------------
+I added an expires option to `sensu silence` to be used like `sensu silence HOST -e 30` where `-e` denotes the number of minutes from now a host/checks silence should expire.  This won't work by itself.  We add a key to the silence stash with a time in the future.  If you run [check-stashes](https://github.com/agent462/sensu-check-stashes) on your sensu-server it will check for expired stashes and delete them.   
+
+There is also a reason option `-r` available.  Be nice and use it so your colleagues know what you're doing.   
 
 Examples
 -----------
@@ -108,6 +113,7 @@ TODO
    
 License and Author
 ==================
+I'm releasing this under the MIT or Apache 2.0 license.  You pick.
 
 Author:: Bryan Brandau <agent462@gmail.com>
 

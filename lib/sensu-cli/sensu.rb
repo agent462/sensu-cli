@@ -56,7 +56,13 @@ module SensuCli
         payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
         path = "/event/resolve"
       when 'silence'
-        cli[:fields][:reason] ? payload = ({:reason => cli[:fields][:reason],:timestamp => Time.now.to_i}).to_json : payload = {:timestamp => Time.now.to_i}.to_json
+        payload = {:timestamp => Time.now.to_i}
+        payload.merge!({:reason => cli[:fields][:reason]}) if cli[:fields][:reason]
+        if cli[:fields][:expires]
+          expires = Time.now.to_i + (cli[:fields][:expires] * 60)
+          payload.merge!({:expires => expires})
+        end
+        payload = payload.to_json
         path = "/stashes/silence" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
       when 'aggregates'
         path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "") << (cli[:fields][:id] ? "/#{cli[:fields][:id]}" : "")
@@ -89,7 +95,7 @@ module SensuCli
       when 'Delete'
         req =  Net::HTTP::Delete.new(@api[:path])
       when 'Post'
-        req =  Net::HTTP::Post.new(@api[:path],initheader = {'Content-Type' =>'application/json'})
+        req =  Net::HTTP::Post.new(@api[:path],initheader = {'Content-Type' => 'application/json'})
         req.body = @api[:payload]
       end
       req.basic_auth(Config.user, Config.password) if Config.user && Config.password

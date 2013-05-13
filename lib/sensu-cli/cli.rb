@@ -253,6 +253,7 @@ module SensuCli
           opt :id, "The id of the check issued.", :short=>"i", :type => :integer
           opt :limit, "The number of aggregates to return", :short => "l", :type => :string
           opt :offset, "The number of aggregates to offset before returning", :short => "o", :type => :string
+          #opt :results, "Include the check results", :short => "r", :type => :boolean
         end
         Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
         item = next_argv
@@ -271,6 +272,7 @@ module SensuCli
       p = Trollop::options do
         opt :check, "The check to silence (requires --client)", :short => 'k', :type => :string
         opt :reason, "The reason this check/node is being silenced", :short => 'r', :type => :string
+        opt :expires, "The number of minutes the silenced event is valid (must use with check-stashes plugin)", :short => 'e', :type => :integer
       end
       command = next_argv
       explode(opts) if command == nil

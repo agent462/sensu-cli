@@ -195,6 +195,16 @@ describe 'SensuCli::Core' do
       @core.api_path(cli).should == {:path=>"/stashes/silence/client/check", :method=>"Post", :command=>"silence", :payload=>payload}
     end
 
+    it 'can return silence client/check with reason and expires path' do
+      cli = {
+        :command => 'silence',
+        :method => 'Post',
+        :fields => {:client => 'client', :check => 'check', :reason => 'noisy client', :expires => 30}
+      }
+      payload = {:timestamp => Time.now.to_i, :reason => 'noisy client', :expires => (Time.now.to_i + (30*60))}.to_json
+      @core.api_path(cli).should == {:path=>"/stashes/silence/client/check", :method=>"Post", :command=>"silence", :payload=>payload}
+    end
+
   end
 
   describe 'settings' do
