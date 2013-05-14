@@ -3,6 +3,7 @@ require 'net/https'
 require 'json'
 require 'sensu-cli/settings'
 require 'sensu-cli/cli'
+require 'sensu-cli/editor'
 require 'rainbow'
 
 module SensuCli
@@ -40,6 +41,10 @@ module SensuCli
       when 'health'
         path = "/health?consumers=#{cli[:fields][:consumers]}&messages=#{cli[:fields][:messages]}"
       when 'stashes'
+        if cli[:fields][:create]
+          e = Editor.new
+          payload = e.create_stash(cli[:fields][:create_path]).to_json
+        end
         path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
       when 'checks'
         if cli[:fields][:name]

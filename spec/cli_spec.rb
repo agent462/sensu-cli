@@ -254,6 +254,12 @@ describe 'SensuCli::Cli' do
       response.should eq({:command=>"stashes", :method=>"Delete", :fields=>{:path=>"path", :help=>false}})
     end
 
+    it 'should return stash create hash' do
+      ARGV.push("stash","create","path")
+      response = @cli.global
+      response.should eq({:command=>"stashes", :method=>"Post", :fields=>{:create => true, :create_path => "path", :help => false}})
+    end
+
     it 'should paginate with limit and offset' do
       ARGV.push("stash","list","-l","2","-o","3")
       response = @cli.global

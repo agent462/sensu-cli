@@ -7,7 +7,7 @@ module SensuCli
     CLIENT_COMMANDS = %w(list show delete history)
     CHECK_COMMANDS  = %w(list show request)
     EVENT_COMMANDS  = %w(list show delete)
-    STASH_COMMANDS  = %w(list show delete)
+    STASH_COMMANDS  = %w(list show delete create)
     AGG_COMMANDS    = %w(list show delete)
     SIL_COMMANDS    = ""
     RES_COMMANDS    = ""
@@ -45,9 +45,9 @@ module SensuCli
           ** Stash Commands **
           sensu stash list (OPTIONS)
           sensu stash show STASHPATH
-          sensu stash delete STASHPATH\n\r
+          sensu stash delete STASHPATH
+          sensu stash create PATH\n\r
         EOS
-        #sensu stash create
         #apost '/stashes'
     AGG_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Aggregate Commands **
@@ -235,6 +235,10 @@ module SensuCli
         p = Trollop::options
         item = next_argv
         deep_merge({:command => 'stashes', :method => 'Delete', :fields => {:path => item}},{:fields => p})
+      when 'create'
+        p = Trollop::options
+        item = next_argv
+        deep_merge({:command => 'stashes', :method => 'Post', :fields => {:create => true, :create_path => item}},{:fields => p})
       else
         explode(opts)
       end
