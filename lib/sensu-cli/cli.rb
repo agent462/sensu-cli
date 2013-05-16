@@ -16,52 +16,52 @@ module SensuCli
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
-          sensu client list (OPTIONS)
-          sensu client show NODE
-          sensu client delete NODE
-          sensu client history NODE\n\r
+          sensu-cli client list (OPTIONS)
+          sensu-cli client show NODE
+          sensu-cli client delete NODE
+          sensu-cli client history NODE\n\r
         EOS
     INFO_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Info Commands **
-          sensu info\n\r
+          sensu-cli info\n\r
         EOS
     HEALTH_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Health Commands **
-          sensu health (OPTIONS)\n\r
+          sensu-cli health (OPTIONS)\n\r
         EOS
     CHECK_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Check Commands **
-          sensu check list
-          sensu check show CHECK
-          sensu check request CHECK SUB1,SUB2\n\r
+          sensu-cli check list
+          sensu-cli check show CHECK
+          sensu-cli check request CHECK SUB1,SUB2\n\r
         EOS
     EVENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Event Commands **
-          sensu event list
-          sensu event show NODE (OPTIONS)
-          sensu event delete NODE CHECK\n\r
+          sensu-cli event list
+          sensu-cli event show NODE (OPTIONS)
+          sensu-cli event delete NODE CHECK\n\r
         EOS
     STASH_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Stash Commands **
-          sensu stash list (OPTIONS)
-          sensu stash show STASHPATH
-          sensu stash delete STASHPATH
-          sensu stash create PATH\n\r
+          sensu-cli stash list (OPTIONS)
+          sensu-cli stash show STASHPATH
+          sensu-cli stash delete STASHPATH
+          sensu-cli stash create PATH\n\r
         EOS
         #apost '/stashes'
     AGG_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Aggregate Commands **
-          sensu aggregate list (OPTIONS)
-          sensu aggregate show CHECK (OPTIONS)
-          sensu aggregate delete CHECK\n\r
+          sensu-cli aggregate list (OPTIONS)
+          sensu-cli aggregate show CHECK (OPTIONS)
+          sensu-cli aggregate delete CHECK\n\r
         EOS
     SIL_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Silence Commands **
-          sensu silence NODE (OPTIONS)\n\r
+          sensu-cli silence NODE (OPTIONS)\n\r
         EOS
     RES_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Resolve Commands **
-          sensu resolve NODE CHECK\n\r
+          sensu-cli resolve NODE CHECK\n\r
         EOS
 
     def global
@@ -77,10 +77,10 @@ module SensuCli
           #    ------------------
           #            /\
           #           '--'
-          #          SENSU
+          #         SENSU-CLI
           #
         EOS
-        banner "\n\rAvailable subcommands: (for details, sensu SUB-COMMAND --help)\n\r"
+        banner "\n\rAvailable subcommands: (for details, sensu-cli SUB-COMMAND --help)\n\r"
         banner AGG_BANNER
         banner CHECK_BANNER
         banner CLIENT_BANNER
