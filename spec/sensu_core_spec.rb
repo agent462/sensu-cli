@@ -17,6 +17,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "clients")
       @core.api_path(cli).should == {:path=>"/clients", :method=>"Get", :command=>"clients", :payload=>false}
     end
 
@@ -26,6 +27,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:name => "test"}
       }
+      @core.instance_variable_set(:@command, "clients")
       @core.api_path(cli).should == {:path=>"/clients/test", :method=>"Get", :command=>"clients", :payload=>false}
     end
 
@@ -35,6 +37,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:name => "test", :history => true}
       }
+      @core.instance_variable_set(:@command, "clients")
       @core.api_path(cli).should == {:path=>"/clients/test/history", :method=>"Get", :command=>"clients", :payload=>false}
     end
 
@@ -44,6 +47,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "info")
       @core.api_path(cli).should == {:path=>"/info", :method=>"Get", :command=>"info", :payload=>false}
     end
 
@@ -53,6 +57,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "health")
       @core.api_path(cli).should == {:path=>"/health?consumers=&messages=", :method=>"Get", :command=>"health", :payload=>false}
     end
 
@@ -62,6 +67,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "stashes")
       @core.api_path(cli).should == {:path=>"/stashes", :method=>"Get", :command=>"stashes", :payload=>false}
     end
 
@@ -71,6 +77,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:path => 'silence'}
       }
+      @core.instance_variable_set(:@command, "stashes")
       @core.api_path(cli).should == {:path=>"/stashes/silence", :method=>"Get", :command=>"stashes", :payload=>false}
     end
 
@@ -80,6 +87,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "checks")
       @core.api_path(cli).should == {:path=>"/checks", :method=>"Get", :command=>"checks", :payload=>false}
     end
 
@@ -89,6 +97,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:check=>"some_check", :subscribers=> ["all"]}
       }
+      @core.instance_variable_set(:@command, "checks")
       @core.api_path(cli).should == {:path=>"/check/request", :method=>"Post", :command=>"checks", :payload=>"{\"check\":\"some_check\",\"subscribers\":[\"all\"]}"}
     end
 
@@ -98,6 +107,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:name => 'test'}
       }
+      @core.instance_variable_set(:@command, "checks")
       @core.api_path(cli).should == {:path=>"/check/test", :method=>"Get", :command=>"checks", :payload=>false}
     end
 
@@ -107,6 +117,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "events")
       @core.api_path(cli).should == {:path=>"/events", :method=>"Get", :command=>"events", :payload=>false}
     end
 
@@ -116,6 +127,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:client => 'test'}
       }
+      @core.instance_variable_set(:@command, "events")
       @core.api_path(cli).should == {:path=>"/events/test", :method=>"Get", :command=>"events", :payload=>false}
     end
 
@@ -125,6 +137,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:client => 'test', :check => 'check'}
       }
+      @core.instance_variable_set(:@command, "events")
       @core.api_path(cli).should == {:path=>"/events/test/check", :method=>"Get", :command=>"events", :payload=>false}
     end
 
@@ -134,6 +147,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:client => "test"}
       }
+      @core.instance_variable_set(:@command, "resolve")
       payload = {:client => "test", :check => nil}.to_json
       @core.api_path(cli).should == {:path=>"/event/resolve", :method=>"Post", :command=>"resolve", :payload=>payload}
     end
@@ -144,6 +158,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:client => "test", :check => 'check'}
       }
+      @core.instance_variable_set(:@command, "resolve")
       payload = {:client => "test", :check => 'check'}.to_json
       @core.api_path(cli).should == {:path=>"/event/resolve", :method=>"Post", :command=>"resolve", :payload=>payload}
     end
@@ -154,6 +169,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {}
       }
+      @core.instance_variable_set(:@command, "aggregates")
       @core.api_path(cli).should == {:path=>"/aggregates", :method=>"Get", :command=>"aggregates", :payload=>false}
     end
 
@@ -163,6 +179,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:check => 'check'}
       }
+      @core.instance_variable_set(:@command, "aggregates")
       @core.api_path(cli).should == {:path=>"/aggregates/check", :method=>"Get", :command=>"aggregates", :payload=>false}
     end
 
@@ -172,6 +189,7 @@ describe 'SensuCli::Core' do
         :method => 'Get',
         :fields => {:check => 'check', :id => 234234234}
       }
+      @core.instance_variable_set(:@command, "aggregates")
       @core.api_path(cli).should == {:path=>"/aggregates/check/234234234", :method=>"Get", :command=>"aggregates", :payload=>false}
     end
 
@@ -181,6 +199,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:client => 'client'}
       }
+      @core.instance_variable_set(:@command, "silence")
       payload = {:timestamp => Time.now.to_i}.to_json
       @core.api_path(cli).should == {:path=>"/stashes/silence/client", :method=>"Post", :command=>"silence", :payload=>payload}
     end
@@ -191,6 +210,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:client => 'client', :check => 'check'}
       }
+      @core.instance_variable_set(:@command, "silence")
       payload = {:timestamp => Time.now.to_i}.to_json
       @core.api_path(cli).should == {:path=>"/stashes/silence/client/check", :method=>"Post", :command=>"silence", :payload=>payload}
     end
@@ -201,6 +221,7 @@ describe 'SensuCli::Core' do
         :method => 'Post',
         :fields => {:client => 'client', :check => 'check', :reason => 'noisy client', :expires => 30}
       }
+      @core.instance_variable_set(:@command, "silence")
       payload = {:timestamp => Time.now.to_i, :reason => 'noisy client', :expires => (Time.now.to_i + (30*60))}.to_json
       @core.api_path(cli).should == {:path=>"/stashes/silence/client/check", :method=>"Post", :command=>"silence", :payload=>payload}
     end

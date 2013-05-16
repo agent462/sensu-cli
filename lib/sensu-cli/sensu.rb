@@ -13,6 +13,7 @@ module SensuCli
       clis = Cli.new
       cli = clis.global
       settings
+      @command = cli[:command]
       api_path(cli)
       make_call
     end
@@ -32,48 +33,77 @@ module SensuCli
     end
 
     def api_path(cli)
-      @command = cli[:command]
-      case @command
-      when 'clients'
-        path = "/clients" << (cli[:fields][:name] ? "/#{cli[:fields][:name]}" : "") << (cli[:fields][:history] ? "/history" : "")
-      when 'info'
-        path = "/info"
-      when 'health'
-        path = "/health?consumers=#{cli[:fields][:consumers]}&messages=#{cli[:fields][:messages]}"
-      when 'stashes'
-        if cli[:fields][:create]
-          e = Editor.new
-          payload = e.create_stash(cli[:fields][:create_path]).to_json
-        end
-        path = "/stashes" << (cli[:fields][:path] ? "/#{cli[:fields][:path]}" : "")
-      when 'checks'
-        if cli[:fields][:name]
-          path = "/check/#{cli[:fields][:name]}"
-        elsif cli[:fields][:subscribers]
-          path = "/check/request"
-          payload = {:check => cli[:fields][:check],:subscribers => cli[:fields][:subscribers]}.to_json
-        else
-          path = "/checks"
-        end
-      when 'events'
-        path = "/events" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
-      when 'resolve'
-        payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
-        path = "/event/resolve"
-      when 'silence'
-        payload = {:timestamp => Time.now.to_i}
-        payload.merge!({:reason => cli[:fields][:reason]}) if cli[:fields][:reason]
-        if cli[:fields][:expires]
-          expires = Time.now.to_i + (cli[:fields][:expires] * 60)
-          payload.merge!({:expires => expires})
-        end
-        payload = payload.to_json
-        path = "/stashes/silence" << (cli[:fields][:client] ? "/#{cli[:fields][:client]}" : "") << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "")
-      when 'aggregates'
-        path = "/aggregates" << (cli[:fields][:check] ? "/#{cli[:fields][:check]}" : "") << (cli[:fields][:id] ? "/#{cli[:fields][:id]}" : "")
+      self.respond_to?(@command) ? path = send(@command, cli) : (puts "Something Bad Happened";exit)
+      @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (@payload || false)}
+    end
+
+    def clients(cli)
+      path = "/clients"
+      path << "/#{cli[:fields][:name]}" if cli[:fields][:name]
+      path << "/history" if cli[:fields][:history]
+      path << pagination(cli)
+    end
+
+    def info(cli)
+      path = "/info"
+    end
+
+    def health(cli)
+      path = "/health?consumers=#{cli[:fields][:consumers]}&messages=#{cli[:fields][:messages]}"
+    end
+
+    def stashes(cli)
+      if cli[:fields][:create]
+        e = Editor.new
+        @payload = e.create_stash(cli[:fields][:create_path]).to_json
       end
-      path << pagination(cli) if ["stashes","clients","aggregates"].include?(@command)
-      @api = {:path => path, :method => cli[:method], :command => cli[:command], :payload => (payload || false)}
+      path = "/stashes"
+      path << "/#{cli[:fields][:path]}" if cli[:fields][:path]
+      path << pagination(cli)
+    end
+
+    def checks(cli)
+      if cli[:fields][:name]
+        path = "/check/#{cli[:fields][:name]}"
+      elsif cli[:fields][:subscribers]
+        @payload = {:check => cli[:fields][:check],:subscribers => cli[:fields][:subscribers]}.to_json
+        path = "/check/request"
+      else
+        path = "/checks"
+      end
+    end
+
+    def events(cli)
+      path = "/events"
+      path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
+      path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
+      path
+    end
+
+    def resolve(cli)
+      @payload = {:client => cli[:fields][:client], :check => cli[:fields][:check]}.to_json
+      path = "/event/resolve"
+    end
+
+    def silence(cli)
+      payload = {:timestamp => Time.now.to_i}
+      payload.merge!({:reason => cli[:fields][:reason]}) if cli[:fields][:reason]
+      if cli[:fields][:expires]
+        expires = Time.now.to_i + (cli[:fields][:expires] * 60)
+        payload.merge!({:expires => expires})
+      end
+      @payload = payload.to_json
+      path = "/stashes/silence"
+      path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
+      path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
+      path
+    end
+
+    def aggregates(cli)
+      path = "/aggregates"
+      path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
+      path << "/#{cli[:fields][:id]}" if cli[:fields][:id]
+      path << pagination(cli)
     end
 
     def pagination(cli)
