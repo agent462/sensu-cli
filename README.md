@@ -10,7 +10,7 @@ sensu-cli
 #    ------------------
 #            /\
 #           '--'
-#          SENSU
+#         SENSU-CLI
 #
 ```
 A sensu-cli for interacting with the sensu api.
@@ -51,7 +51,7 @@ password "some_secret_password"
 
 Expire Silenced Hosts/Checks
 ----------------------------
-I added an expires option to `sensu silence` to be used like `sensu silence HOST -e 30` where `-e` denotes the number of minutes from now a host/checks silence should expire.  This won't work by itself.  We add a key to the silence stash with a time in the future.  If you run [check-stashes](https://github.com/agent462/sensu-check-stashes) on your sensu-server it will check for expired stashes and delete them.   
+I added an expires option to `sensu-cli silence` to be used like `sensu-cli silence HOST -e 30` where `-e` denotes the number of minutes from now a host/checks silence should expire.  This won't work by itself.  We add a key to the silence stash with a time in the future.  If you run [check-stashes](https://github.com/agent462/sensu-check-stashes) on your sensu-server it will check for expired stashes and delete them.   
 
 There is also a reason option `-r` available.  Be nice and use it so your colleagues know what you're doing.   
 
@@ -61,42 +61,43 @@ Examples
 Available subcommands: (for details, sensu SUB-COMMAND --help)
 
 ** Aggregate Commands **
-sensu aggregate list (OPTIONS)
-sensu aggregate show CHECK (OPTIONS)
-sensu aggregate delete CHECK
+sensu-cli aggregate list (OPTIONS)
+sensu-cli aggregate show CHECK (OPTIONS)
+sensu-cli aggregate delete CHECK
 
 ** Check Commands **
-sensu check list
-sensu check show CHECK
-sensu check request CHECK SUB1,SUB2
+sensu-cli check list
+sensu-cli check show CHECK
+sensu-cli check request CHECK SUB1,SUB2
 
 ** Client Commands **
-sensu client list (OPTIONS)
-sensu client show NODE
-sensu client delete NODE
-sensu client history NODE
+sensu-cli client list (OPTIONS)
+sensu-cli client show NODE
+sensu-cli client delete NODE
+sensu-cli client history NODE
 
 ** Event Commands **
-sensu event list
-sensu event show NODE (OPTIONS)
-sensu event delete NODE CHECK
+sensu-cli event list
+sensu-cli event show NODE (OPTIONS)
+sensu-cli event delete NODE CHECK
 
 ** Health Commands **
-sensu health (OPTIONS)
+sensu-cli health (OPTIONS)
 
 ** Info Commands **
-sensu info
+sensu-cli info
 
 ** Silence Commands **
-sensu silence NODE (OPTIONS)
+sensu-cli silence NODE (OPTIONS)
 
 ** Stash Commands **
-sensu stash list (OPTIONS)
-sensu stash show STASHPATH
-sensu stash delete STASHPATH
+sensu-cli stash list (OPTIONS)
+sensu-cli stash show STASHPATH
+sensu-cli stash delete STASHPATH
+sensu-cli stash create PATH
 
 ** Resolve Commands **
-sensu resolve NODE CHECK
+sensu-cli resolve NODE CHECK
 
   --version, -v:   Print version and exit
      --help, -h:   Show this message
