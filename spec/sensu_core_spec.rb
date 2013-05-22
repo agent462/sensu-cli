@@ -1,12 +1,12 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli/sensu.rb'
+require File.dirname(__FILE__) + '/../lib/sensu-cli/base.rb'
 require File.dirname(__FILE__) + '/helpers.rb'
 require 'json'
 
-describe 'SensuCli::Core' do
+describe 'SensuCli::Base' do
   include Helpers
 
   before do
-    @core = SensuCli::Core.new
+    @core = SensuCli::Base.new
   end
 
   describe 'handle paths' do
@@ -234,66 +234,6 @@ describe 'SensuCli::Core' do
       SensuCli::Config.host.should match(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)
       SensuCli::Config.port.should eq('4567')
       SensuCli::Config.ssl.should satisfy { true || false}
-    end
-  end
-
-  describe 'pretty text' do
-    it 'can pretty empty response' do
-      res = []
-      output = capture_stdout { @core.pretty(res) }
-      output.should == "\e[36mno values for this request\e[0m\n"
-    end
-
-    it 'can pretty a hash' do
-      res = [{:test => "value"}]
-      output = capture_stdout { @core.pretty(res) }
-      output.should == "\e[33m-------\e[0m\n\e[36mtest:  \e[0m\e[32mvalue\e[0m\n"
-    end
-
-    it 'can pretty an array' do
-      res = ["test","test1"]
-      output = capture_stdout { @core.pretty(res) }
-      output.should == "\e[33m-------\e[0m\n\e[36mtest\e[0m\n\e[33m-------\e[0m\n\e[36mtest1\e[0m\n"
-    end
-
-    it 'can pretty a hash inside an array' do
-      res = [{:test => "value",:test1 => "value1"}]
-      output = capture_stdout { @core.pretty(res) }
-      output.should == "\e[33m-------\e[0m\n\e[36mtest:  \e[0m\e[32mvalue\e[0m\n\e[36mtest1:  \e[0m\e[32mvalue1\e[0m\n"
-    end
-  end
-
-  describe 'count response' do
-    it 'can count a hash' do
-      res = {:test => "value",:test1 => "value1"}
-      output = capture_stdout { @core.count(res) }
-      output.should == "\e[33m2 total items\e[0m\n"
-    end
-
-    it 'can count an array' do
-      res = ["test","test2"]
-      output = capture_stdout { @core.count(res) }
-      output.should == "\e[33m2 total items\e[0m\n"
-    end
-  end
-
-  describe 'pagination' do
-    it 'can paginate with limit and offset' do
-      cli = {:fields => {:limit => '2', :offset => '3'}}
-      output = @core.pagination(cli)
-      output.should == "?limit=2&offset=3"
-    end
-
-    it 'can paginate with limit' do
-      cli = {:fields => {:limit => '2'}}
-      output = @core.pagination(cli)
-      output.should == "?limit=2"
-    end
-
-    it 'can return empty string if offset and limit do not exist' do
-      cli = {:fields => {}}
-      output = @core.pagination(cli)
-      output.should == ""
     end
   end
 
