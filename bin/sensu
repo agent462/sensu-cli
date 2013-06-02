@@ -3,6 +3,6 @@ unless $:.include?(File.dirname(__FILE__) + '/../lib/')
   $: << File.dirname(__FILE__) + '/../lib'
 end
 
-require 'sensu-cli/base'
+require 'sensu-cli'
 sensu = SensuCli::Base.new
 sensu.setup
