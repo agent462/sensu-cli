@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'mixlib/config'
+require 'rainbow'
 
 module SensuCli
   class Settings

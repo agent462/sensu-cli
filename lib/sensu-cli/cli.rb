@@ -1,5 +1,6 @@
 require 'trollop'
 require 'sensu-cli/version'
+require 'rainbow'
 
 module SensuCli
   class Cli

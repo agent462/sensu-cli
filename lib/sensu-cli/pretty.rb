@@ -1,3 +1,5 @@
+require 'rainbow'
+
 module SensuCli
   class Pretty
 

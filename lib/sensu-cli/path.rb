@@ -87,6 +87,10 @@ module SensuCli
       end
     end
 
+    def method_missing(method_name, *args)
+      puts "Path method: #{method_name} does not exist. "
+    end
+
     def respond(path,payload=false)
       {:path => path, :payload => payload}
     end
