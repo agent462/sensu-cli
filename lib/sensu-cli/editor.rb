@@ -5,12 +5,11 @@ module SensuCli
   class Editor
 
     def create_stash(create_path)
-      @create_path = create_path
-      file = create_file
-      open(file)
+      file = temp_file({:path => create_path, :content => {:timestamp => Time.now.to_i }})
+      edit(file)
     end
 
-    def open(file)
+    def edit(file)
       ENV['EDITOR'] ? editor = ENV['EDITOR'] : editor = 'vi'
       system("#{editor} #{file}")
       begin
@@ -21,8 +20,7 @@ module SensuCli
       end
     end
 
-    def create_file
-      template = {:path => @create_path, :content => {:timestamp => Time.now.to_i }}
+    def temp_file(template)
       file = Tempfile.new('sensu')
       file.write(JSON.pretty_generate(template))
       file.close
