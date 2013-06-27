@@ -169,7 +169,7 @@ describe 'SensuCli::Cli' do
     it 'should return event list hash' do
       ARGV.push("event","list")
       response = @cli.global
-      response.should eq({:command=>"events", :method=>"Get", :fields=>{:help=>false}})
+      response.should eq({:command=>"events", :method=>"Get", :fields=>{:format=>nil, :help=>false}})
     end
 
     it 'should return event show node hash' do

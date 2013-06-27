@@ -4,6 +4,7 @@ module SensuCli
     def setup
       clis = Cli.new
       cli = clis.global
+      @format = cli[:fields][:format] || "long"
       settings
       api_path(cli)
       make_call
@@ -43,7 +44,13 @@ module SensuCli
       api = Api.new
       res = api.request(opts)
       msg = api.response(res.code, res.body, @api[:command])
-      res.code != '200' ? exit : Pretty.print(msg)
+      if res.code != '200'
+        exit
+      elsif @format == "single"
+        Pretty.table(msg)
+      else
+        Pretty.print(msg)
+      end
       Pretty.count(msg)
     end
 
