@@ -3,3 +3,4 @@
 
 ## 0.2.2
 * 07032013 added a header to identify for proxying requests
+* 07032013 initial lint cleanup from rubocop
