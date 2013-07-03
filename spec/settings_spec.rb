@@ -4,7 +4,7 @@ describe 'SensuCli::Settings' do
 
   before do
     @settings = SensuCli::Settings.new
-    @file = File.join(File.dirname(__FILE__),"settings/settings.rb")
+    @file = File.join(File.dirname(__FILE__), 'settings/settings.rb')
   end
 
   it 'can check if a file exists' do
@@ -13,11 +13,11 @@ describe 'SensuCli::Settings' do
 
   it 'can create a configuration file' do
     require 'rainbow'
-    directory = "/tmp/sensu"
-    file = "temp.rb"
-    full_path = File.join(directory,file)
+    directory = '/tmp/sensu'
+    file = 'temp.rb'
+    full_path = File.join(directory, file)
     File.exist?(full_path).should be_false
-    lambda { @settings.create(directory,full_path)}.should raise_error SystemExit
+    -> { @settings.create(directory, full_path) }.should raise_error SystemExit
     File.exist?(full_path).should be_true
     File.delete(full_path)
   end

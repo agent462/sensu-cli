@@ -1,0 +1,20 @@
+# This is the configuration used to check the rubocop source code
+
+# Avoid methods longer than 30 lines of code
+LineLength:
+  Max: 160
+
+Encoding:
+  Enabled: false
+
+HashSyntax:
+  Enabled: false
+
+MethodLength:
+  Max: 30
+
+Documentation:
+  Enabled: false
+
+ColonMethodCall:
+  Enabled: false
