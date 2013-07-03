@@ -38,18 +38,6 @@ describe 'SensuCli::Pretty' do
       output.should == "\e[36mno values for this request\e[0m\n"
     end
 
-    it 'can table a hash' do
-      res = [{:test => "value"}]
-      output = capture_stdout { SensuCli::Pretty.table(res) }
-      output.should == "test \nvalue\n"
-    end
-
-    it 'can table an array' do
-      res = ["test","test1"]
-      output = capture_stdout { SensuCli::Pretty.table(res) }
-      output.should == "\e[33m-------\e[0m\n\e[36mtest\e[0m\n\e[33m-------\e[0m\n\e[36mtest1\e[0m\n"
-    end
-
     it 'can table a hash inside an array' do
       res = [{:test => "value",:test1 => "value1"}]
       output = capture_stdout { SensuCli::Pretty.table(res) }

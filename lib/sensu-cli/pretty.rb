@@ -38,12 +38,7 @@ module SensuCli
 
     def self.table(res)
       if !res.empty?
-        if res.is_a?(Hash)
-          res.each do |key,value|
-            key = self.clean(key); value = self.clean(value)
-            puts "#{key}:".color(:cyan) + "#{value}".color(:green)
-          end
-        elsif res.is_a?(Array)
+        if res.is_a?(Array)
           keys = res.map{|item| item.keys}.flatten.uniq.sort
 
           # Remove fields with spaces (breaks awkage)
