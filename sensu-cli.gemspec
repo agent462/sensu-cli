@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   s.add_dependency('trollop', '2.0')
   s.add_dependency('mixlib-config', '1.1.2')
 
+  s.add_development_dependency('rspec')
+
   s.files         = Dir.glob('{bin,lib}/**/*') + %w[sensu-cli.gemspec README.md settings.example.rb]
   s.executables   = Dir.glob('bin/**/*').map { |file| File.basename(file) }
   s.require_paths = ['lib']

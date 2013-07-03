@@ -32,7 +32,7 @@ describe 'SensuCli::Cli' do
     it 'should return proper client list hash' do
       ARGV.push("client","list")
       response = @cli.global
-      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :help=>false}})
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>nil, :offset=>nil, :format=>nil, :help=>false}})
     end
 
     it 'should return proper client show hash' do
@@ -56,13 +56,13 @@ describe 'SensuCli::Cli' do
     it 'should paginate with limit and offset' do
       ARGV.push("client","list","-l","2","-o","3")
       response = @cli.global
-      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>"3", :help=>false, :limit_given=>true, :offset_given=>true}})
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>"3", :format=>nil, :help=>false, :limit_given=>true, :offset_given=>true}})
     end
 
     it 'should paginate with limit' do
       ARGV.push("client","list","-l","2")
       response = @cli.global
-      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :help=>false, :limit_given=>true}})
+      response.should eq({:command=>"clients", :method=>"Get", :fields=>{:limit=>"2", :offset=>nil, :format=>nil, :help=>false, :limit_given=>true}})
     end
 
     it 'should bail if offset exists without limit' do
@@ -169,7 +169,7 @@ describe 'SensuCli::Cli' do
     it 'should return event list hash' do
       ARGV.push("event","list")
       response = @cli.global
-      response.should eq({:command=>"events", :method=>"Get", :fields=>{:help=>false}})
+      response.should eq({:command=>"events", :method=>"Get", :fields=>{:format=>nil, :help=>false}})
     end
 
     it 'should return event show node hash' do

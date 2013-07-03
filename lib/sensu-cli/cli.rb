@@ -137,7 +137,9 @@ module SensuCli
         p = Trollop::options do
           opt :limit, "The number if clients to return", :short => "l", :type => :string
           opt :offset, "The number of clients to offset before returning", :short => "o", :type => :string
+          opt :format, "Available formats; single (single line formatting)", :short => "f", :type => :string
         end
+        Trollop::die :format, "Available optional formats: single".color(:red) if p[:format] && p[:format] != "single"
         Trollop::die :offset, "Offset depends on the limit option --limit ( -l )".color(:red) if p[:offset] && !p[:limit]
         cli = {:command => 'clients', :method => 'Get', :fields => p}
       when 'delete'
@@ -197,7 +199,10 @@ module SensuCli
       explode_if_empty(opts,command)
       case command
       when 'list'
-        p = Trollop::options
+        p = Trollop::options do
+          opt :format, "Available formats; single (single line formatting)", :short => "f", :type => :string
+        end
+        Trollop::die :format, "Available optional formats: single".color(:red) if p[:format] && p[:format] != "single"
         cli = {:command => 'events', :method => 'Get', :fields => p}
       when 'show'
         p = Trollop::options do
