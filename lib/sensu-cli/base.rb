@@ -47,11 +47,14 @@ module SensuCli
       if res.code != '200'
         exit
       elsif @format == 'single'
+        Pretty.single(msg)
+        Pretty.count(msg)
+      elsif @format == 'table'
         Pretty.table(msg)
       else
         Pretty.print(msg)
+        Pretty.count(msg)
       end
-      Pretty.count(msg)
     end
 
   end

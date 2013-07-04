@@ -1,4 +1,6 @@
 require 'rainbow'
+require 'hirb'
+require 'terminfo'
 
 module SensuCli
   class Pretty
@@ -36,7 +38,7 @@ module SensuCli
       thing
     end
 
-    def self.table(res)
+    def self.single(res)
       if !res.empty?
         if res.is_a?(Array)
           keys = res.map { |item| item.keys }.flatten.uniq.sort
@@ -67,6 +69,19 @@ module SensuCli
               puts item.to_s.color(:cyan)
             end
           end
+        end
+      else
+        puts 'no values for this request'.color(:cyan)
+      end
+    end
+
+    def self.table(res)
+      if !res.empty?
+        if res.is_a?(Array)
+          terminal_size = TermInfo.screen_size
+          keys = res.map { |item| item.keys }.flatten.uniq
+          order = ['check', 'client', 'status', 'flapping', 'handlers', 'issued', 'output']
+          puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[1], :fields => keys })
         end
       else
         puts 'no values for this request'.color(:cyan)
