@@ -48,13 +48,13 @@ describe 'SensuCli::Pretty' do
   describe 'pretty single table' do
     it 'can table an empty response' do
       res = []
-      output = capture_stdout { SensuCli::Pretty.table(res) }
+      output = capture_stdout { SensuCli::Pretty.table(res, 'events') }
       output.should == "\e[36mno values for this request\e[0m\n"
     end
 
     it 'can table a hash inside an array' do
       res = [{ :test => 'value', :test1 => 'value1' }]
-      output = capture_stdout { SensuCli::Pretty.table(res) }
+      output = capture_stdout { SensuCli::Pretty.table(res, 'test') }
       output.should == "+-------+--------+\n| test  | test1  |\n+-------+--------+\n| value | value1 |\n+-------+--------+\n1 row in set\n"
     end
   end

@@ -50,7 +50,9 @@ module SensuCli
         Pretty.single(msg)
         Pretty.count(msg)
       elsif @format == 'table'
-        Pretty.table(msg)
+        endpoint = @api[:command]
+        puts endpoint
+        Pretty.table(msg, endpoint)
       else
         Pretty.print(msg)
         Pretty.count(msg)

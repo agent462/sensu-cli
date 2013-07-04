@@ -75,11 +75,15 @@ module SensuCli
       end
     end
 
-    def self.table(res)
+    def self.table(res, endpoint)
       if !res.empty?
         if res.is_a?(Array)
           terminal_size = TermInfo.screen_size
-          keys = res.map { |item| item.keys }.flatten.uniq
+          if endpoint == 'events'
+            keys = ['check', 'client', 'status', 'flapping', 'handlers', 'issued', 'output']
+          else
+            keys = res.map { |item| item.keys }.flatten.uniq
+          end
           puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[1], :fields => keys })
         end
       else
