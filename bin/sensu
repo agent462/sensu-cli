@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
-unless $:.include?(File.dirname(__FILE__) + '/../lib/')
-  $: << File.dirname(__FILE__) + '/../lib'
-end
+$LOAD_PATH << File.dirname(__FILE__) + '/../lib' unless $LOAD_PATH.include?(File.dirname(__FILE__) + '/../lib/')
 
 require 'sensu-cli'
 sensu = SensuCli::Base.new

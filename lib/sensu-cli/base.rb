@@ -26,7 +26,7 @@ module SensuCli
 
     def api_path(cli)
       p = PathCreator.new
-      p.respond_to?(cli[:command]) ? path = p.send(cli[:command], cli) : (puts 'Something Bad Happened'; exit)
+      p.respond_to?(cli[:command]) ? path = p.send(cli[:command], cli) : (puts 'Something Bad Happened'; exit) # rubocop:disable Semicolon
       @api = { :path => path[:path], :method => cli[:method], :command => cli[:command], :payload => (path[:payload] || false) }
     end
 

@@ -80,7 +80,7 @@ module SensuCli
         if res.is_a?(Array)
           terminal_size = TermInfo.screen_size
           if endpoint == 'events'
-            keys = ['check', 'client', 'status', 'flapping', 'handlers', 'issued', 'output']
+            keys = %w[check client status flapping handlers issued output]
           else
             keys = res.map { |item| item.keys }.flatten.uniq
           end

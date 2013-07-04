@@ -53,7 +53,11 @@ module SensuCli
       when '404'
         puts 'The item did not exist.'.color(:cyan)
       else
-        (command == 'health') ? (puts 'Sensu is not healthy.'.color(:red)) : (puts "There was an error while trying to complete your request. Response code: #{code}".color(:red))
+        if command == 'health'
+          puts 'Sensu is not healthy.'.color(:red)
+        else
+          puts "There was an error while trying to complete your request. Response code: #{code}".color(:red)
+        end
       end
     end
 

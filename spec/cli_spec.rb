@@ -173,7 +173,7 @@ describe 'SensuCli::Cli' do
       ARGV.push('check', 'request', 'test_check', 'all,web')
       response = @cli.global
       response.should eq({ :command => 'checks', :method => 'Post', :fields => {
-        :check => 'test_check', :subscribers => ['all', 'web'], :help => false } })
+        :check => 'test_check', :subscribers => ['all', 'web'], :help => false } }) # rubocop:disable WordArray
     end
   end
 

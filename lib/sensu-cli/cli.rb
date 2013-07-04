@@ -93,7 +93,7 @@ module SensuCli
         stop_on SUB_COMMANDS
       end
 
-      opts = Trollop::with_standard_exception_handling global_opts do
+      Trollop::with_standard_exception_handling global_opts do
         global_opts.parse ARGV
         raise Trollop::HelpNeeded if ARGV.empty? # show help screen
       end
@@ -103,7 +103,7 @@ module SensuCli
     end
 
     def explode(opts)
-      explode = Trollop::with_standard_exception_handling opts do
+      Trollop::with_standard_exception_handling opts do
         raise Trollop::HelpNeeded # show help screen
       end
     end
@@ -113,7 +113,7 @@ module SensuCli
     end
 
     def parser(cli)
-      opts = Trollop::Parser.new do
+      Trollop::Parser.new do
         banner Cli.const_get("#{cli}_BANNER")
         stop_on Cli.const_get("#{cli}_COMMANDS")
       end
@@ -165,7 +165,7 @@ module SensuCli
     end
 
     def health
-      opts = parser('HEALTH')
+      parser('HEALTH')
       p = Trollop::options do
         opt :consumers, 'The minimum number of consumers', :short => 'c', :type => :string, :required => true
         opt :messages, 'The maximum number of messages', :short => 'm', :type => :string, :required => true
