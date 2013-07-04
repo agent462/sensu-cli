@@ -80,7 +80,6 @@ module SensuCli
         if res.is_a?(Array)
           terminal_size = TermInfo.screen_size
           keys = res.map { |item| item.keys }.flatten.uniq
-          order = ['check', 'client', 'status', 'flapping', 'handlers', 'issued', 'output']
           puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[1], :fields => keys })
         end
       else
