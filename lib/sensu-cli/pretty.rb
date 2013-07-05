@@ -1,6 +1,7 @@
 require 'rainbow'
 require 'hirb'
 require 'terminfo'
+require 'json'
 
 module SensuCli
   class Pretty
@@ -27,6 +28,10 @@ module SensuCli
         else
           self.no_values
         end
+      end
+
+      def json(res)
+        puts JSON.pretty_generate(res)
       end
 
       def count(res)

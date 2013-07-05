@@ -12,3 +12,4 @@
 
 ## 0.2.4 TBD
 * 07052013 added formats to stashes
+* 07052013 added json to formats for event, client and stash list

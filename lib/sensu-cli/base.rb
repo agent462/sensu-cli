@@ -52,6 +52,9 @@ module SensuCli
         endpoint = @api[:command]
         fields = nil || @cli[:fields][:fields]
         Pretty.table(msg, endpoint, fields)
+      elsif @cli[:fields][:format] == 'json'
+        puts Pretty.json(msg)
+        Pretty.count(msg)
       else
         Pretty.print(msg)
         Pretty.count(msg)
