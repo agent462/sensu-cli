@@ -25,7 +25,7 @@ module SensuCli
             end
           end
         else
-          puts 'no values for this request'.color(:cyan)
+          self.no_values
         end
       end
 
@@ -37,6 +37,10 @@ module SensuCli
       def clean(thing)
         thing = thing.gsub("\n", '/\n') if thing.is_a?(String)
         thing
+      end
+
+      def no_values
+        puts 'no values for this request'.color(:cyan)
       end
 
       def single(res)
@@ -72,7 +76,7 @@ module SensuCli
             end
           end
         else
-          puts 'no values for this request'.color(:cyan)
+          self.no_values
         end
       end
 
@@ -96,7 +100,7 @@ module SensuCli
             puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[1], :fields => keys })
           end
         else
-          puts 'no values for this request'.color(:cyan)
+          self.no_values
         end
       end
 
