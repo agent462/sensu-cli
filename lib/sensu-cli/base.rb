@@ -3,10 +3,9 @@ module SensuCli
 
     def setup
       clis = Cli.new
-      cli = clis.global
-      @format = cli[:fields][:format] || 'long'
+      @cli = clis.global
       settings
-      api_path(cli)
+      api_path(@cli)
       make_call
     end
 
@@ -46,13 +45,13 @@ module SensuCli
       msg = api.response(res.code, res.body, @api[:command])
       if res.code != '200'
         exit
-      elsif @format == 'single'
+      elsif @cli[:fields][:format] == 'single'
         Pretty.single(msg)
         Pretty.count(msg)
-      elsif @format == 'table'
+      elsif @cli[:fields][:format] == 'table'
         endpoint = @api[:command]
-        puts endpoint
-        Pretty.table(msg, endpoint)
+        fields = nil || @cli[:fields][:fields]
+        Pretty.table(msg, endpoint, fields)
       else
         Pretty.print(msg)
         Pretty.count(msg)

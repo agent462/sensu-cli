@@ -137,8 +137,10 @@ module SensuCli
           opt :limit, 'The number if clients to return', :short => 'l', :type => :string
           opt :offset, 'The number of clients to offset before returning', :short => 'o', :type => :string
           opt :format, 'Available formats; single, table', :short => 'f', :type => :string
+          opt :fields, 'Fields for table ouput: -F name,address,subscriptions', :short => 'F', :type => :string
         end
         Trollop::die :format, 'Available optional formats: single, table'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format]
+        Trollop::die :fields, 'Fields must be used in conjunction with --format table'.color(:red) if p[:format] != 'table' && p[:format]
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         { :command => 'clients', :method => 'Get', :fields => p }
       when 'delete'
