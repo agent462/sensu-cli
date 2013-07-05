@@ -8,4 +8,4 @@
 ## 0.2.3
 * 07032013 added a table format for events and clients
 * 07042013 fully passing rubocop lint tests
-* 07042013 added ability to pass in fields for client table
+* 07042013 added ability to pass in fields for client table -f table -F name,address,subscriptions
