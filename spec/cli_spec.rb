@@ -266,7 +266,7 @@ describe 'SensuCli::Cli' do
       ARGV.push('stash', 'list')
       response = @cli.global
       response.should eq({ :command => 'stashes', :method => 'Get', :fields => {
-        :limit => nil, :offset => nil, :help => false } })
+        :limit => nil, :offset => nil, :format => nil, :help => false } })
     end
 
     it 'should return stash show hash' do
@@ -294,14 +294,14 @@ describe 'SensuCli::Cli' do
       ARGV.push('stash', 'list', '-l', '2', '-o', '3')
       response = @cli.global
       response.should eq({ :command => 'stashes', :method => 'Get', :fields => {
-        :limit => '2', :offset => '3', :help => false, :limit_given => true, :offset_given => true } })
+        :limit => '2', :offset => '3', :format => nil, :help => false, :limit_given => true, :offset_given => true } })
     end
 
     it 'should paginate with limit' do
       ARGV.push('stash', 'list', '-l', '2')
       response = @cli.global
       response.should eq({ :command => 'stashes', :method => 'Get', :fields => {
-        :limit => '2', :offset => nil, :help => false, :limit_given => true } })
+        :limit => '2', :offset => nil, :format => nil, :help => false, :limit_given => true } })
     end
 
     it 'should bail with offset and no limit' do

@@ -38,7 +38,7 @@ module SensuCli
         EOS
     EVENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Event Commands **
-          sensu-cli event list
+          sensu-cli event list (OPTIONS)
           sensu-cli event show NODE (OPTIONS)
           sensu-cli event delete NODE CHECK\n\r
         EOS
@@ -231,8 +231,10 @@ module SensuCli
         p = Trollop::options do
           opt :limit, 'The number of stashes to return', :short => 'l', :type => :string
           opt :offset, 'The number of stashes to offset before returning', :short => 'o', :type => :string
+          opt :format, 'Available formats; single, table', :short => 'f', :type => :string
         end
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        Trollop::die :format, 'Available optional formats: single, table'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format]
         { :command => 'stashes', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options
