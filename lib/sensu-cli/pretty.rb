@@ -85,7 +85,7 @@ module SensuCli
           if res.is_a?(Array)
             terminal_size = TermInfo.screen_size
             if endpoint == 'events'
-              keys = %w[check client status flapping handlers issued output]
+              keys = %w[check client status flapping occurrences handlers issued output]
             else
               if fields
                 keys = self.parse_fields(fields)
