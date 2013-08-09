@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.add_dependency('trollop', '2.0')
   s.add_dependency('mixlib-config', '1.1.2')
   s.add_dependency('hirb', '0.7.1')
-  s.add_dependency('ruby-terminfo', '0.1.1')
 
   s.add_development_dependency('rspec')
   s.add_development_dependency('rubocop')

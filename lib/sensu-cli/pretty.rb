@@ -1,6 +1,5 @@
 require 'rainbow'
 require 'hirb'
-require 'terminfo'
 require 'json'
 
 module SensuCli
@@ -92,7 +91,7 @@ module SensuCli
       def table(res, endpoint, fields = nil)
         if !res.empty?
           if res.is_a?(Array)
-            terminal_size = TermInfo.screen_size
+            terminal_size = Hirb::Util.detect_terminal_size
             if endpoint == 'events'
               keys = %w[check client status flapping occurrences handlers issued output]
             else
@@ -102,7 +101,7 @@ module SensuCli
                 keys = res.map { |item| item.keys }.flatten.uniq
               end
             end
-            puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[1], :fields => keys })
+            puts Hirb::Helpers::AutoTable.render(res, { :max_width => terminal_size[0], :fields => keys })
           end
         else
           self.no_values
