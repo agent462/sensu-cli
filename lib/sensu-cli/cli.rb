@@ -284,6 +284,7 @@ module SensuCli
       opts = parser('SIL')
       p = Trollop::options do
         opt :check, 'The check to silence (requires --client)', :short => 'k', :type => :string
+        opt :owner, 'The owner of the stash', :short => 'o', :type => :string
         opt :reason, 'The reason this check/node is being silenced', :short => 'r', :type => :string
         opt :expires, 'The number of minutes the silenced event is valid (must use with check-stashes plugin)', :short => 'e', :type => :integer
       end

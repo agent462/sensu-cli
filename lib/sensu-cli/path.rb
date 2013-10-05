@@ -57,6 +57,7 @@ module SensuCli
 
     def silence(cli)
       payload = { :timestamp => Time.now.to_i }
+      payload.merge!({ :owner => cli[:fields][:owner] }) if cli[:fields][:owner]
       payload.merge!({ :reason => cli[:fields][:reason] }) if cli[:fields][:reason]
       if cli[:fields][:expires]
         expires = Time.now.to_i + (cli[:fields][:expires] * 60)
