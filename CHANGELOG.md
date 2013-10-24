@@ -1,3 +1,7 @@
+## 0.2.5 10/24/2013
+* 10242013 fix text in silence option for cli
+* 10042013 added owner to silence
+
 ## 0.2.4 08/09/2013
 * 07052013 added formats to stashes
 * 07052013 added json to formats for event, client and stash list
