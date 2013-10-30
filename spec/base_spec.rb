@@ -201,8 +201,8 @@ describe 'SensuCli::Base' do
         :fields => { :client => 'client' }
       }
       @core.instance_variable_set(:@command, 'silence')
-      payload = { :timestamp => Time.now.to_i }.to_json
-      @core.api_path(cli).should == { :path => '/stashes/silence/client', :method => 'Post', :command => 'silence', :payload => payload }
+      payload = { 'content' => { :timestamp => Time.now.to_i }, 'path' => 'silence/client' }.to_json
+      @core.api_path(cli).should == { :path => '/stashes', :method => 'Post', :command => 'silence', :payload => payload }
     end
 
     it 'can return silence client/check path' do
@@ -212,8 +212,8 @@ describe 'SensuCli::Base' do
         :fields => { :client => 'client', :check => 'check' }
       }
       @core.instance_variable_set(:@command, 'silence')
-      payload = { :timestamp => Time.now.to_i }.to_json
-      @core.api_path(cli).should == { :path => '/stashes/silence/client/check', :method => 'Post', :command => 'silence', :payload => payload }
+      payload = { 'content' => { :timestamp => Time.now.to_i }, 'path' => 'silence/client/check' }.to_json
+      @core.api_path(cli).should == { :path => '/stashes', :method => 'Post', :command => 'silence', :payload => payload }
     end
 
     it 'can return silence client/check with reason and expires path' do
@@ -223,8 +223,8 @@ describe 'SensuCli::Base' do
         :fields => { :client => 'client', :check => 'check', :reason => 'noisy client', :expires => 30 }
       }
       @core.instance_variable_set(:@command, 'silence')
-      payload = { :timestamp => Time.now.to_i, :reason => 'noisy client', :expires => (Time.now.to_i + (30 * 60)) }.to_json
-      @core.api_path(cli).should == { :path => '/stashes/silence/client/check', :method => 'Post', :command => 'silence', :payload => payload }
+      payload = { 'content' => { :timestamp => Time.now.to_i }, :reason => 'noisy client', :expire => 30, 'path' => 'silence/client/check' }.to_json
+      @core.api_path(cli).should == { :path => '/stashes', :method => 'Post', :command => 'silence', :payload => payload }
     end
 
   end
