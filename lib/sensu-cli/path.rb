@@ -35,7 +35,7 @@ module SensuCli
         path = "/check/#{cli[:fields][:name]}"
       elsif cli[:fields][:subscribers]
         payload = { :check => cli[:fields][:check], :subscribers => cli[:fields][:subscribers] }.to_json
-        path = '/check/request'
+        path = '/request'
       else
         path = '/checks'
       end
