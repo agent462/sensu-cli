@@ -98,7 +98,7 @@ describe 'SensuCli::Base' do
         :fields => { :check => 'some_check', :subscribers =>  ['all'] }
       }
       @core.instance_variable_set(:@command, 'checks')
-      @core.api_path(cli).should == { :path => '/check/request', :method => 'Post',
+      @core.api_path(cli).should == { :path => '/request', :method => 'Post',
         :command => 'checks', :payload => '{"check":"some_check","subscribers":["all"]}' }
     end
 
@@ -150,7 +150,7 @@ describe 'SensuCli::Base' do
       }
       @core.instance_variable_set(:@command, 'resolve')
       payload = { :client => 'test', :check => nil }.to_json
-      @core.api_path(cli).should == { :path => '/event/resolve', :method => 'Post', :command => 'resolve', :payload => payload }
+      @core.api_path(cli).should == { :path => '/resolve', :method => 'Post', :command => 'resolve', :payload => payload }
     end
 
     it 'can return all proper client/check resolve path' do
@@ -161,7 +161,7 @@ describe 'SensuCli::Base' do
       }
       @core.instance_variable_set(:@command, 'resolve')
       payload = { :client => 'test', :check => 'check' }.to_json
-      @core.api_path(cli).should == { :path => '/event/resolve', :method => 'Post', :command => 'resolve', :payload => payload }
+      @core.api_path(cli).should == { :path => '/resolve', :method => 'Post', :command => 'resolve', :payload => payload }
     end
 
     it 'can return all aggregates path' do
