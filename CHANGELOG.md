@@ -1,3 +1,8 @@
+## 0.3.0 10/29/2013 
+* Sensu 0.12.0 compliance release
+* 10292013 Update to new expire logic for stashes
+* 10292013 Update deprecated check/request and event/resolve endpoints
+
 ## 0.2.5 10/24/2013
 * 10242013 fix text in silence option for cli
 * 10042013 added owner to silence
