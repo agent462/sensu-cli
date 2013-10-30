@@ -35,7 +35,7 @@ module SensuCli
         path = "/check/#{cli[:fields][:name]}"
       elsif cli[:fields][:subscribers]
         payload = { :check => cli[:fields][:check], :subscribers => cli[:fields][:subscribers] }.to_json
-        path = '/check/request'
+        path = '/request'
       else
         path = '/checks'
       end
@@ -51,23 +51,20 @@ module SensuCli
 
     def resolve(cli)
       payload = { :client => cli[:fields][:client], :check => cli[:fields][:check] }.to_json
-      path = '/event/resolve'
+      path = '/resolve'
       respond(path, payload)
     end
 
     def silence(cli)
-      payload = { :timestamp => Time.now.to_i }
+      payload = { :content => { :timestamp => Time.now.to_i } }
       payload.merge!({ :owner => cli[:fields][:owner] }) if cli[:fields][:owner]
       payload.merge!({ :reason => cli[:fields][:reason] }) if cli[:fields][:reason]
-      if cli[:fields][:expires]
-        expires = Time.now.to_i + (cli[:fields][:expires] * 60)
-        payload.merge!({ :expires => expires })
-      end
-      payload = payload.to_json
-      path = '/stashes/silence'
-      path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
-      path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
-      respond(path, payload)
+      payload.merge!({ :expire => cli[:fields][:expire].to_i }) if cli[:fields][:expire]
+      silence_path = 'silence'
+      silence_path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
+      silence_path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
+      payload = payload.merge!({ :path => silence_path }).to_json
+      respond('/stashes', payload)
     end
 
     def aggregates(cli)

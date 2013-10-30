@@ -10,7 +10,7 @@ module SensuCli
     end
 
     def edit(file)
-      ENV['EDITOR'] ? editor = ENV['EDITOR'] : editor = 'vi'
+      editor = ENV['EDITOR'] ? ENV['EDITOR'] : 'vi'
       system("#{editor} #{file}")
       begin
         JSON.parse(File.read(file))
