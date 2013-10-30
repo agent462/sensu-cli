@@ -51,7 +51,7 @@ module SensuCli
 
     def resolve(cli)
       payload = { :client => cli[:fields][:client], :check => cli[:fields][:check] }.to_json
-      path = '/event/resolve'
+      path = '/resolve'
       respond(path, payload)
     end
 
