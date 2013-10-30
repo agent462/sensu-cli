@@ -59,7 +59,7 @@ module SensuCli
       payload = { :content => { :timestamp => Time.now.to_i } }
       payload.merge!({ :owner => cli[:fields][:owner] }) if cli[:fields][:owner]
       payload.merge!({ :reason => cli[:fields][:reason] }) if cli[:fields][:reason]
-      payload.merge!({ :expire => cli[:fields][:expires].to_i }) if cli[:fields][:expires]
+      payload.merge!({ :expire => cli[:fields][:expire].to_i }) if cli[:fields][:expire]
       silence_path = 'silence'
       silence_path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
       silence_path << "/#{cli[:fields][:check]}" if cli[:fields][:check]

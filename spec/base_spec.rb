@@ -220,7 +220,7 @@ describe 'SensuCli::Base' do
       cli = {
         :command => 'silence',
         :method => 'Post',
-        :fields => { :client => 'client', :check => 'check', :reason => 'noisy client', :expires => 30 }
+        :fields => { :client => 'client', :check => 'check', :reason => 'noisy client', :expire => 30 }
       }
       @core.instance_variable_set(:@command, 'silence')
       payload = { 'content' => { :timestamp => Time.now.to_i }, :reason => 'noisy client', :expire => 30, 'path' => 'silence/client/check' }.to_json
