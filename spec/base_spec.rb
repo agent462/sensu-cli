@@ -223,7 +223,7 @@ describe 'SensuCli::Base' do
         :fields => { :client => 'client', :check => 'check', :reason => 'noisy client', :expire => 30 }
       }
       @core.instance_variable_set(:@command, 'silence')
-      payload = { 'content' => { :timestamp => Time.now.to_i }, :reason => 'noisy client', :expire => 30, 'path' => 'silence/client/check' }.to_json
+      payload = { 'content' => { :timestamp => Time.now.to_i, :reason => 'noisy client' }, :expire => 30, 'path' => 'silence/client/check' }.to_json
       @core.api_path(cli).should == { :path => '/stashes', :method => 'Post', :command => 'silence', :payload => payload }
     end
 
