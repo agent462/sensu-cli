@@ -38,6 +38,8 @@ module SensuCli
         :port => Config.port,
         :ssl => Config.ssl || false,
         :user => Config.user || nil,
+        :read_timeout => Config.read_timeout || 15,
+        :open_timeout => Config.open_timeout || 5,
         :password => Config.password || nil
       }
       api = Api.new
