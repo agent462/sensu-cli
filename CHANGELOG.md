@@ -1,3 +1,7 @@
+## 0.3.1 12/11/2013
+* Added read and connect timeouts to config
+* Fix silence payload
+
 ## 0.3.0 10/29/2013 
 * Sensu 0.12.0 compliance release
 * 10292013 Update to new expire logic for stashes
