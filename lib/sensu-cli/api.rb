@@ -7,8 +7,8 @@ module SensuCli
 
     def request(opts)
       http = Net::HTTP.new(opts[:host], opts[:port])
-      http.read_timeout = 15
-      http.open_timeout = 5
+      http.read_timeout = opts[:read_timeout]
+      http.open_timeout = opts[:open_timeout]
       if opts[:ssl]
         http.use_ssl = true
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE

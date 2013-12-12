@@ -30,12 +30,14 @@ Usage and Configuration
 -----------------------
 * gem install sensu-cli
 
-* There is one settings file for host, port and ssl that lives in your user directory ~/.sensu/settings.rb.  You can alternatively place this in /etc/sensu/sensu-cli/settings.rb.
+* There is one settings file for host, port, ssl, and HTTP timeout that lives in your user directory ~/.sensu/settings.rb.  You can alternatively place this in /etc/sensu/sensu-cli/settings.rb.
 
 ````
 host  "127.0.0.1"
 port  "4567"
 ssl   false
+read_timeout 20
+open_timeout 20
 ````
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
@@ -48,12 +50,14 @@ ssl   false
 user "some_user"
 password "some_secret_password"
 ````
+If `read_timeout` and `open_timeout` are not set, they default to 15 and
+5 seconds respectively.
 
 Expire Silenced Hosts/Checks
 ----------------------------
-I added an expires option to `sensu-cli silence` to be used like `sensu-cli silence HOST -e 30` where `-e` denotes the number of minutes from now a host/checks silence should expire.  This won't work by itself.  We add a key to the silence stash with a time in the future.  If you run [check-stashes](https://github.com/agent462/sensu-check-stashes) on your sensu-server it will check for expired stashes and delete them.   
+I added an expires option to `sensu-cli silence` to be used like `sensu-cli silence HOST -e 30` where `-e` denotes the number of minutes from now a host/checks silence should expire.  This won't work by itself.  We add a key to the silence stash with a time in the future.  If you run [check-stashes](https://github.com/agent462/sensu-check-stashes) on your sensu-server it will check for expired stashes and delete them.
 
-There is also a reason option `-r` available.  Be nice and use it so your colleagues know what you're doing.   
+There is also a reason option `-r` available.  Be nice and use it so your colleagues know what you're doing.
 
 Examples
 -----------
@@ -106,12 +110,12 @@ sensu-cli resolve NODE CHECK
 Contributions
 -------------
 Please provide a pull request.  I'm an ops guy, not a developer, so if you're submitting code cleanup, all I ask is that you explain the improvement so I can learn.
-   
+
 TODO
 ----
 * cleanup the cli
 * Once complete api support is implemented I'll add other features like filtering or issuing a event.
-   
+
 License and Author
 ==================
 I'm releasing this under the MIT or Apache 2.0 license.  You pick.
