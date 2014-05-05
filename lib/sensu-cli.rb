@@ -6,6 +6,7 @@ require 'sensu-cli/path.rb'
 require 'sensu-cli/api.rb'
 require 'sensu-cli/base.rb'
 require 'sensu-cli/version.rb'
+require 'sensu-cli/filter.rb'
 
 module SensuCli
 end
