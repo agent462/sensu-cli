@@ -45,6 +45,7 @@ module SensuCli
       api = Api.new
       res = api.request(opts)
       msg = api.response(res.code, res.body, @api[:command])
+      msg = Filter.filter_json(msg, @cli[:fields][:filter]) if @cli[:fields][:filter]
       if res.code != '200'
         exit
       elsif @cli[:fields][:format] == 'single'
