@@ -19,7 +19,7 @@ describe 'SensuCli::Pretty' do
     end
 
     it 'can pretty an array' do
-      res = %w[test test1]
+      res = %w(test test1)
       output = capture_stdout { SensuCli::Pretty.print(res) }
       output.should == "\e[33m-------\e[0m\n\e[36mtest\e[0m\n\e[33m-------\e[0m\n\e[36mtest1\e[0m\n"
     end
@@ -67,10 +67,9 @@ describe 'SensuCli::Pretty' do
     end
 
     it 'can count an array' do
-      res = %w[test test2]
+      res = %w(test test2)
       output = capture_stdout { SensuCli::Pretty.count(res) }
       output.should == "\e[33m2 total items\e[0m\n"
     end
   end
-
 end

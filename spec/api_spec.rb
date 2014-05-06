@@ -13,8 +13,7 @@ describe 'SensuCli::Api' do
       response = '{"sensu":{"version":"0.9.12"},"rabbitmq":{"keepalives":{"messages":0,"consumers":1},'\
         '"results":{"messages":0,"consumers":1},"connected":true},"redis":{"connected":true}}'
       output = @core.response('200', response)
-      output.should == { 'sensu' => { 'version' => '0.9.12' }, 'rabbitmq' => { 'keepalives' => { 'messages' => 0, 'consumers' => 1 },
-        'results' => { 'messages' => 0, 'consumers' => 1 }, 'connected' => true }, 'redis' => { 'connected' => true } }
+      output.should == { 'sensu' => { 'version' => '0.9.12' }, 'rabbitmq' => { 'keepalives' => { 'messages' => 0, 'consumers' => 1 }, 'results' => { 'messages' => 0, 'consumers' => 1 }, 'connected' => true }, 'redis' => { 'connected' => true } }
     end
 
     it 'can handle a 201 response code for stashes endpoint' do

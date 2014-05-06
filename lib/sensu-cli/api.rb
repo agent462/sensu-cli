@@ -4,7 +4,6 @@ require 'rainbow/ext/string'
 
 module SensuCli
   class Api
-
     def request(opts)
       http = Net::HTTP.new(opts[:host], opts[:port])
       http.read_timeout = opts[:read_timeout]
@@ -20,7 +19,7 @@ module SensuCli
       when 'Delete'
         req =  Net::HTTP::Delete.new(opts[:path], initheader = proxy_header)
       when 'Post'
-        req =  Net::HTTP::Post.new(opts[:path], initheader = proxy_header.merge!({ 'Content-Type' => 'application/json' }))
+        req =  Net::HTTP::Post.new(opts[:path], initheader = proxy_header.merge!('Content-Type' => 'application/json'))
         req.body = opts[:payload]
       end
       req.basic_auth(opts[:user], opts[:password]) if opts[:user] && opts[:password]
@@ -60,6 +59,5 @@ module SensuCli
         end
       end
     end
-
   end
 end

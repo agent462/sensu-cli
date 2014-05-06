@@ -4,7 +4,6 @@ require 'rainbow/ext/string'
 
 module SensuCli
   class Settings
-
     def is_file?(file)
       !File.readable?(file) ? false : true # rubocop:disable FavorUnlessOverNegatedIf
     end
@@ -15,11 +14,9 @@ module SensuCli
       puts "We created the configuration file for you at #{file}.  You can also place this in /etc/sensu/sensu-cli. Edit the settings as needed.".color(:red)
       exit
     end
-
   end
 
   class Config
     extend(Mixlib::Config)
   end
-
 end

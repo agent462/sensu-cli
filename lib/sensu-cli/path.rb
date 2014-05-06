@@ -1,6 +1,5 @@
 module SensuCli
   class PathCreator
-
     def clients(cli)
       path = '/clients'
       path << "/#{cli[:fields][:name]}" if cli[:fields][:name]
@@ -57,14 +56,14 @@ module SensuCli
 
     def silence(cli)
       content = { :timestamp => Time.now.to_i }
-      content.merge!({ :owner => cli[:fields][:owner] }) if cli[:fields][:owner]
-      content.merge!({ :reason => cli[:fields][:reason] }) if cli[:fields][:reason]
+      content.merge!(:owner => cli[:fields][:owner]) if cli[:fields][:owner]
+      content.merge!(:reason => cli[:fields][:reason]) if cli[:fields][:reason]
       payload = { :content =>  content }
-      payload.merge!({ :expire => cli[:fields][:expire].to_i }) if cli[:fields][:expire]
+      payload.merge!(:expire => cli[:fields][:expire].to_i) if cli[:fields][:expire]
       silence_path = 'silence'
       silence_path << "/#{cli[:fields][:client]}" if cli[:fields][:client]
       silence_path << "/#{cli[:fields][:check]}" if cli[:fields][:check]
-      payload = payload.merge!({ :path => silence_path }).to_json
+      payload = payload.merge!(:path => silence_path).to_json
       respond('/stashes', payload)
     end
 
@@ -77,12 +76,12 @@ module SensuCli
     end
 
     def pagination(cli)
-      if cli[:fields].has_key?(:limit) && cli[:fields].has_key?(:offset)
-        page = "?limit=#{cli[:fields][:limit]}&offset=#{cli[:fields][:offset]}"
-      elsif cli[:fields].has_key?(:limit)
-        page = "?limit=#{cli[:fields][:limit]}"
+      if cli[:fields].key?(:limit) && cli[:fields].key?(:offset)
+        "?limit=#{cli[:fields][:limit]}&offset=#{cli[:fields][:offset]}"
+      elsif cli[:fields].key?(:limit)
+        "?limit=#{cli[:fields][:limit]}"
       else
-        page = ''
+        ''
       end
     end
 
@@ -93,6 +92,5 @@ module SensuCli
     def respond(path, payload = false)
       { :path => path, :payload => payload }
     end
-
   end
 end

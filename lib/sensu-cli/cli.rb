@@ -301,6 +301,5 @@ module SensuCli
       ARGV.empty? ? explode(opts) : check = next_argv
       deep_merge({ :command => 'resolve', :method => 'Post', :fields => { :client => command, :check => check } }, { :fields => p })
     end
-
   end
 end

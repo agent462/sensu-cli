@@ -1,6 +1,5 @@
 module SensuCli
   class Base
-
     def setup
       clis = Cli.new
       @cli = clis.global
@@ -61,6 +60,5 @@ module SensuCli
       end
       Pretty.count(msg) unless @cli[:fields][:format] == 'table'
     end
-
   end
 end

@@ -98,8 +98,7 @@ describe 'SensuCli::Base' do
         :fields => { :check => 'some_check', :subscribers =>  ['all'] }
       }
       @core.instance_variable_set(:@command, 'checks')
-      @core.api_path(cli).should == { :path => '/request', :method => 'Post',
-        :command => 'checks', :payload => '{"check":"some_check","subscribers":["all"]}' }
+      @core.api_path(cli).should == { :path => '/request', :method => 'Post', :command => 'checks', :payload => '{"check":"some_check","subscribers":["all"]}' }
     end
 
     it 'can return proper single checks path' do

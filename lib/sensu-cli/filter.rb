@@ -1,6 +1,5 @@
 module SensuCli
   class Filter
-
     def self.filter_split(filter)
       filter.sub(' ', '').split(',')
     end
@@ -21,6 +20,5 @@ module SensuCli
         res
       end
     end
-
   end
 end

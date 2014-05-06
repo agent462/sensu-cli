@@ -1,5 +1,13 @@
+AllCops:
+  Exclude:
+    - settings.example.rb
+    - spec/settings/settings.rb
+
 LineLength:
-  Max: 160
+  Enabled: false
+
+FileName:
+  Enabled: false
 
 Encoding:
   Enabled: false
@@ -17,9 +25,6 @@ ColonMethodCall:
   Enabled: false
 
 NumericLiterals:
-  Enabled: false
-
-LineContinuation:
   Enabled: false
 
 BlockNesting:
