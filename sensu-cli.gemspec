@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('rainbow', '2.0.0')
   s.add_dependency('trollop', '2.0')
-  s.add_dependency('mixlib-config', '1.1.2')
+  s.add_dependency('mixlib-config', '2.1.0')
   s.add_dependency('hirb', '0.7.1')
 
   s.add_development_dependency('rspec')
