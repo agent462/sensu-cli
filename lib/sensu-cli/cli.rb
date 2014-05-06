@@ -138,6 +138,7 @@ module SensuCli
           opt :offset, 'The number of clients to offset before returning', :short => 'o', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
           opt :fields, 'Fields for table ouput: -F name,address,subscriptions', :short => 'F', :type => :string
+          opt :filter, 'Field and value to filter on: name,graphite', :type => :string
         end
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
         Trollop::die :fields, 'Fields must be used in conjunction with --format table'.color(:red) if p[:format] != 'table' && p[:fields]
