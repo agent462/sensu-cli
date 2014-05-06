@@ -1,6 +1,6 @@
 require 'trollop'
 require 'sensu-cli/version'
-require 'rainbow'
+require 'rainbow/ext/string'
 
 module SensuCli
   class Cli

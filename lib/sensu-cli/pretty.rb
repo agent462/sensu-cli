@@ -1,4 +1,4 @@
-require 'rainbow'
+require 'rainbow/ext/string'
 require 'hirb'
 require 'json'
 

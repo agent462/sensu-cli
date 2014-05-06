@@ -1,6 +1,6 @@
 require 'net/https'
 require 'json'
-require 'rainbow'
+require 'rainbow/ext/string'
 
 module SensuCli
   class Api
