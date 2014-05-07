@@ -96,7 +96,7 @@ describe 'SensuCli::Cli' do
     it 'should return proper aggregate list hash' do
       ARGV.push('aggregate', 'list')
       response = @cli.global
-      response.should eq(:command => 'aggregates', :method => 'Get', :fields => { :help => false })
+      response.should eq(:command => 'aggregates', :method => 'Get', :fields => { :filter => nil, :help => false })
     end
 
     it 'should return proper aggregate delete hash' do
@@ -144,7 +144,7 @@ describe 'SensuCli::Cli' do
     it 'should return check list hash' do
       ARGV.push('check', 'list')
       response = @cli.global
-      response.should eq(:command => 'checks', :method => 'Get', :fields => { :help => false })
+      response.should eq(:command => 'checks', :method => 'Get', :fields => { :filter => nil, :help => false })
     end
 
     it 'should return check show hash' do
@@ -169,7 +169,7 @@ describe 'SensuCli::Cli' do
     it 'should return event list hash' do
       ARGV.push('event', 'list')
       response = @cli.global
-      response.should eq(:command => 'events', :method => 'Get', :fields => { :format => nil, :help => false })
+      response.should eq(:command => 'events', :method => 'Get', :fields => { :filter => nil, :format => nil, :help => false })
     end
 
     it 'should return event show node hash' do
@@ -239,7 +239,7 @@ describe 'SensuCli::Cli' do
     it 'should return stash list hash' do
       ARGV.push('stash', 'list')
       response = @cli.global
-      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => nil, :offset => nil, :format => nil, :help => false })
+      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => nil, :filter => nil, :offset => nil, :format => nil, :help => false })
     end
 
     it 'should return stash show hash' do
@@ -263,13 +263,13 @@ describe 'SensuCli::Cli' do
     it 'should paginate with limit and offset' do
       ARGV.push('stash', 'list', '-l', '2', '-o', '3')
       response = @cli.global
-      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => '2', :offset => '3', :format => nil, :help => false, :limit_given => true, :offset_given => true })
+      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => '2', :filter => nil, :offset => '3', :format => nil, :help => false, :limit_given => true, :offset_given => true })
     end
 
     it 'should paginate with limit' do
       ARGV.push('stash', 'list', '-l', '2')
       response = @cli.global
-      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => '2', :offset => nil, :format => nil, :help => false, :limit_given => true })
+      response.should eq(:command => 'stashes', :method => 'Get', :fields => { :limit => '2', :filter => nil, :offset => nil, :format => nil, :help => false, :limit_given => true })
     end
 
     it 'should bail with offset and no limit' do
