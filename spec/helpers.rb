@@ -1,7 +1,7 @@
 require 'rspec'
 
 module Helpers
-  def capture_stdout(&block)
+  def capture_stdout(*)
     original_stdout = $stdout
     $stdout = fake = StringIO.new
     begin

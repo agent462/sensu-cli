@@ -13,9 +13,9 @@ module SensuCli
       file = "#{directory}/settings.rb"
       alt = '/etc/sensu/sensu-cli/settings.rb'
       settings = Settings.new
-      if settings.is_file?(file)
+      if settings.file?(file)
         SensuCli::Config.from_file(file)
-      elsif settings.is_file?(alt)
+      elsif settings.file?(alt)
         SensuCli::Config.from_file(alt)
       else
         settings.create(directory, file)

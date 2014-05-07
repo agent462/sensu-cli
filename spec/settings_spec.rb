@@ -8,7 +8,7 @@ describe 'SensuCli::Settings' do
   end
 
   it 'can check if a file exists' do
-    @settings.is_file?(@file).should be_true
+    @settings.file?(@file).should be_true
   end
 
   it 'can create a configuration file' do

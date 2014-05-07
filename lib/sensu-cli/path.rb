@@ -8,7 +8,7 @@ module SensuCli
       respond(path)
     end
 
-    def info(cli)
+    def info(*)
       path = '/info'
       respond(path)
     end
@@ -85,7 +85,7 @@ module SensuCli
       end
     end
 
-    def method_missing(method_name, *args)
+    def method_missing(method_name, *_args)
       puts "Path method: #{method_name} does not exist. "
     end
 

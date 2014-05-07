@@ -15,11 +15,11 @@ module SensuCli
       proxy_header = { 'api-proxy' => 'true' }
       case opts[:method]
       when 'Get'
-        req =  Net::HTTP::Get.new(opts[:path], initheader = proxy_header)
+        req =  Net::HTTP::Get.new(opts[:path], proxy_header)
       when 'Delete'
-        req =  Net::HTTP::Delete.new(opts[:path], initheader = proxy_header)
+        req =  Net::HTTP::Delete.new(opts[:path], proxy_header)
       when 'Post'
-        req =  Net::HTTP::Post.new(opts[:path], initheader = proxy_header.merge!('Content-Type' => 'application/json'))
+        req =  Net::HTTP::Post.new(opts[:path], proxy_header.merge!('Content-Type' => 'application/json'))
         req.body = opts[:payload]
       end
       req.basic_auth(opts[:user], opts[:password]) if opts[:user] && opts[:password]

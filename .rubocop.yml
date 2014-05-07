@@ -9,6 +9,12 @@ LineLength:
 FileName:
   Enabled: false
 
+SignalException:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
 Encoding:
   Enabled: false
 

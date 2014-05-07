@@ -24,7 +24,7 @@ module SensuCli
             end
           end
         else
-          self.no_values
+          no_values
         end
       end
 
@@ -64,22 +64,21 @@ module SensuCli
             end
 
             # Print header
-            format = keys.map { |key| "%-#{value_lengths[key]}s" }.join(' ')
-            puts sprintf(format, *keys)
+            lengths = keys.map { |key| "%-#{value_lengths[key]}s" }.join(' ')
+            puts format(lengths, *keys)
 
             # Print value rows
             res.each do |item|
               if item.is_a?(Hash)
                 values = keys.map { |key| item[key] }
-                format = keys.map { |key| "%-#{value_lengths[key]}s" }.join(' ')
-                puts sprintf(format, *values)
+                puts format(lengths, *values)
               else
                 puts item.to_s.color(:cyan)
               end
             end
           end
         else
-          self.no_values
+          no_values
         end
       end
 
@@ -95,7 +94,7 @@ module SensuCli
               keys = %w(check client status flapping occurrences handlers issued output)
             else
               if fields
-                keys = self.parse_fields(fields)
+                keys = parse_fields(fields)
               else
                 keys = res.map { |item| item.keys }.flatten.uniq
               end
@@ -103,7 +102,7 @@ module SensuCli
             puts Hirb::Helpers::AutoTable.render(res, :max_width => terminal_size[0], :fields => keys)
           end
         else
-          self.no_values
+          no_values
         end
       end
     end

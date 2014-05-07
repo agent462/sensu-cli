@@ -3,7 +3,7 @@ require 'sensu-cli/version'
 require 'rainbow/ext/string'
 
 module SensuCli
-  class Cli
+  class Cli # rubocop:disable ClassLength
     SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve health)
     CLIENT_COMMANDS = %w(list show delete history)
     CHECK_COMMANDS  = %w(list show request)
@@ -109,7 +109,7 @@ module SensuCli
     end
 
     def deep_merge(hash_one, hash_two)
-      hash_one.merge(hash_two) { |key, hash_one_item, hash_two_item| deep_merge(hash_one_item, hash_two_item) }
+      hash_one.merge(hash_two) { |_key, hash_one_item, hash_two_item| deep_merge(hash_one_item, hash_two_item) }
     end
 
     def parser(cli)
@@ -127,7 +127,7 @@ module SensuCli
       ARGV.shift
     end
 
-    def client
+    def client # rubocop:disable MethodLength
       opts = parser('CLIENT')
       command = next_argv
       explode_if_empty(opts, command)
@@ -216,7 +216,7 @@ module SensuCli
         p = Trollop::options
         item = next_argv
         check = next_argv
-        explode(opts) if check == nil
+        explode(opts) if check.nil?
         deep_merge({ :command => 'events', :method => 'Delete', :fields => { :client => item, :check => check } }, { :fields => p })
       else
         explode(opts)
@@ -290,7 +290,7 @@ module SensuCli
         opt :expire, 'The number of seconds the silenced event is valid', :short => 'e', :type => :integer
       end
       command = next_argv
-      explode(opts) if command == nil
+      explode(opts) if command.nil?
       deep_merge({ :command => 'silence', :method => 'Post', :fields => { :client => command } }, { :fields => p })
     end
 

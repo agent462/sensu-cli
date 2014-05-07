@@ -4,7 +4,7 @@ require 'rainbow/ext/string'
 
 module SensuCli
   class Settings
-    def is_file?(file)
+    def file?(file)
       !File.readable?(file) ? false : true # rubocop:disable FavorUnlessOverNegatedIf
     end
 
