@@ -41,17 +41,13 @@ open_timeout 20
 ````
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
-* If your Sensu API has basic auth, add the parameters to the config.
-
-````
-host  "127.0.0.1"
-port  "4567"
-ssl   false
-user "some_user"
-password "some_secret_password"
-````
-If `read_timeout` and `open_timeout` are not set, they default to 15 and
-5 seconds respectively.
+* All Configuration Settings
+`host` String - Required
+`port` String/Integer - Required
+`ssl`  Boolean - Optional - Defaults False
+`read_timeout` Integer - Optional - Default 15 (seconds)
+`open_timeout` Integer - Optional - Default 5 (seconds)
+`pretty_colors` Boolean - Optional - Default True
 
 Examples
 -----------

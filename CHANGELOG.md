@@ -1,3 +1,11 @@
+## 0.4.0 05/06/2014
+* Added Bash Completion
+* Added Client filtering option
+* Added ability to turn off colored output
+* Updated rainbow gem
+* Updated mixlib config gem
+* Cleanup for updated rubocop
+
 ## 0.3.1 12/11/2013
 * Added read and connect timeouts to config
 * Fix silence payload
