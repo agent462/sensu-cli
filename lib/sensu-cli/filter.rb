@@ -1,25 +1,38 @@
 module SensuCli
   class Filter
-    class << self
-      def filter_split(filter)
-        filter.sub(' ', '').split(',')
-      end
+    attr_reader :filter
 
-      def filter_json(res, filter)
-        filter = filter_split(filter)
-        if !res.empty?
-          res.select do |item|
-            if item.key? filter[0]
-              if item[filter[0]].is_a?(Array)
-                item unless item[filter[0]].select { |value| value.include? filter[1] }.empty?
-              else
-                item if item[filter[0]].include? filter[1]
-              end
-            end
-          end
+    def initialize(filter_data)
+      filter_split(filter_data)
+    end
+
+    def filter_split(filter)
+      @filter = filter.sub(' ', '').split(',')
+    end
+
+    def match?(data)
+      data.to_s.include? filter[1]
+    end
+
+    def inspect_hash(data)
+      data.any? do |key, value|
+        if value.is_a?(Array)
+          match?(value) if key == filter[0]
+        elsif value.is_a?(Hash)
+          process(value)
         else
-          res
+          match?(value) if key == filter[0]
         end
+      end
+    end
+
+    def process(data)
+      if data.is_a?(Array)
+        data.select do |value|
+          process(value)
+        end
+      elsif data.is_a?(Hash)
+        inspect_hash(data)
       end
     end
   end
