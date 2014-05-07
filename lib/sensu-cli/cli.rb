@@ -180,14 +180,18 @@ module SensuCli
       opts = parser('CHECK')
       command = next_argv
       explode_if_empty(opts, command)
-      p = Trollop::options
       item = next_argv
       case command
       when 'list'
+        p = Trollop::options do
+          opt :filter, 'Field and value to filter on: command,procs', :type => :string
+        end
         { :command => 'checks', :method => 'Get', :fields => p }
       when 'show'
+        p = Trollop::options
         deep_merge({ :command => 'checks', :method => 'Get', :fields => { :name => item } }, { :fields => p })
       when 'request'
+        p = Trollop::options
         ARGV.empty? ? explode(opts) : subscribers = next_argv.split(',')
         deep_merge({ :command => 'checks', :method => 'Post', :fields => { :check => item, :subscribers => subscribers } }, { :fields => p })
       else
@@ -202,6 +206,7 @@ module SensuCli
       case command
       when 'list'
         p = Trollop::options do
+          opt :filter, 'Field and value to filter on: client,graphite', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
         end
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
@@ -233,6 +238,7 @@ module SensuCli
           opt :limit, 'The number of stashes to return', :short => 'l', :type => :string
           opt :offset, 'The number of stashes to offset before returning', :short => 'o', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
+          opt :filter, 'Field and value to filter on: path,graphite', :type => :string
         end
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
@@ -260,7 +266,9 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options
+        p = Trollop::options do
+          opt :filter, 'Field and value to filter on: issued,1399505890', :type => :string
+        end
         { :command => 'aggregates', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options do
