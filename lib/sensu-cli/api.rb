@@ -26,11 +26,9 @@ module SensuCli
       begin
         http.request(req)
       rescue Timeout::Error
-        puts 'HTTP request has timed out.'.color(:red)
-        exit
+        SensuCli::die(1, 'HTTP request has timed out.'.color(:red))
       rescue StandardError => e
-        puts "An HTTP error occurred.  Check your settings. #{e}".color(:red)
-        exit
+        SensuCli::die(1, "An HTTP error occurred.  Check your settings. #{e}".color(:red))
       end
     end
 

@@ -14,8 +14,7 @@ module SensuCli
       begin
         JSON.parse(File.read(file))
       rescue JSON::ParserError
-        puts 'The stash you created has Invalid JSON.'
-        exit
+        SensuCli::die(1, 'The stash you created has invalid JSON.')
       end
     end
 

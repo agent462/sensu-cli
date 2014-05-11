@@ -1,8 +1,7 @@
 module SensuCli
   class Base
     def setup
-      clis = Cli.new
-      @cli = clis.global
+      @cli = Cli.new.global
       settings
       api_path(@cli)
       make_call
@@ -25,7 +24,7 @@ module SensuCli
 
     def api_path(cli)
       p = PathCreator.new
-      p.respond_to?(cli[:command]) ? path = p.send(cli[:command], cli) : (puts 'Something Bad Happened'; exit) # rubocop:disable Semicolon
+      p.respond_to?(cli[:command]) ? path = p.send(cli[:command], cli) : SensuCli::die(1, 'Something Bad Happened')
       @api = { :path => path[:path], :method => cli[:method], :command => cli[:command], :payload => (path[:payload] || false) }
     end
 
@@ -47,7 +46,7 @@ module SensuCli
       msg = api.response(res.code, res.body, @api[:command])
       msg = Filter.new(@cli[:fields][:filter]).process(msg) if @cli[:fields][:filter]
       if res.code != '200'
-        exit
+        SensuCli::die(0)
       elsif @cli[:fields][:format] == 'single'
         Pretty.single(msg)
       elsif @cli[:fields][:format] == 'table'
