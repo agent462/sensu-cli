@@ -1,3 +1,7 @@
+## 0.5.0 05/10/2014
+* Deep Filtering in responses
+* Added filtering to event, stash, check and aggregate
+
 ## 0.4.0 05/06/2014
 * Added Bash Completion
 * Added Client filtering option
