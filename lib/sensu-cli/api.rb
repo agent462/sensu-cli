@@ -5,7 +5,8 @@ require 'rainbow/ext/string'
 module SensuCli
   class Api
     def request(opts)
-      http = Net::HTTP.new(opts[:host], opts[:port])
+      http = Net::HTTP.new(opts[:host], opts[:port], opts[:proxy_address],
+                           opts[:proxy_port])
       http.read_timeout = opts[:read_timeout]
       http.open_timeout = opts[:open_timeout]
       if opts[:ssl]

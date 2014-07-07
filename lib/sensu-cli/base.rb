@@ -39,7 +39,9 @@ module SensuCli
         :user => Config.user || nil,
         :read_timeout => Config.read_timeout || 15,
         :open_timeout => Config.open_timeout || 5,
-        :password => Config.password || nil
+        :password => Config.password || nil,
+        :proxy_address => Config.proxy_address || :ENV,
+        :proxy_port => Config.proxy_port || nil
       }
       api = Api.new
       res = api.request(opts)
