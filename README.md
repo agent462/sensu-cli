@@ -47,7 +47,9 @@ This format was chosen so you can do some ENV magic via your profile and setting
 `ssl`  Boolean - Optional - Defaults False   
 `read_timeout` Integer - Optional - Default 15 (seconds)   
 `open_timeout` Integer - Optional - Default 5 (seconds)   
-`pretty_colors` Boolean - Optional - Default True   
+`pretty_colors` Boolean - Optional - Default True
+`proxy_address` String - Optional
+`proxy_port` Integer - Optional
 
 Examples
 -----------
