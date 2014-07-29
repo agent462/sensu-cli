@@ -99,21 +99,40 @@ module SensuCli
       def table(res, endpoint, fields = nil)
         if !res.empty?
           if res.is_a?(Array)
-            terminal_size = Hirb::Util.detect_terminal_size
-            if endpoint == 'events'
-              keys = %w(check client status flapping occurrences handlers issued output)
+            case endpoint
+            when 'events'
+              keys = %w(check client address occurrences status handlers issued output)
+              events = []
+              res.each do |event|
+                events << {
+                  'client' => event['client']['name'],
+                  'address' => event['client']['address'],
+                  'check' => event['check']['name'],
+                  'occurrences' => event['occurrences'],
+                  'status' => event['check']['status'],
+                  'handlers' => event['check']['handlers'],
+                  'issued' => event['check']['issued'],
+                  'output' => event['check']['output'].rstrip
+                }
+              end
+              create_table(events, keys)
             else
               if fields
                 keys = parse_fields(fields)
               else
                 keys = res.map { |item| item.keys }.flatten.uniq
               end
+              create_table(res, keys)
             end
-            puts Hirb::Helpers::AutoTable.render(res, :max_width => terminal_size[0], :fields => keys)
           end
         else
           no_values
         end
+      end
+
+      def create_table(data, keys)
+        terminal_size = Hirb::Util.detect_terminal_size
+        puts Hirb::Helpers::AutoTable.render(data, :max_width => terminal_size[0], :fields => keys)
       end
     end
   end
