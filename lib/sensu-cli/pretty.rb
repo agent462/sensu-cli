@@ -1,12 +1,22 @@
 require 'rainbow/ext/string'
 require 'hirb'
 require 'json'
+require 'erubis'
 
 module SensuCli
   class Pretty
     class << self
-      def print(res)
+      def print(res, endpoint = nil)
         if !res.empty?
+          case endpoint
+          when 'events'
+            template = File.read('lib/sensu-cli/templates/event.erb')
+            renderer = Erubis::Eruby.new(template)
+            res.each do |event|
+              puts renderer.result(event)
+            end
+            return
+          end
           if res.is_a?(Hash)
             res.each do |key, value|
               puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)

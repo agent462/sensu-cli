@@ -47,18 +47,18 @@ module SensuCli
       res = api.request(opts)
       msg = api.response(res.code, res.body, @api[:command])
       msg = Filter.new(@cli[:fields][:filter]).process(msg) if @cli[:fields][:filter]
+      endpoint = @api[:command]
       if res.code != '200'
         SensuCli::die(0)
       elsif @cli[:fields][:format] == 'single'
         Pretty.single(msg)
       elsif @cli[:fields][:format] == 'table'
-        endpoint = @api[:command]
         fields = nil || @cli[:fields][:fields]
         Pretty.table(msg, endpoint, fields)
       elsif @cli[:fields][:format] == 'json'
         Pretty.json(msg)
       else
-        Pretty.print(msg)
+        Pretty.print(msg, endpoint)
       end
       Pretty.count(msg) unless @cli[:fields][:format] == 'table'
     end
