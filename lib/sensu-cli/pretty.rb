@@ -97,36 +97,31 @@ module SensuCli
       end
 
       def table(res, endpoint, fields = nil)
-        if !res.empty?
-          if res.is_a?(Array)
-            case endpoint
-            when 'events'
-              keys = %w(check client address occurrences status handlers issued output)
-              events = []
-              res.each do |event|
-                events << {
-                  'client' => event['client']['name'],
-                  'address' => event['client']['address'],
-                  'check' => event['check']['name'],
-                  'occurrences' => event['occurrences'],
-                  'status' => event['check']['status'],
-                  'handlers' => event['check']['handlers'],
-                  'issued' => event['check']['issued'],
-                  'output' => event['check']['output'].rstrip
-                }
-              end
-              create_table(events, keys)
-            else
-              if fields
-                keys = parse_fields(fields)
-              else
-                keys = res.map { |item| item.keys }.flatten.uniq
-              end
-              create_table(res, keys)
-            end
+        return no_values if res.empty?
+        case endpoint
+        when 'events'
+          keys = %w(check client address occurrences status handlers issued output)
+          events = []
+          res.each do |event|
+            events << {
+              'client' => event['client']['name'],
+              'address' => event['client']['address'],
+              'check' => event['check']['name'],
+              'occurrences' => event['occurrences'],
+              'status' => event['check']['status'],
+              'handlers' => event['check']['handlers'],
+              'issued' => event['check']['issued'],
+              'output' => event['check']['output'].rstrip
+            }
           end
+          create_table(events, keys)
         else
-          no_values
+          if fields
+            keys = parse_fields(fields)
+          else
+            keys = res.map { |item| item.keys }.flatten.uniq
+          end
+          create_table(res, keys)
         end
       end
 
