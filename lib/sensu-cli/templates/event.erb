@@ -1,12 +1,12 @@
 <%= "-------".color(:yellow) %>
-<%= "id:".color(:blue).bright %> <%= id.color(:green) %>
-<%= "client name:".color(:blue).bright %> <%= client['name'].color(:green) %>
-  <%= "address:".color(:cyan) %> <%= client['address'].color(:green) %>
+<%= "id:".color(:blue).bright %> <%= id.to_s.color(:green) %>
+<%= "client name:".color(:blue).bright %> <%= client['name'].to_s.color(:green) %>
+  <%= "address:".color(:cyan) %> <%= client['address'].to_s.color(:green) %>
   <%= "subscriptions:".color(:cyan) %> <%= client['subscriptions'].to_s.color(:green) %>
-  <%= "version:".color(:cyan) %> <%= client['version'].color(:green) %>
+  <%= "version:".color(:cyan) %> <%= client['version'].to_s.color(:green) %>
   <%= "timestamp:".color(:cyan) %> <%= client['timestamp'].to_s.color(:green) %>
-<%= "check name:".color(:blue).bright %> <%= check['name'].color(:green) %>
-  <%= "command:".color(:cyan) %> <%= check['command'].color(:green) %>
+<%= "check name:".color(:blue).bright %> <%= check['name'].to_s.color(:green) %>
+  <%= "command:".color(:cyan) %> <%= check['command'].to_s.color(:green) %>
   <%= "handlers:".color(:cyan) %> <%= check['handlers'].to_s.color(:green) %>
   <%= "interval:".color(:cyan) %> <%= check['interval'].to_s.color(:green) %>
   <%= "subscribers:".color(:cyan) %> <%= check['subscribers'].to_s.color(:green) %>
@@ -17,4 +17,4 @@
   <%= "status:".color(:cyan) %> <%= check['status'].to_s.color(:green) %>
   <%= "history:".color(:cyan) %> <%= check['history'].to_s.color(:green) %>
 <%= "occurrences:".color(:blue).bright %> <%= occurrences.to_s.color(:green) %>
-<%= "action:".color(:blue).bright %> <%= action.color(:green) %>
+<%= "action:".color(:blue).bright %> <%= action.to_s.color(:green) %>
