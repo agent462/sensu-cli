@@ -206,7 +206,7 @@ module SensuCli
       case command
       when 'list'
         p = Trollop::options do
-          opt :filter, 'Field and value to filter on: client,graphite', :type => :string
+          opt :filter, 'Field and value to filter on: client,graphite (use "name" as field for client or event name)', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
         end
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
