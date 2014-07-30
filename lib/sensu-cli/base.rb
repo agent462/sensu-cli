@@ -51,7 +51,7 @@ module SensuCli
       if res.code != '200'
         SensuCli::die(0)
       elsif @cli[:fields][:format] == 'single'
-        Pretty.single(msg)
+        Pretty.single(msg, endpoint)
       elsif @cli[:fields][:format] == 'table'
         fields = nil || @cli[:fields][:fields]
         Pretty.table(msg, endpoint, fields)

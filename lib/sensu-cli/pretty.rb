@@ -7,34 +7,31 @@ module SensuCli
   class Pretty
     class << self
       def print(res, endpoint = nil)
-        if !res.empty?
-          case endpoint
-          when 'events'
-            template = File.read('lib/sensu-cli/templates/event.erb')
-            renderer = Erubis::Eruby.new(template)
-            res.each do |event|
-              puts renderer.result(event)
-            end
-            return
+        return no_values if res.empty?
+        case endpoint
+        when 'events'
+          template = File.read('lib/sensu-cli/templates/event.erb')
+          renderer = Erubis::Eruby.new(template)
+          res.each do |event|
+            puts renderer.result(event)
           end
-          if res.is_a?(Hash)
-            res.each do |key, value|
-              puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
-            end
-          elsif res.is_a?(Array)
-            res.each do |item|
-              puts '-------'.color(:yellow)
-              if item.is_a?(Hash)
-                item.each do |key, value|
-                  puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
-                end
-              else
-                puts item.to_s.color(:cyan)
+          return
+        end
+        if res.is_a?(Hash)
+          res.each do |key, value|
+            puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
+          end
+        elsif res.is_a?(Array)
+          res.each do |item|
+            puts '-------'.color(:yellow)
+            if item.is_a?(Hash)
+              item.each do |key, value|
+                puts "#{key}:  ".color(:cyan) + "#{value}".color(:green)
               end
+            else
+              puts item.to_s.color(:cyan)
             end
           end
-        else
-          no_values
         end
       end
 
@@ -56,39 +53,38 @@ module SensuCli
         puts 'no values for this request'.color(:cyan)
       end
 
-      def single(res)
-        if !res.empty?
-          if res.is_a?(Array)
-            keys = res.map { |item| item.keys }.flatten.uniq.sort
+      def single(res, endpoint)
+        return no_values if res.empty?
+        case endpoint
+        when 'events'
+          res = event_data(res)
+        end
+        keys = res.map { |item| item.keys }.flatten.uniq.sort
 
-            # Remove fields with spaces (breaks awkage)
-            keys.select! do |key|
-              res.none? { |item| item[key].to_s.include?(' ') }
-            end
+        # Remove fields with spaces (breaks awkage)
+        keys.select! do |key|
+          res.none? { |item| item[key].to_s.include?(' ') }
+        end
 
-            # Find max value lengths
-            value_lengths = {}
-            keys.each do |key|
-              max_value_length = res.map { |item| item[key].to_s.length }.max
-              value_lengths[key] = [max_value_length, key.length].max
-            end
+        # Find max value lengths
+        value_lengths = {}
+        keys.each do |key|
+          max_value_length = res.map { |item| item[key].to_s.length }.max
+          value_lengths[key] = [max_value_length, key.length].max
+        end
 
-            # Print header
-            lengths = keys.map { |key| "%-#{value_lengths[key]}s" }.join(' ')
-            puts format(lengths, *keys)
+        # Print header
+        lengths = keys.map { |key| "%-#{value_lengths[key]}s" }.join(' ')
+        puts format(lengths, *keys)
 
-            # Print value rows
-            res.each do |item|
-              if item.is_a?(Hash)
-                values = keys.map { |key| item[key] }
-                puts format(lengths, *values)
-              else
-                puts item.to_s.color(:cyan)
-              end
-            end
+        # Print value rows
+        res.each do |item|
+          if item.is_a?(Hash)
+            values = keys.map { |key| item[key] }
+            puts format(lengths, *values)
+          else
+            puts item.to_s.color(:cyan)
           end
-        else
-          no_values
         end
       end
 
@@ -96,36 +92,42 @@ module SensuCli
         fields.split(',')
       end
 
+      def event_data(res)
+        events = []
+        res.each do |event|
+          events << {
+            'client' => event['client']['name'],
+            'address' => event['client']['address'],
+            'check' => event['check']['name'],
+            'interval' => event['check']['interval'],
+            'occurrences' => event['occurrences'],
+            'status' => event['check']['status'],
+            'handlers' => event['check']['handlers'],
+            'issued' => event['check']['issued'],
+            'executed' => event['check']['executed'],
+            'output' => event['check']['output'].rstrip
+          }
+        end
+        events
+      end
+
       def table(res, endpoint, fields = nil)
         return no_values if res.empty?
         case endpoint
         when 'events'
-          keys = %w(check client address occurrences status handlers issued output)
-          events = []
-          res.each do |event|
-            events << {
-              'client' => event['client']['name'],
-              'address' => event['client']['address'],
-              'check' => event['check']['name'],
-              'occurrences' => event['occurrences'],
-              'status' => event['check']['status'],
-              'handlers' => event['check']['handlers'],
-              'issued' => event['check']['issued'],
-              'output' => event['check']['output'].rstrip
-            }
-          end
-          create_table(events, keys)
+          keys = %w(check client address interval occurrences status handlers issued executed output)
+          render_table(event_data(res), keys)
         else
           if fields
             keys = parse_fields(fields)
           else
             keys = res.map { |item| item.keys }.flatten.uniq
           end
-          create_table(res, keys)
+          render_table(res, keys)
         end
       end
 
-      def create_table(data, keys)
+      def render_table(data, keys)
         terminal_size = Hirb::Util.detect_terminal_size
         puts Hirb::Helpers::AutoTable.render(data, :max_width => terminal_size[0], :fields => keys)
       end
