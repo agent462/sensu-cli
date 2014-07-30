@@ -9,7 +9,7 @@ describe 'SensuCli::Settings' do
   end
 
   it 'can check if a file exists' do
-    @settings.file?(@file).should be_true
+    @settings.file?(@file).should be_truthy
   end
 
   it 'can create a configuration file' do
@@ -17,9 +17,9 @@ describe 'SensuCli::Settings' do
     directory = '/tmp/sensu'
     file = 'temp.rb'
     full_path = File.join(directory, file)
-    File.exist?(full_path).should be_false
+    File.exist?(full_path).should be_falsey
     -> { @settings.create(directory, full_path) }.should raise_error SystemExit
-    File.exist?(full_path).should be_true
+    File.exist?(full_path).should be_truthy
     File.delete(full_path)
   end
 

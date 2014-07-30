@@ -53,7 +53,7 @@ module SensuCli
         puts 'no values for this request'.color(:cyan)
       end
 
-      def single(res, endpoint)
+      def single(res, endpoint = nil)
         return no_values if res.empty?
         case endpoint
         when 'events'
@@ -111,7 +111,7 @@ module SensuCli
         events
       end
 
-      def table(res, endpoint, fields = nil)
+      def table(res, endpoint = nil, fields = nil)
         return no_values if res.empty?
         case endpoint
         when 'events'
