@@ -1,3 +1,7 @@
+## 0.6.0 07/29/2014
+* Added settings for proxies
+* Support for 0.13 event data --format table and single have new template (use sensu-cli 0.5.0 for previous sensu versions)
+
 ## 0.5.0 05/10/2014
 * Deep Filtering in responses
 * Added filtering to event, stash, check and aggregate
@@ -14,7 +18,7 @@
 * Added read and connect timeouts to config
 * Fix silence payload
 
-## 0.3.0 10/29/2013 
+## 0.3.0 10/29/2013
 * Sensu 0.12.0 compliance release
 * 10292013 Update to new expire logic for stashes
 * 10292013 Update deprecated check/request and event/resolve endpoints
@@ -39,7 +43,3 @@
 
 ## 0.2.1
 * 07032013 added a single line format for events and clients
-
-
-
-
