@@ -1,3 +1,6 @@
+## 0.6.1 08/08/2014
+* Fix proxy address causing http request failing
+
 ## 0.6.0 07/29/2014
 * Added settings for proxies
 * Support for 0.13 event data --format table and single have new template (use sensu-cli 0.5.0 for previous sensu versions)
