@@ -40,7 +40,7 @@ module SensuCli
         :read_timeout => Config.read_timeout || 15,
         :open_timeout => Config.open_timeout || 5,
         :password => Config.password || nil,
-        :proxy_address => Config.proxy_address || :ENV,
+        :proxy_address => Config.proxy_address || nil,
         :proxy_port => Config.proxy_port || nil
       }
       api = Api.new
