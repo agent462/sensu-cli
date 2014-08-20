@@ -1,3 +1,6 @@
+## 0.6.2 08/20/2014
+* Fix path to events template bug
+
 ## 0.6.1 08/08/2014
 * Fix proxy address causing http request failing
 
