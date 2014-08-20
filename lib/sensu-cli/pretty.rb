@@ -10,7 +10,7 @@ module SensuCli
         return no_values if res.empty?
         case endpoint
         when 'events'
-          template = File.read('lib/sensu-cli/templates/event.erb')
+          template = File.read(File.expand_path(File.join(File.dirname(__FILE__), 'templates/event.erb')))
           renderer = Erubis::Eruby.new(template)
           res.each do |event|
             puts renderer.result(event)
