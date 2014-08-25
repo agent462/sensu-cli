@@ -50,6 +50,8 @@ This format was chosen so you can do some ENV magic via your profile and setting
 `pretty_colors` Boolean - Optional - Default True    
 `proxy_address` String - Optional    
 `proxy_port` Integer - Optional    
+`user` String - Optional   
+`password` String - Optional   
 
 Examples
 -----------
