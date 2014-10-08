@@ -60,7 +60,7 @@ module SensuCli
       else
         Pretty.print(msg, endpoint)
       end
-      Pretty.count(msg) unless @cli[:fields][:format] == 'table'
+      Pretty.count(msg) unless @cli[:fields][:format] == 'table' or @cli[:fields][:format] == 'json'
     end
   end
 end
