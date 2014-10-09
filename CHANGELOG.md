@@ -1,3 +1,6 @@
+## 0.6.3 10/08/2014
+* Remove item count from json output
+
 ## 0.6.2 08/20/2014
 * Fix path to events template bug
 
