@@ -296,6 +296,7 @@ module SensuCli
         opt :owner, 'The owner of the stash', :short => 'o', :type => :string
         opt :reason, 'The reason this check/node is being silenced', :short => 'r', :type => :string
         opt :expire, 'The number of seconds the silenced event is valid', :short => 'e', :type => :integer
+        opt :source, 'The name of the source of the silence', :short => 's', :type => :string
       end
       command = next_argv
       explode(opts) if command.nil?
