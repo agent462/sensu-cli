@@ -11,7 +11,7 @@ module SensuCli
     def create(directory, file)
       FileUtils.mkdir_p(directory) unless File.directory?(directory)
       FileUtils.cp(File.join(File.dirname(__FILE__), '../../settings.example.rb'), file)
-      SensuCli::die(0, "We created the configuration file for you at #{file}.  You can also place this in /etc/sensu/sensu-cli. Edit the settings as needed.".color(:red))
+      SensuCli::die(0, "We created the configuration file for you at #{file}.  You can also place this in /etc/sensu/sensu-cli/settings.rb. Edit the settings as needed.".color(:red))
     end
   end
 
