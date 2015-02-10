@@ -42,16 +42,16 @@ open_timeout 20
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
 * All Configuration Settings   
-`host` String - Required   
-`port` String/Integer - Required   
+`host` String - Required - Host of the Sensu API       
+`port` String/Integer - Required - Port of the Sensu API    
 `ssl`  Boolean - Optional - Defaults False   
 `read_timeout` Integer - Optional - Default 15 (seconds)   
 `open_timeout` Integer - Optional - Default 5 (seconds)   
 `pretty_colors` Boolean - Optional - Default True    
 `proxy_address` String - Optional    
 `proxy_port` Integer - Optional    
-`user` String - Optional   
-`password` String - Optional   
+`user` String - Optional - User for the Sensu API    
+`password` String - Optional - Password for the Sensu API    
 
 Examples
 -----------
