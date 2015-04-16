@@ -101,6 +101,21 @@ sensu-cli resolve NODE CHECK
      --help, -h:   Show this message
 ````
 
+Filters
+-------
+
+Filters are strings in 'key,value' format.
+
+````
+Examples:
+
+# show all events with name matching 'foo'
+sensu-cli event list -i name,foo
+
+# show all events whose output matches 'foo'
+sensu-cli event list -i output,foo
+````
+
 Contributions
 -------------
 Please provide a pull request.  I'm an ops guy, not a developer, so if you're submitting code cleanup, all I ask is that you explain the improvement so I can learn.
