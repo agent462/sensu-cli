@@ -1,10 +1,21 @@
 module SensuCli
   class Base
+    attr_accessor :cli
     def setup
-      @cli = Cli.new.global
+      self.cli = Cli.new.global
       settings
-      api_path(@cli)
-      make_call
+      if cli[:command] == 'socket'
+        socket
+      else
+        api_path(cli)
+        make_call
+      end
+    end
+
+    def socket
+      socket = SensuCli::Client::Socket.new
+      socket.format_message(cli[:fields])
+      socket.send_udp_message
     end
 
     def settings
@@ -46,21 +57,21 @@ module SensuCli
       api = Api.new
       res = api.request(opts)
       msg = api.response(res.code, res.body, @api[:command])
-      msg = Filter.new(@cli[:fields][:filter]).process(msg) if @cli[:fields][:filter]
+      msg = Filter.new(cli[:fields][:filter]).process(msg) if cli[:fields][:filter]
       endpoint = @api[:command]
       if res.code != '200'
         SensuCli::die(0)
-      elsif @cli[:fields][:format] == 'single'
+      elsif cli[:fields][:format] == 'single'
         Pretty.single(msg, endpoint)
-      elsif @cli[:fields][:format] == 'table'
-        fields = nil || @cli[:fields][:fields]
+      elsif cli[:fields][:format] == 'table'
+        fields = nil || cli[:fields][:fields]
         Pretty.table(msg, endpoint, fields)
-      elsif @cli[:fields][:format] == 'json'
+      elsif cli[:fields][:format] == 'json'
         Pretty.json(msg)
       else
         Pretty.print(msg, endpoint)
       end
-      Pretty.count(msg) unless @cli[:fields][:format] == 'table' or @cli[:fields][:format] == 'json'
+      Pretty.count(msg) unless cli[:fields][:format] == 'table' or cli[:fields][:format] == 'json'
     end
   end
 end
