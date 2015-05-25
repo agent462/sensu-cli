@@ -42,18 +42,18 @@ open_timeout 20
 ````
 This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
-* All Configuration Settings
-`host` String - Required - Host of the Sensu API
-`port` String/Integer - Required - Port of the Sensu API
-`ssl`  Boolean - Optional - Defaults False
-`api_endpoint` String - Optional - Default ''
-`read_timeout` Integer - Optional - Default 15 (seconds)
-`open_timeout` Integer - Optional - Default 5 (seconds)
-`pretty_colors` Boolean - Optional - Default True
-`proxy_address` String - Optional
-`proxy_port` Integer - Optional
-`user` String - Optional - User for the Sensu API
-`password` String - Optional - Password for the Sensu API
+* All Configuration Settings    
+`host` String - Required - Host of the Sensu API    
+`port` String/Integer - Required - Port of the Sensu API    
+`ssl`  Boolean - Optional - Defaults False    
+`api_endpoint` String - Optional - Default ''    
+`read_timeout` Integer - Optional - Default 15 (seconds)    
+`open_timeout` Integer - Optional - Default 5 (seconds)    
+`pretty_colors` Boolean - Optional - Default True    
+`proxy_address` String - Optional    
+`proxy_port` Integer - Optional    
+`user` String - Optional - User for the Sensu API    
+`password` String - Optional - Password for the Sensu API    
 
 Examples
 -----------
@@ -125,13 +125,13 @@ sensu-cli event list -i output,foo
 Socket
 -------
 This command can only be used on a host that is running sensu-client.  sensu-client exposes a socket for arbritary check results.  For more information you can see the [sensu client documentation](https://sensuapp.org/docs/0.18/clients#client-socket-input).
-
+````
 # send a check result to the sensu server
 sensu-cli socket create -name "host33" --output "Something broke really bad" --status 1
 
 # send raw json check result to the sensu server
 sensu-cli socket raw '{"name": "host34", "output": "Something broke even worse than on host33", "status": 1}'
-
+````
 
 Contributions
 -------------
