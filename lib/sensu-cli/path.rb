@@ -90,7 +90,7 @@ module SensuCli
     end
 
     def respond(path, payload = false)
-      { :path => path, :payload => payload }
+      { :path => "#{Config.api_endpoint}#{path}", :payload => payload }
     end
   end
 end

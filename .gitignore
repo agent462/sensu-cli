@@ -2,3 +2,5 @@
 pkg/*
 *.lock
 .idea
+.bundle/
+.ruby-version

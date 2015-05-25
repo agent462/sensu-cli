@@ -36,6 +36,7 @@ Usage and Configuration
 host  "127.0.0.1"
 port  "4567"
 ssl   false
+api_endpoint "/api"
 read_timeout 20
 open_timeout 20
 ````
@@ -45,6 +46,7 @@ This format was chosen so you can do some ENV magic via your profile and setting
 `host` String - Required - Host of the Sensu API       
 `port` String/Integer - Required - Port of the Sensu API    
 `ssl`  Boolean - Optional - Defaults False   
+`api_endpoint` String - Optional - Default ''
 `read_timeout` Integer - Optional - Default 15 (seconds)   
 `open_timeout` Integer - Optional - Default 5 (seconds)   
 `pretty_colors` Boolean - Optional - Default True    
