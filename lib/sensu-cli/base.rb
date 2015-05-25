@@ -14,7 +14,8 @@ module SensuCli
 
     def socket
       socket = SensuCli::Client::Socket.new
-      socket.format_message(cli[:fields])
+      socket.format_message(cli[:fields]) if cli[:method] == 'create'
+      socket.message = cli[:raw] if cli[:method] == 'raw'
       socket.send_udp_message
     end
 

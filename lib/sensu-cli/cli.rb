@@ -4,7 +4,7 @@ require 'rainbow/ext/string'
 
 module SensuCli
   class Cli # rubocop:disable ClassLength
-    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve health)
+    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve health socket)
     CLIENT_COMMANDS = %w(list show delete history)
     CHECK_COMMANDS  = %w(list show request)
     EVENT_COMMANDS  = %w(list show delete)
@@ -14,6 +14,7 @@ module SensuCli
     RES_COMMANDS    = ''
     INFO_COMMANDS   = ''
     HEALTH_COMMANDS = ''
+    SOCKET_COMMANDS = %w(create raw)
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -63,7 +64,11 @@ module SensuCli
           ** Resolve Commands **
           sensu-cli resolve NODE CHECK\n\r
         EOS
-
+    SOCKET_BANNER = <<-EOS.gsub(/^ {10}/, '')
+          ** Socket Commands **
+          sensu-cli socket create (OPTIONS)
+          sensu-cli socket raw INPUT\n\r
+        EOS
     def global
       global_opts = Trollop::Parser.new do
         version "sensu-cli version: #{SensuCli::VERSION}"
@@ -90,6 +95,7 @@ module SensuCli
         banner SIL_BANNER
         banner STASH_BANNER
         banner RES_BANNER
+        banner SOCKET_BANNER
         stop_on SUB_COMMANDS
       end
 
@@ -308,6 +314,27 @@ module SensuCli
       p = Trollop::options
       ARGV.empty? ? explode(opts) : check = next_argv
       deep_merge({ :command => 'resolve', :method => 'Post', :fields => { :client => command, :check => check } }, { :fields => p })
+    end
+
+    def socket
+      opts = parser('SOCKET')
+      command = next_argv
+      explode_if_empty(opts, command)
+      case command
+      when 'create'
+        p = Trollop::options do
+          opt :name, 'The check name to report as', :short => 'n', :type => :string, :required => true
+          opt :output, 'The check result output', :short => 'o', :type => :string, :required => true
+          opt :status, 'The check result exit status to indicate severity.', :short => 's', :type => :integer
+          # opt :handlers, 'The check result handlers.', :type => :string
+        end
+        { :command => 'socket', :method => 'create', :fields => p }
+      when 'raw'
+        p = Trollop::options
+        { :command => 'socket', :method => 'raw', :raw => next_argv }
+      else
+        explode(opts)
+      end
     end
   end
 end
