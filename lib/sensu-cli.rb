@@ -7,6 +7,7 @@ require 'sensu-cli/api.rb'
 require 'sensu-cli/base.rb'
 require 'sensu-cli/version.rb'
 require 'sensu-cli/filter.rb'
+require 'sensu-cli/client/socket.rb'
 
 module SensuCli
   def self.die(code = 0, msg = nil)

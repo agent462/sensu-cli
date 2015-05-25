@@ -1,3 +1,6 @@
+## 0.7.0 05/24/2015
+* Add Socket create and raw command
+
 ## 0.6.3 10/08/2014
 * Remove item count from json output
 
