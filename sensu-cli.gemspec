@@ -12,7 +12,11 @@ Gem::Specification.new do |s|
   s.licenses    = %w(MIT APACHE)
   s.homepage    = 'http://github.com/agent462/sensu-cli'
 
-  s.add_dependency('rainbow', '1.99.2')
+  if RUBY_VERSION < '1.9'
+    s.add_dependency('rainbow', '1.99.2')
+  else
+    s.add_dependency('rainbow', '2.0.0')
+  end
   s.add_dependency('trollop', '2.0')
   s.add_dependency('mixlib-config', '2.1.0')
   s.add_dependency('hirb', '0.7.1')
