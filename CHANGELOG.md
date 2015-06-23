@@ -1,3 +1,6 @@
+## 0.7.1 06/23/2015
+* Rainbow compatability
+
 ## 0.7.0 06/09/2015
 * Add Socket create and raw command
 * Add api_endpoint to config for people proxying to a different api endpoint
