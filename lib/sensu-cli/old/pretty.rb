@@ -111,26 +111,26 @@ module SensuCli
         events
       end
 
-      def table(res, endpoint = nil, fields = nil)
-        return no_values if res.empty?
-        case endpoint
-        when 'events'
-          keys = %w(check client address interval occurrences status handlers issued executed output)
-          render_table(event_data(res), keys)
-        else
-          if fields
-            keys = parse_fields(fields)
-          else
-            keys = res.map { |item| item.keys }.flatten.uniq
-          end
-          render_table(res, keys)
-        end
-      end
+      # def table(res, endpoint = nil, fields = nil)
+      #   return no_values if res.empty?
+      #   case endpoint
+      #   when 'events'
+      #     keys = %w(check client address interval occurrences status handlers issued executed output)
+      #     render_table(event_data(res), keys)
+      #   else
+      #     if fields
+      #       keys = parse_fields(fields)
+      #     else
+      #       keys = res.map { |item| item.keys }.flatten.uniq
+      #     end
+      #     render_table(res, keys)
+      #   end
+      # end
 
-      def render_table(data, keys)
-        terminal_size = Hirb::Util.detect_terminal_size
-        puts Hirb::Helpers::AutoTable.render(data, :max_width => terminal_size[0], :fields => keys)
-      end
+      # def render_table(data, keys)
+      #   terminal_size = Hirb::Util.detect_terminal_size
+      #   puts Hirb::Helpers::AutoTable.render(data, :max_width => terminal_size[0], :fields => keys)
+      # end
     end
   end
 end

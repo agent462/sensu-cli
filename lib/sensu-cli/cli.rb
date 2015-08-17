@@ -149,19 +149,19 @@ module SensuCli
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
         Trollop::die :fields, 'Fields must be used in conjunction with --format table'.color(:red) if p[:format] != 'table' && p[:fields]
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
-        { :command => 'clients', :method => 'Get', :fields => p }
+        { :command => 'client', :subcommand => command, :method => 'Get', :fields => p }
       when 'delete'
         p = Trollop::options
         item = next_argv # the ARGV.shift needs to happen after Trollop::options to catch --help
-        deep_merge({ :command => 'clients', :method => 'Delete', :fields => { :name => item } }, { :fields => p })
+        deep_merge({ :command => 'client', :subcommand => command, :method => 'Delete', :fields => { :name => item } }, { :fields => p })
       when 'show'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'clients', :method => 'Get', :fields => { :name => item } }, { :fields => p })
+        deep_merge({ :command => 'client', :subcommand => command, :method => 'Get', :fields => { :name => item } }, { :fields => p })
       when 'history'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'clients', :method => 'Get', :fields => { :name => item, :history => true } }, { :fields => p })
+        deep_merge({ :command => 'client', :subcommand => command, :method => 'Get', :fields => { :name => item, :history => true } }, { :fields => p })
       else
         explode(opts)
       end
@@ -170,7 +170,7 @@ module SensuCli
     def info
       parser('INFO')
       p = Trollop::options
-      { :command => 'info', :method => 'Get', :fields => p }
+      { :command => 'info', :subcommand => 'info', :method => 'Get', :fields => p }
     end
 
     def health
@@ -192,14 +192,14 @@ module SensuCli
         p = Trollop::options do
           opt :filter, 'Field and value to filter on: command,procs', :type => :string
         end
-        { :command => 'checks', :method => 'Get', :fields => p }
+        { :command => 'check', :subcommand => 'list', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options
-        deep_merge({ :command => 'checks', :method => 'Get', :fields => { :name => item } }, { :fields => p })
+        deep_merge({ :command => 'check', :subcommand => 'show', :method => 'Get', :fields => { :name => item } }, { :fields => p })
       when 'request'
         p = Trollop::options
         ARGV.empty? ? explode(opts) : subscribers = next_argv.split(',')
-        deep_merge({ :command => 'checks', :method => 'Post', :fields => { :check => item, :subscribers => subscribers } }, { :fields => p })
+        deep_merge({ :command => 'check', :subcommand => 'request', :method => 'Post', :fields => { :check => item, :subscribers => subscribers } }, { :fields => p })
       else
         explode(opts)
       end
@@ -216,19 +216,19 @@ module SensuCli
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
         end
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
-        { :command => 'events', :method => 'Get', :fields => p }
+        { :command => 'event', :subcommand => 'list', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options do
           opt :check, 'Returns the check associated with the client', :short => 'k', :type => :string
         end
         item = next_argv
-        deep_merge({ :command => 'events', :method => 'Get', :fields => { :client => item } }, { :fields => p })
+        deep_merge({ :command => 'event', :subcommand => 'show', :method => 'Get', :fields => { :client => item } }, { :fields => p })
       when 'delete'
         p = Trollop::options
         item = next_argv
         check = next_argv
         explode(opts) if check.nil?
-        deep_merge({ :command => 'events', :method => 'Delete', :fields => { :client => item, :check => check } }, { :fields => p })
+        deep_merge({ :command => 'event', :subcommand => 'delete', :method => 'Delete', :fields => { :client => item, :check => check } }, { :fields => p })
       else
         explode(opts)
       end
@@ -248,19 +248,19 @@ module SensuCli
         end
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
-        { :command => 'stashes', :method => 'Get', :fields => p }
+        { :command => 'stash', :subcommand => 'list', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'stashes', :method => 'Get', :fields => { :path => item } }, { :fields => p })
+        deep_merge({ :command => 'stash', :subcommand => 'list', :method => 'Get', :fields => { :path => item } }, { :fields => p })
       when 'delete'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'stashes', :method => 'Delete', :fields => { :path => item } }, { :fields => p })
+        deep_merge({ :command => 'stash', :subcommand => 'list', :method => 'Delete', :fields => { :path => item } }, { :fields => p })
       when 'create'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'stashes', :method => 'Post', :fields => { :create => true, :create_path => item } }, { :fields => p })
+        deep_merge({ :command => 'stash', :subcommand => 'list', :method => 'Post', :fields => { :create => true, :create_path => item } }, { :fields => p })
       else
         explode(opts)
       end
@@ -275,7 +275,7 @@ module SensuCli
         p = Trollop::options do
           opt :filter, 'Field and value to filter on: issued,1399505890', :type => :string
         end
-        { :command => 'aggregates', :method => 'Get', :fields => p }
+        { :command => 'aggregate', :subcommand => 'list', :method => 'Get', :fields => p }
       when 'show'
         p = Trollop::options do
           opt :id, 'The id of the check issued.', :short => 'i', :type => :integer
@@ -285,11 +285,11 @@ module SensuCli
         end
         Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         item = next_argv
-        deep_merge({ :command => 'aggregates', :method => 'Get', :fields => { :check => item } }, { :fields => p })
+        deep_merge({ :command => 'aggregate', :subcommand => 'show', :method => 'Get', :fields => { :check => item } }, { :fields => p })
       when 'delete'
         p = Trollop::options
         item = next_argv
-        deep_merge({ :command => 'aggregates', :method => 'Delete', :fields => { :check => item } }, { :fields => p })
+        deep_merge({ :command => 'aggregate', :subcommand => 'delete', :method => 'Delete', :fields => { :check => item } }, { :fields => p })
       else
         explode(opts)
       end
@@ -305,7 +305,7 @@ module SensuCli
       end
       command = next_argv
       explode(opts) if command.nil?
-      deep_merge({ :command => 'silence', :method => 'Post', :fields => { :client => command } }, { :fields => p })
+      deep_merge({ :command => 'silence', :subcommand => 'silence', :method => 'Post', :fields => { :client => command } }, { :fields => p })
     end
 
     def resolve
@@ -313,7 +313,7 @@ module SensuCli
       command = next_argv
       p = Trollop::options
       ARGV.empty? ? explode(opts) : check = next_argv
-      deep_merge({ :command => 'resolve', :method => 'Post', :fields => { :client => command, :check => check } }, { :fields => p })
+      deep_merge({ :command => 'resolve', :subcommand => 'resolve', :method => 'Post', :fields => { :client => command, :check => check } }, { :fields => p })
     end
 
     def socket
@@ -328,10 +328,10 @@ module SensuCli
           opt :status, 'The check result exit status to indicate severity.', :short => 's', :type => :integer
           # opt :handlers, 'The check result handlers.', :type => :string
         end
-        { :command => 'socket', :method => 'create', :fields => p }
+        { :command => 'socket', :subcommand => 'create', :method => 'create', :fields => p }
       when 'raw'
         p = Trollop::options
-        { :command => 'socket', :method => 'raw', :raw => next_argv }
+        { :command => 'socket', :subcommand => 'raw', :method => 'raw', :raw => next_argv }
       else
         explode(opts)
       end

@@ -1,0 +1,5 @@
+add count on output
+support pagination
+response code handling
+output format types not all done
+ - single/table need cli input
