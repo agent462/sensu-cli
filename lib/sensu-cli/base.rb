@@ -31,7 +31,11 @@ module SensuCli
       else
         settings.create(directory, file)
       end
-      Rainbow.enabled = Config.pretty_colors == false ? false : true
+      if $stdout.isatty and not Config.pretty_colors == false
+        Rainbow.enabled = true
+      else
+        Rainbow.enabled = false
+      end
     end
 
     def api_path(cli)
