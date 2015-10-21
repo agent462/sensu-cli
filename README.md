@@ -28,10 +28,12 @@ Features
 
 Usage and Configuration
 -----------------------
-* gem install sensu-cli
-
-* There is one settings file for host, port, ssl, and HTTP timeout that lives in your user directory ~/.sensu/settings.rb.  You can alternatively place this in /etc/sensu/sensu-cli/settings.rb.
-
+* Installation: `gem install sensu-cli`
+* Installation using the embedded Sensu ruby: `/opt/sensu/embedded/bin/gem install sensu-cli && ln -s /opt/sensu/embedded/bin/sensu-cli /usr/local/bin/`
+* There is one settings file for host, port, ssl, and HTTP timeout that lives
+  in your user directory `~/.sensu/settings.rb`.  You can alternatively place
+  this in `/etc/sensu/sensu-cli/settings.rb`.
+* An example config file:
 ````
 host  "127.0.0.1"
 port  "4567"
@@ -40,20 +42,23 @@ api_endpoint "/api"
 read_timeout 20
 open_timeout 20
 ````
-This format was chosen so you can do some ENV magic via your profile and setting up an alias. For details see the [wiki](https://github.com/agent462/sensu-cli/wiki)
 
-* All Configuration Settings    
-`host` String - Required - Host of the Sensu API    
-`port` String/Integer - Required - Port of the Sensu API    
-`ssl`  Boolean - Optional - Defaults False    
-`api_endpoint` String - Optional - Default ''    
-`read_timeout` Integer - Optional - Default 15 (seconds)    
-`open_timeout` Integer - Optional - Default 5 (seconds)    
-`pretty_colors` Boolean - Optional - Default True    
-`proxy_address` String - Optional    
-`proxy_port` Integer - Optional    
-`user` String - Optional - User for the Sensu API    
-`password` String - Optional - Password for the Sensu API    
+This format was chosen so you can do some ENV magic via your profile and
+setting up an alias. For details see the
+[wiki](https://github.com/agent462/sensu-cli/wiki)
+
+All Configuration Settings:
+* `host` String - Required - Host of the Sensu API
+* `port` String/Integer - Required - Port of the Sensu API
+* `ssl`  Boolean - Optional - Defaults False
+* `api_endpoint` String - Optional - Default ''
+* `read_timeout` Integer - Optional - Default 15 (seconds)
+* `open_timeout` Integer - Optional - Default 5 (seconds)
+* `pretty_colors` Boolean - Optional - Default True
+* `proxy_address` String - Optional
+* `proxy_port` Integer - Optional
+* `user` String - Optional - User for the Sensu API
+* `password` String - Optional - Password for the Sensu API
 
 Examples
 -----------
@@ -124,7 +129,11 @@ sensu-cli event list -i output,foo
 
 Socket
 -------
-This command can only be used on a host that is running sensu-client.  sensu-client exposes a socket for arbritary check results.  For more information you can see the [sensu client documentation](https://sensuapp.org/docs/0.18/clients#client-socket-input).
+This command can only be used on a host that is running sensu-client.
+The sensu-client exposes a socket for arbritary check results. For more
+information you can see the [sensu client documentation](https://sensuapp.org/docs/0.18/clients#client-socket-input).
+
+Examples:
 ````
 # send a check result to the sensu server
 sensu-cli socket create -name "host33" --output "Something broke really bad" --status 1
@@ -135,7 +144,9 @@ sensu-cli socket raw '{"name": "host34", "output": "Something broke even worse t
 
 Contributions
 -------------
-Please provide a pull request.  I'm an ops guy, not a developer, so if you're submitting code cleanup, all I ask is that you explain the improvement so I can learn.
+Please provide a pull request. I'm an ops guy, not a developer, so if you're
+submitting code cleanup, all I ask is that you explain the improvement so I can
+learn.
 
 
 License and Author
