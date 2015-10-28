@@ -1,5 +1,4 @@
-sensu-cli
-=========
+# sensu-cli
 ```
 #
 # Welcome to the sensu-cli.
@@ -17,8 +16,8 @@ A sensu-cli for interacting with the sensu api.
 
 What is Sensu? http://sensuapp.org/
 
-Features
---------
+## Features
+
 * API interaction with info, health, stashes, events, clients, aggregates and checks
 * Resolve Events
 * Silence clients and checks
@@ -26,8 +25,8 @@ Features
 * Delete Requests (delete clients, stashes, aggregates and events)
 
 
-Usage and Configuration
------------------------
+## Usage and Configuration
+
 * Installation: `gem install sensu-cli`
 * Installation using the embedded Sensu ruby: `/opt/sensu/embedded/bin/gem install sensu-cli && ln -s /opt/sensu/embedded/bin/sensu-cli /usr/local/bin/`
 * There is one settings file for host, port, ssl, and HTTP timeout that lives
@@ -60,8 +59,8 @@ All Configuration Settings:
 * `user` String - Optional - User for the Sensu API
 * `password` String - Optional - Password for the Sensu API
 
-Examples
------------
+## Examples
+
 ````
 Available subcommands: (for details, sensu SUB-COMMAND --help)
 
@@ -112,8 +111,7 @@ sensu-cli socket raw INPUT
      --help, -h:   Show this message
 ````
 
-Filters
--------
+### Filters
 
 Filters are strings in 'key,value' format.
 
@@ -127,8 +125,8 @@ sensu-cli event list -i name,foo
 sensu-cli event list -i output,foo
 ````
 
-Socket
--------
+### Socket
+
 This command can only be used on a host that is running sensu-client.
 The sensu-client exposes a socket for arbritary check results. For more
 information you can see the [sensu client documentation](https://sensuapp.org/docs/0.18/clients#client-socket-input).
@@ -136,21 +134,64 @@ information you can see the [sensu client documentation](https://sensuapp.org/do
 Examples:
 ````
 # send a check result to the sensu server
-sensu-cli socket create -name "host33" --output "Something broke really bad" --status 1
+sensu-cli socket create --name "check33" --output "Warn: Something broke really bad" --status 1
 
 # send raw json check result to the sensu server
-sensu-cli socket raw '{"name": "host34", "output": "Something broke even worse than on host33", "status": 1}'
+sensu-cli socket raw '{"name": "check34", "output": "Crit: Something broke even worse than on check33", "status": 2}'
+
+# send raw json check result to the sensu server, faking the source
+sensu-cli socket raw '{"name": "snmp", "output": "Crit: SNMP is bad on this switch", "status": 2, "source": "switch01"}'
 ````
 
-Contributions
--------------
+### Advanced Examples
+
+These advanced examples show off the power of being able to use the
+sensu-cli tool in combination with other command line tools. Some use
+the [jq](https://stedolan.github.io/jq/) command to do JSON parsing.
+
+#### Have a host silence itself
+
+```bash
+sensu-cli silence `hostname -f` --owner root --reason "This server was just created" --expire 3600
+```
+
+#### Silence any client that has the word "test" in the name
+
+```bash
+sensu-cli client list -f json |
+  jq -r .[].name |
+  grep "test" |
+  xargs --verbose --no-run-if-empty -n1 sensu-cli silence
+```
+
+#### Delete sliences older than 3 days
+
+```bash
+THRESHOLD=$(date +%s --date="3 days ago")
+sensu-cli stash list --format json |
+  jq -r "map(select( .[\"content\"][\"timestamp\"] < $THRESHOLD )) | .[].path " |
+  xargs --verbose --no-run-if-empty -n1 sensu-cli stash delete
+```
+
+#### Resolve any checks that haven't checked in in a month
+
+```bash
+THRESHOLD=$(date +%s --date="1 month ago")
+sensu-cli event list --format json |
+  jq --raw-output "map(select( .[\"check\"][\"issued\"] < $THRESHOLD )) | .[] | .client.name + \" \" +  .check.name " |
+  xargs --verbose --no-run-if-empty -n2 sensu-cli resolve
+```
+
+
+### Contributions
+
 Please provide a pull request. I'm an ops guy, not a developer, so if you're
 submitting code cleanup, all I ask is that you explain the improvement so I can
 learn.
 
 
-License and Author
-==================
+## License and Author
+
 I'm releasing this under the MIT or Apache 2.0 license.  You pick.
 
 Author:: Bryan Brandau <agent462@gmail.com>
