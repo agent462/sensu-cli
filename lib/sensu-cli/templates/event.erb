@@ -11,7 +11,13 @@
   <%= "interval:".color(:cyan) %> <%= check['interval'].to_s.color(:green) %>
   <%= "subscribers:".color(:cyan) %> <%= check['subscribers'].to_s.color(:green) %>
   <%= "issued:".color(:cyan) %> <%= check['issued'].to_s.color(:green) %>
+  <% if check['issued'] -%>
+  <%= "issued_s:".color(:cyan) %> <%= Time.at(check['issued']).to_s.color(:green) %>
+  <% end -%>
   <%= "executed:".color(:cyan) %> <%= check['executed'].to_s.color(:green) %>
+  <% if check['executed'] -%>
+  <%= "executed_s:".color(:cyan) %> <%= Time.at(check['executed']).to_s.color(:green) %>
+  <% end -%>
   <%= "duration:".color(:cyan) %> <%= check['duration'].to_s.color(:green) %>
   <%= "output:".color(:cyan) %> <%= check['output'].rstrip.to_s.color(:green) %>
   <%= "status:".color(:cyan) %> <%= check['status'].to_s.color(:green) %>
