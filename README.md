@@ -129,7 +129,7 @@ sensu-cli event list -i output,foo
 
 This command can only be used on a host that is running sensu-client.
 The sensu-client exposes a socket for arbritary check results. For more
-information you can see the [sensu client documentation](https://sensuapp.org/docs/0.18/clients#client-socket-input).
+information you can see the [sensu client documentation](https://sensuapp.org/docs/0.25/reference/clients.html#client-socket-input).
 
 Examples:
 ````
