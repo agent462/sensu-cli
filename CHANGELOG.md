@@ -1,3 +1,7 @@
+## 0.8.0 07/27/2017
+* Add support for new silenced API version 0.26+
+* If not specified creator will detect on OSX and Linux from whoami
+
 ## 0.7.1 06/23/2015
 * Rainbow compatability
 
