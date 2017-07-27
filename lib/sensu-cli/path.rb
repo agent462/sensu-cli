@@ -68,6 +68,25 @@ module SensuCli
       respond('/stashes', payload)
     end
 
+    def silenced(cli)
+      payload = {}
+      if !cli[:fields][:creator] && cli[:method] == 'Post'
+        cli[:fields][:creator] = `whoami`.strip if %w[darwin linux].any? { |word| RUBY_PLATFORM.include?(word) }
+      end
+      payload.merge!(:creator => cli[:fields][:creator]) if cli[:fields][:creator]
+      payload.merge!(:reason => cli[:fields][:reason]) if cli[:fields][:reason]
+      payload.merge!(:expire => cli[:fields][:expire].to_i) if cli[:fields][:expire]
+      payload.merge!(:expire_on_resolve => cli[:fields][:expire_on_resolve]) if cli[:fields][:expire_on_resolve]
+      payload.merge!(:check => cli[:fields][:check]) if cli[:fields][:check]
+      payload.merge!(:subscription => cli[:fields][:subscription]) if cli[:fields][:subscription]
+      silenced_path = '/silenced'
+      silenced_path << "/subscriptions/#{cli[:fields][:subscription]}" if cli[:fields][:subscription] && cli[:method] == 'Get'
+      silenced_path << "/checks/#{cli[:fields][:check]}" if cli[:fields][:check] && cli[:method] == 'Get'
+      silenced_path << "/clear" if cli[:clear]
+      silenced_path << pagination(cli)
+      respond(silenced_path, payload.to_json)
+    end
+
     def aggregates(cli)
       path = '/aggregates'
       path << "/#{cli[:fields][:check]}" if cli[:fields][:check]

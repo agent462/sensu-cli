@@ -39,11 +39,13 @@ module SensuCli
         JSON.parse(body)
       when '201'
         puts 'The stash has been created.' if command == 'stashes' || command == 'silence'
+        puts 'The silence has been created.' if command == 'silenced'
       when '202'
         puts 'The item was submitted for processing.'
       when '204'
         puts 'Sensu is healthy' if command == 'health'
         puts 'The item was successfully deleted.' if command == 'aggregates' || command == 'stashes'
+        puts 'The silence has been cleared.' if command == 'silenced'
       when '400'
         puts 'The payload is malformed.'.color(:red)
       when '401'

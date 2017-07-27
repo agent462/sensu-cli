@@ -4,17 +4,18 @@ require 'rainbow/ext/string'
 
 module SensuCli
   class Cli # rubocop:disable ClassLength
-    SUB_COMMANDS    = %w(info client check event stash aggregate silence resolve health socket)
-    CLIENT_COMMANDS = %w(list show delete history)
-    CHECK_COMMANDS  = %w(list show request)
-    EVENT_COMMANDS  = %w(list show delete)
-    STASH_COMMANDS  = %w(list show delete create)
-    AGG_COMMANDS    = %w(list show delete)
-    SIL_COMMANDS    = ''
-    RES_COMMANDS    = ''
-    INFO_COMMANDS   = ''
-    HEALTH_COMMANDS = ''
-    SOCKET_COMMANDS = %w(create raw)
+    SUB_COMMANDS    = %w[info client check event stash aggregate silence silenced resolve health socket].freeze
+    CLIENT_COMMANDS = %w[list show delete history].freeze
+    CHECK_COMMANDS  = %w[list show request].freeze
+    EVENT_COMMANDS  = %w[list show delete].freeze
+    STASH_COMMANDS  = %w[list show delete create].freeze
+    AGG_COMMANDS    = %w[list show delete].freeze
+    SIL_COMMANDS    = ''.freeze
+    SILD_COMMANDS   = %w[list create clear].freeze
+    RES_COMMANDS    = ''.freeze
+    INFO_COMMANDS   = ''.freeze
+    HEALTH_COMMANDS = ''.freeze
+    SOCKET_COMMANDS = %w[create raw].freeze
 
     CLIENT_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Client Commands **
@@ -60,6 +61,14 @@ module SensuCli
           ** Silence Commands **
           sensu-cli silence NODE (OPTIONS)\n\r
         EOS
+    SILD_BANNER = <<-EOS.gsub(/^ {10}/, '')
+          ** Silenced Commands **
+          sensu-cli silenced list (OPTIONS)
+          sensu-cli silenced create (OPTIONS)
+          sensu-cli silenced clear (OPTIONS)
+
+          Supported only in Sensu 0.26+\n\r
+        EOS
     RES_BANNER = <<-EOS.gsub(/^ {10}/, '')
           ** Resolve Commands **
           sensu-cli resolve NODE CHECK\n\r
@@ -93,17 +102,16 @@ module SensuCli
         banner HEALTH_BANNER
         banner INFO_BANNER
         banner SIL_BANNER
+        banner SILD_BANNER
         banner STASH_BANNER
         banner RES_BANNER
         banner SOCKET_BANNER
         stop_on SUB_COMMANDS
       end
-
       Trollop::with_standard_exception_handling global_opts do
         global_opts.parse ARGV
         raise Trollop::HelpNeeded if ARGV.empty? # show help screen
       end
-
       cmd = next_argv
       self.respond_to?(cmd) ? send(cmd) : explode(global_opts)
     end
@@ -309,6 +317,45 @@ module SensuCli
       deep_merge({ :command => 'silence', :method => 'Post', :fields => { :client => command } }, { :fields => p })
     end
 
+    def silenced
+      opts = parser('SILD')
+      command = next_argv
+      explode_if_empty(opts, command)
+      case command
+      when 'list'
+        p = Trollop::options do
+          opt :check, 'The check entries to return', :short => 'c', :type => :string
+          opt :subscription, 'The subscription entries to return', :short => 's', :type => :string
+          opt :limit, 'The number of aggregates to return', :short => 'l', :type => :string
+          opt :offset, 'The number of aggregates to offset before returning', :short => 'o', :type => :string
+        end
+        Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        { :command => 'silenced', :method => 'Get', :fields => p }
+      when 'create'
+        p = Trollop::options do
+          opt :check, 'The check to silence', :short => 'c', :type => :string
+          opt :creator, 'The owner of the stash', :short => 'o', :type => :string
+          opt :reason, 'The reason this check/node is being silenced', :short => 'r', :type => :string, :default => 'Silenced via API - no reason given'
+          opt :expire, 'The number of seconds the silenced event is valid', :short => 'e', :type => :integer
+          opt :expire_on_resolve, 'Entry will be automatically cleared once resolved', :short => 'f', :type => :boolean
+          opt :source, 'The name of the source of the silence', :short => 's', :type => :string, :default => 'sensu-cli'
+          opt :subscription, 'The name of the subscription to silence', :short => 'n', :type => :string
+        end
+        Trollop::die :check, 'Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription]
+        deep_merge({ :command => 'silenced', :method => 'Post', :fields => { :create => true } }, { :fields => p })
+      when 'clear'
+        p = Trollop::options do
+          opt :id, 'The id of the silenced item', :short => 'i', :type => :string
+          opt :check, 'The check of the silenced item', :short => 'c', :type => :string
+          opt :subscription, 'The subscription of the silenced item', :short => 's', :type => :string
+        end
+        Trollop::die :id, 'ID, Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription] && !p[:id]
+        { :command => 'silenced', :method => 'Post', :clear => true, :fields => p }
+      else
+        explode(opts)
+      end
+    end
+
     def resolve
       opts = parser('RES')
       command = next_argv
@@ -331,7 +378,7 @@ module SensuCli
         end
         { :command => 'socket', :method => 'create', :fields => p }
       when 'raw'
-        p = Trollop::options
+        Trollop::options
         { :command => 'socket', :method => 'raw', :raw => next_argv }
       else
         explode(opts)
