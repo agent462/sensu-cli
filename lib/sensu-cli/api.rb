@@ -14,6 +14,9 @@ module SensuCli
         http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
       proxy_header = { 'api-proxy' => 'true' }
+      if opts[:auth_token]
+        proxy_header.merge!('Authorization' => "token #{opts[:auth_token]}")
+      end
       case opts[:method]
       when 'Get'
         req =  Net::HTTP::Get.new(opts[:path], proxy_header)
