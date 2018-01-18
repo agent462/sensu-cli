@@ -58,6 +58,7 @@ All Configuration Settings:
 * `proxy_port` Integer - Optional
 * `user` String - Optional - User for the Sensu API
 * `password` String - Optional - Password for the Sensu API
+* `auth_token` String - Optional - Auth Token for Sensu API
 
 ## Examples
 
