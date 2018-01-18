@@ -1,3 +1,6 @@
+## 0.9.0 01/18/2018
+* Add token authorization
+
 ## 0.8.1 07/27/2017
 * Updating Rainbow version for dependency chains
 
