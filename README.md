@@ -63,7 +63,7 @@ All Configuration Settings:
 ## Examples
 
 ````
-Available subcommands: (for details, sensu SUB-COMMAND --help)
+Available subcommands: (for details, sensu-cli SUB-COMMAND --help)
 
 ** Aggregate Commands **
 sensu-cli aggregate list (OPTIONS)
@@ -82,7 +82,7 @@ sensu-cli client delete NODE
 sensu-cli client history NODE
 
 ** Event Commands **
-sensu-cli event list
+sensu-cli event list (OPTIONS)
 sensu-cli event show NODE (OPTIONS)
 sensu-cli event delete NODE CHECK
 
@@ -94,6 +94,13 @@ sensu-cli info
 
 ** Silence Commands **
 sensu-cli silence NODE (OPTIONS)
+
+** Silenced Commands **
+sensu-cli silenced list (OPTIONS)
+sensu-cli silenced create (OPTIONS)
+sensu-cli silenced clear (OPTIONS)
+
+Supported only in Sensu 0.26+
 
 ** Stash Commands **
 sensu-cli stash list (OPTIONS)
