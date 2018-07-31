@@ -19,9 +19,8 @@ module SensuCli
       socket.send_udp_message
     end
 
-    def settings
-      directory = "#{Dir.home}/.sensu"
-      file = "#{directory}/settings.rb"
+    def settings(directory = "#{Dir.home}/.sensu", filename = 'settings.rb')
+      file = "#{directory}/#{filename}"
       alt = '/etc/sensu/sensu-cli/settings.rb'
       settings = Settings.new
       if settings.file?(file)
