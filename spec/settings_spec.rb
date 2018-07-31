@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli.rb'
-require File.dirname(__FILE__) + '/../lib/sensu-cli/settings.rb'
+require 'sensu-cli'
+require 'sensu-cli/settings'
 
 describe 'SensuCli::Settings' do
 

@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli/pretty.rb'
-require File.dirname(__FILE__) + '/helpers.rb'
+require 'sensu-cli/pretty'
 require 'json'
 
 describe 'SensuCli::Pretty' do
