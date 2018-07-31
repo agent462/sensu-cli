@@ -1,3 +1,9 @@
+## 0.10.0  07/31/2018
+* Moving to pessimistic version locks
+* Updating testing to pass
+* renamed helper to spec helper and using LOADPATH to require cleanly
+* updating Base#settings to take parameters and defining standards
+
 ## 0.9.0 01/18/2018
 * Add token authorization
 
