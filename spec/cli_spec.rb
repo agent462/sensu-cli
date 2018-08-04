@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli/cli.rb'
-require File.dirname(__FILE__) + '/helpers.rb'
+require 'sensu-cli/cli'
 
 describe 'SensuCli::Cli' do
   include Helpers
@@ -200,13 +199,13 @@ describe 'SensuCli::Cli' do
     it 'should return silence node hash' do
       ARGV.push('silence', 'test_node')
       response = @cli.global
-      response.should eq(:command => 'silence', :method => 'Post', :fields => { :client => 'test_node', :check => nil, :owner => nil, :reason => nil, :expire =>  nil, :source => nil, :help => false })
+      response.should eq(:command => 'silence', :method => 'Post', :fields => { :client => 'test_node', :check => nil, :owner => nil, :reason => nil, :expire =>  nil, :source => 'sensu-cli', :help => false })
     end
 
     it 'should return silence node check hash' do
       ARGV.push('silence', 'test_node', '-k', 'test_check')
       response = @cli.global
-      response.should eq(:command => 'silence', :method => 'Post', :fields => { :client => 'test_node', :check => 'test_check', :owner => nil, :reason => nil, :expire =>  nil, :source => nil, :help => false, :check_given => true })
+      response.should eq(:command => 'silence', :method => 'Post', :fields => { :client => 'test_node', :check => 'test_check', :owner => nil, :reason => nil, :expire =>  nil, :source => 'sensu-cli', :help => false, :check_given => true })
     end
 
     it 'should return silence node check hash with options' do

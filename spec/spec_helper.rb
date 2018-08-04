@@ -1,5 +1,7 @@
 require 'rspec'
 
+$LOAD_PATH << '../lib'
+
 module Helpers
   def capture_stdout(*)
     original_stdout = $stdout

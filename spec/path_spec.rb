@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli/path.rb'
-require File.dirname(__FILE__) + '/helpers.rb'
+require 'sensu-cli/path'
 
 describe 'SensuCli::PathParser' do
   include Helpers

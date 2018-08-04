@@ -1,5 +1,4 @@
-require File.dirname(__FILE__) + '/../lib/sensu-cli/base.rb'
-require File.dirname(__FILE__) + '/helpers.rb'
+require 'sensu-cli/base'
 require 'json'
 
 describe 'SensuCli::Base' do
@@ -229,8 +228,9 @@ describe 'SensuCli::Base' do
   end
 
   describe 'settings' do
+
     it 'can setup settings' do
-      @core.settings
+      @core.settings('./spec/settings')
       SensuCli::Config.host.should match(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)
       SensuCli::Config.port.should eq('4567')
       SensuCli::Config.ssl.should satisfy { true || false }
