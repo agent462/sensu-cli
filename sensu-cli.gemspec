@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency('rainbow', '~> 2.0')
   end
-  s.add_dependency('trollop', '~> 2.0')
+  s.add_dependency('optimist', '~> 3.0')
   s.add_dependency('mixlib-config', '~> 2.1')
   s.add_dependency('hirb', '~> 0.7')
   s.add_dependency('erubis', '~> 2.7')

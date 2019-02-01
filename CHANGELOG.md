@@ -1,3 +1,6 @@
+## 0.11.0  02/01/2019
+* Update to Optimist gem from trollop as it was renamed
+
 ## 0.10.0  07/31/2018
 * Moving to pessimistic version locks
 * Updating testing to pass

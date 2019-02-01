@@ -1,4 +1,4 @@
-require 'trollop'
+require 'optimist'
 require 'sensu-cli/version'
 require 'rainbow/ext/string'
 
@@ -79,7 +79,7 @@ module SensuCli
           sensu-cli socket raw INPUT\n\r
         EOS
     def global
-      global_opts = Trollop::Parser.new do
+      global_opts = Optimist::Parser.new do
         version "sensu-cli version: #{SensuCli::VERSION}"
         banner <<-'EOS'.gsub(/^ {10}/, '')
           #
@@ -108,17 +108,17 @@ module SensuCli
         banner SOCKET_BANNER
         stop_on SUB_COMMANDS
       end
-      Trollop::with_standard_exception_handling global_opts do
+      Optimist::with_standard_exception_handling global_opts do
         global_opts.parse ARGV
-        raise Trollop::HelpNeeded if ARGV.empty? # show help screen
+        raise Optimist::HelpNeeded if ARGV.empty? # show help screen
       end
       cmd = next_argv
       self.respond_to?(cmd) ? send(cmd) : explode(global_opts)
     end
 
     def explode(opts)
-      Trollop::with_standard_exception_handling opts do
-        raise Trollop::HelpNeeded # show help screen
+      Optimist::with_standard_exception_handling opts do
+        raise Optimist::HelpNeeded # show help screen
       end
     end
 
@@ -127,7 +127,7 @@ module SensuCli
     end
 
     def parser(cli)
-      Trollop::Parser.new do
+      Optimist::Parser.new do
         banner Cli.const_get("#{cli}_BANNER")
         stop_on Cli.const_get("#{cli}_COMMANDS")
       end
@@ -147,27 +147,27 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :limit, 'The number if clients to return', :short => 'l', :type => :string
           opt :offset, 'The number of clients to offset before returning', :short => 'o', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
           opt :fields, 'Fields for table ouput: -F name,address,subscriptions', :short => 'F', :type => :string
           opt :filter, 'Field and value to filter on: name,graphite', :type => :string
         end
-        Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
-        Trollop::die :fields, 'Fields must be used in conjunction with --format table'.color(:red) if p[:format] != 'table' && p[:fields]
-        Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        Optimist::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
+        Optimist::die :fields, 'Fields must be used in conjunction with --format table'.color(:red) if p[:format] != 'table' && p[:fields]
+        Optimist::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         { :command => 'clients', :method => 'Get', :fields => p }
       when 'delete'
-        p = Trollop::options
-        item = next_argv # the ARGV.shift needs to happen after Trollop::options to catch --help
+        p = Optimist::options
+        item = next_argv # the ARGV.shift needs to happen after Optimist::options to catch --help
         deep_merge({ :command => 'clients', :method => 'Delete', :fields => { :name => item } }, { :fields => p })
       when 'show'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'clients', :method => 'Get', :fields => { :name => item } }, { :fields => p })
       when 'history'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'clients', :method => 'Get', :fields => { :name => item, :history => true } }, { :fields => p })
       else
@@ -177,13 +177,13 @@ module SensuCli
 
     def info
       parser('INFO')
-      p = Trollop::options
+      p = Optimist::options
       { :command => 'info', :method => 'Get', :fields => p }
     end
 
     def health
       parser('HEALTH')
-      p = Trollop::options do
+      p = Optimist::options do
         opt :consumers, 'The minimum number of consumers', :short => 'c', :type => :string, :required => true
         opt :messages, 'The maximum number of messages', :short => 'm', :type => :string, :required => true
       end
@@ -197,15 +197,15 @@ module SensuCli
       item = next_argv
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :filter, 'Field and value to filter on: command,procs', :type => :string
         end
         { :command => 'checks', :method => 'Get', :fields => p }
       when 'show'
-        p = Trollop::options
+        p = Optimist::options
         deep_merge({ :command => 'checks', :method => 'Get', :fields => { :name => item } }, { :fields => p })
       when 'request'
-        p = Trollop::options
+        p = Optimist::options
         ARGV.empty? ? explode(opts) : subscribers = next_argv.split(',')
         deep_merge({ :command => 'checks', :method => 'Post', :fields => { :check => item, :subscribers => subscribers } }, { :fields => p })
       else
@@ -219,20 +219,20 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :filter, 'Field and value to filter on: client,graphite (use "name" as field for client or event name)', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
         end
-        Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
+        Optimist::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
         { :command => 'events', :method => 'Get', :fields => p }
       when 'show'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :check, 'Returns the check associated with the client', :short => 'k', :type => :string
         end
         item = next_argv
         deep_merge({ :command => 'events', :method => 'Get', :fields => { :client => item } }, { :fields => p })
       when 'delete'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         check = next_argv
         explode(opts) if check.nil?
@@ -248,25 +248,25 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :limit, 'The number of stashes to return', :short => 'l', :type => :string
           opt :offset, 'The number of stashes to offset before returning', :short => 'o', :type => :string
           opt :format, 'Available formats; single, table, json', :short => 'f', :type => :string
           opt :filter, 'Field and value to filter on: path,graphite', :type => :string
         end
-        Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
-        Trollop::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
+        Optimist::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        Optimist::die :format, 'Available optional formats: single, table, json'.color(:red) if p[:format] != 'table' && p[:format] != 'single' && p[:format] != 'json' && p[:format]
         { :command => 'stashes', :method => 'Get', :fields => p }
       when 'show'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'stashes', :method => 'Get', :fields => { :path => item } }, { :fields => p })
       when 'delete'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'stashes', :method => 'Delete', :fields => { :path => item } }, { :fields => p })
       when 'create'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'stashes', :method => 'Post', :fields => { :create => true, :create_path => item } }, { :fields => p })
       else
@@ -280,22 +280,22 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :filter, 'Field and value to filter on: issued,1399505890', :type => :string
         end
         { :command => 'aggregates', :method => 'Get', :fields => p }
       when 'show'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :id, 'The id of the check issued.', :short => 'i', :type => :integer
           opt :limit, 'The number of aggregates to return', :short => 'l', :type => :string
           opt :offset, 'The number of aggregates to offset before returning', :short => 'o', :type => :string
           # opt :results, 'Include the check results', :short => 'r', :type => :boolean
         end
-        Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        Optimist::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         item = next_argv
         deep_merge({ :command => 'aggregates', :method => 'Get', :fields => { :check => item } }, { :fields => p })
       when 'delete'
-        p = Trollop::options
+        p = Optimist::options
         item = next_argv
         deep_merge({ :command => 'aggregates', :method => 'Delete', :fields => { :check => item } }, { :fields => p })
       else
@@ -305,7 +305,7 @@ module SensuCli
 
     def silence
       opts = parser('SIL')
-      p = Trollop::options do
+      p = Optimist::options do
         opt :check, 'The check to silence', :short => 'k', :type => :string
         opt :owner, 'The owner of the stash', :short => 'o', :type => :string
         opt :reason, 'The reason this check/node is being silenced', :short => 'r', :type => :string
@@ -323,16 +323,16 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'list'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :check, 'The check entries to return', :short => 'c', :type => :string
           opt :subscription, 'The subscription entries to return', :short => 's', :type => :string
           opt :limit, 'The number of aggregates to return', :short => 'l', :type => :string
           opt :offset, 'The number of aggregates to offset before returning', :short => 'o', :type => :string
         end
-        Trollop::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
+        Optimist::die :offset, 'Offset depends on the limit option --limit ( -l )'.color(:red) if p[:offset] && !p[:limit]
         { :command => 'silenced', :method => 'Get', :fields => p }
       when 'create'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :check, 'The check to silence', :short => 'c', :type => :string
           opt :creator, 'The owner of the stash', :short => 'o', :type => :string
           opt :reason, 'The reason this check/node is being silenced', :short => 'r', :type => :string, :default => 'Silenced via API - no reason given'
@@ -341,15 +341,15 @@ module SensuCli
           opt :source, 'The name of the source of the silence', :short => 's', :type => :string, :default => 'sensu-cli'
           opt :subscription, 'The name of the subscription to silence', :short => 'n', :type => :string
         end
-        Trollop::die :check, 'Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription]
+        Optimist::die :check, 'Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription]
         deep_merge({ :command => 'silenced', :method => 'Post', :fields => { :create => true } }, { :fields => p })
       when 'clear'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :id, 'The id of the silenced item', :short => 'i', :type => :string
           opt :check, 'The check of the silenced item', :short => 'c', :type => :string
           opt :subscription, 'The subscription of the silenced item', :short => 's', :type => :string
         end
-        Trollop::die :id, 'ID, Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription] && !p[:id]
+        Optimist::die :id, 'ID, Check or Subscription is required'.color(:red) if !p[:check] && !p[:subscription] && !p[:id]
         { :command => 'silenced', :method => 'Post', :clear => true, :fields => p }
       else
         explode(opts)
@@ -359,7 +359,7 @@ module SensuCli
     def resolve
       opts = parser('RES')
       command = next_argv
-      p = Trollop::options
+      p = Optimist::options
       ARGV.empty? ? explode(opts) : check = next_argv
       deep_merge({ :command => 'resolve', :method => 'Post', :fields => { :client => command, :check => check } }, { :fields => p })
     end
@@ -370,7 +370,7 @@ module SensuCli
       explode_if_empty(opts, command)
       case command
       when 'create'
-        p = Trollop::options do
+        p = Optimist::options do
           opt :name, 'The check name to report as', :short => 'n', :type => :string, :required => true
           opt :output, 'The check result output', :short => 'o', :type => :string, :required => true
           opt :status, 'The check result exit status to indicate severity.', :short => 's', :type => :integer
@@ -378,7 +378,7 @@ module SensuCli
         end
         { :command => 'socket', :method => 'create', :fields => p }
       when 'raw'
-        Trollop::options
+        Optimist::options
         { :command => 'socket', :method => 'raw', :raw => next_argv }
       else
         explode(opts)
