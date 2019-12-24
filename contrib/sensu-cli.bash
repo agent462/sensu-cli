@@ -17,6 +17,15 @@ _sensu_stashes() {
 _sensu_aggregates() {
   sensu-cli aggregate list | grep check | cut -f 2 -d : | xargs
 }
+_sensu_silenced_checks() {
+  sensu-cli silenced list | grep ^check: | cut -f 2- -d : | xargs
+}
+_sensu_silenced_ids() {
+  sensu-cli silenced list | grep ^id: | cut -f 2- -d : | xargs
+}
+_sensu_silenced_subscriptions() {
+  sensu-cli silenced list | grep ^subscription: | cut -f 2- -d : | xargs
+}
 
 _sensu-cli() {
   
@@ -30,7 +39,7 @@ _sensu-cli() {
   
   # First level deep 
   if [ $COMP_CWORD -eq 1 ]; then
-    SUB_COMMANDS="info client check event stash aggregate silence resolve health -v --version -h --help"
+    SUB_COMMANDS="info client check event stash aggregate silence silenced resolve health -v --version -h --help"
     COMPREPLY=( $(compgen -W "${SUB_COMMANDS}" -- ${cur}) )
     return 0
   # Second level, after the sub commands 
@@ -154,6 +163,52 @@ _sensu-cli() {
         else
           # Otherwise we just return, we can't complete the OPTs above
           return 0
+        fi
+      ;;
+      silenced)
+        SILENCED_LIST_OPTS="--check -c --subscription -s --limit  -l --offset -o --subscription -s -h --help"
+        SILENCED_CLEAR_OPTS="--id -i -c --check --subscription -s -h --help"
+        SILENCED_CREATE_OPTS="-c --check -o --creator -r --reason -e --expire -f --expire-on-resolve -s --source --subscription -n -h --help"
+        if [ $COMP_CWORD -eq 2 ]; then
+          SILENCED_COMMANDS="list create clear -h --help"
+          COMPREPLY=( $(compgen -W "$SILENCED_COMMANDS" -- ${cur}) )
+          return 0
+        elif [ $COMP_CWORD -eq 3 ]; then
+          if [[ $prev == 'list' ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_LIST_OPTS" -- ${cur}) )
+            return 0
+          elif [[ $prev == 'clear' ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_CLEAR_OPTS" -- ${cur}) )
+            return 0
+          elif [[ $prev == 'create' ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_CREATE_OPTS" -- ${cur}) )
+            return 0
+          fi
+        elif [ $COMP_CWORD -gt 3 ]; then
+          if [[ $prev == '--id' ]] || [[ $prev == '-i' ]]; then
+            COMPREPLY=( $(compgen -W "$(_sensu_silenced_ids)" -- ${cur}) )
+            return 0
+          elif [[ $prev == '--check' ]] || [[ $prev == '-c' ]] && [[ ${COMP_WORDS[2]} == "clear" ]]; then
+            COMPREPLY=( $(compgen -W "$(_sensu_silenced_checks)" -- ${cur}) )
+            return 0
+          elif [[ $prev == '--check' ]] || [[ $prev == '-c' ]] && [[ ${COMP_WORDS[2]} == "create" ]]; then
+            COMPREPLY=( $(compgen -W "$(_sensu_checks)" -- ${cur}) )
+            return 0
+          elif [[ $prev == '--subscription' ]] || [[ $prev == '-s' ]] || [[ $prev == '-n' ]]; then
+            COMPREPLY=( $(compgen -W "$(_sensu_silenced_subscriptions)" -- ${cur}) )
+            return 0
+          elif [[ ${COMP_WORDS[2]} -eq "list" ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_LIST_OPTS" -- ${cur}) )
+            return 0
+          elif [[ ${COMP_WORDS[2]} -eq "clear" ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_CLEAR_OPTS" -- ${cur}) )
+            return 0
+          elif [[ ${COMP_WORDS[2]} -eq "create" ]]; then
+            COMPREPLY=( $(compgen -W "$SILENCED_CREATE_OPTS" -- ${cur}) )
+            return 0
+          else
+            return 0
+          fi
         fi
       ;;
       resolve)
