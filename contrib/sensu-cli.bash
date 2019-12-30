@@ -6,16 +6,16 @@
 # . /etc/bash_completion
 #
 _sensu_clients() {
-  sensu-cli client list | grep name | cut -f 2 -d : | xargs
+  sensu-cli client list | grep ^name: | cut -f 2- -d : | xargs
 }
 _sensu_checks() {
-  sensu-cli check list | grep name | cut -f 2 -d : | xargs
+  sensu-cli check list | grep ^name: | cut -f 2- -d : | xargs
 }
 _sensu_stashes() {
-  sensu-cli stash list | grep path | cut -f 2 -d : | xargs
+  sensu-cli stash list | grep ^path: | cut -f 2- -d : | xargs
 }
 _sensu_aggregates() {
-  sensu-cli aggregate list | grep check | cut -f 2 -d : | xargs
+  sensu-cli aggregate list | grep ^check: | cut -f 2- -d : | xargs
 }
 _sensu_silenced_checks() {
   sensu-cli silenced list | grep ^check: | cut -f 2- -d : | xargs
